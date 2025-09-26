@@ -263,6 +263,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startGlassyCycle('.glassy', 2000);
 
+    // Reveal skill progress bars when they enter the viewport
+    (function initSkillObserver() {
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const skills = Array.from(document.querySelectorAll('.skill'));
+        if (!skills.length) return;
+
+        // Fast path for reduced motion: reveal immediately without animation
+        if (prefersReduced) {
+            skills.forEach(skill => {
+                const fill = skill.querySelector('.skill-fill');
+                if (!fill) return;
+                const percent = getComputedStyle(fill).getPropertyValue('--skill-percent').trim() || '0%';
+                fill.style.width = percent;
+                skill.classList.add('in-view');
+            });
+            return;
+        }
+
+        // IntersectionObserver to reveal fills when visible
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const skill = entry.target;
+                const fill = skill.querySelector('.skill-fill');
+                if (fill) {
+                    const percent = getComputedStyle(fill).getPropertyValue('--skill-percent').trim() || '0%';
+                    // set inline width to trigger transition reliably, and add class
+                    fill.style.width = percent;
+                    skill.classList.add('in-view');
+                }
+                obs.unobserve(skill); // reveal once
+            });
+        }, { threshold: 0.28 });
+
+        skills.forEach(s => observer.observe(s));
+    })();
+
     /* -------------------------------------------------------------
        Skill -> portrait panel wiring: show skill details in panel,
        fade portrait out, type description with cancellation, and
@@ -349,10 +386,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // If same skill already active, do nothing (or restart typing)
             if (activeSkill === skillEl) {
-                // restart typing for the same item
                 if (currentTyper && currentTyper.cancel) currentTyper.cancel();
+                // handle reduced-motion
+                const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
                 const tSame = typer();
-                await tSame.type(detail);
+                if (prefersReduced) {
+                    panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+                } else {
+                    await tSame.type(detail);
+                    if (activeSkill === skillEl) panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+                }
                 return;
             }
 
@@ -371,7 +414,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // quick switch: cancel previous typing and type new content
                 if (currentTyper && currentTyper.cancel) currentTyper.cancel();
                 const t = typer();
-                await t.type(detail);
+                const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (prefersReduced) {
+                    panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+                } else {
+                    await t.type(detail);
+                    if (activeSkill === skillEl) panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+                }
                 return;
             }
 
@@ -384,7 +433,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 await new Promise(res => setTimeout(res, 80));
                 if (currentTyper && currentTyper.cancel) currentTyper.cancel();
                 const t = typer();
-                await t.type(detail);
+                const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (prefersReduced) {
+                    panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+                } else {
+                    await t.type(detail);
+                    if (activeSkill === skillEl) panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+                }
             }, 140);
         }
 
@@ -478,3 +533,27 @@ window.addEventListener('resize', () => {
         resizeTimer = null;
     }, 200);
 });
+
+// helper to escape HTML for safe insertion
+function escapeHtml(str = '') {
+    return String(str).replace(/[&<>"']/g, (s) => {
+        return ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[s];
+    });
+}
+
+// highlight first occurrence of label inside text (case-insensitive)
+function highlightFirstOccurrence(text = '', label = '') {
+    if (!label) return escapeHtml(text);
+    const idx = String(text).toLowerCase().indexOf(String(label).toLowerCase());
+    if (idx === -1) return escapeHtml(text);
+    const before = escapeHtml(String(text).slice(0, idx));
+    const match = escapeHtml(String(text).slice(idx, idx + String(label).length));
+    const after = escapeHtml(String(text).slice(idx + String(label).length));
+    return `${before}<span class="panel-keyword">${match}</span>${after}`;
+}
