@@ -87,7 +87,6 @@ body {
     font-weight: 500;
     letter-spacing: 1px;
     position: relative;
-    transition: color 0.2s;
     display: inline-block;
     padding: 0.45rem 0.9rem; /* clickable region */
     border-radius: 10px;

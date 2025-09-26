@@ -17,10 +17,6 @@
         font-size: 2rem;
     }
 
-    /* Show hamburger for <=1024 so tablets can use it */
-    .hamburger {
-        display: flex;
-    }
 }
 
 /* Slightly narrower than large desktop (keeps layout balanced) */
