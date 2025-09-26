@@ -1,4 +1,6 @@
-/*Desktop Onli*/
+/* Consolidated responsive rules for the site */
+
+/* Large tablets / small desktops */
 @media (max-width: 1024px) {
     .header {
         max-width: 100vw;
@@ -14,29 +16,47 @@
     .hero-title {
         font-size: 2rem;
     }
+
+    /* Show hamburger for <=1024 so tablets can use it */
+    .hamburger {
+        display: flex;
+    }
 }
 
-/*For Tablit*/
+/* Slightly narrower than large desktop (keeps layout balanced) */
+@media (max-width: 980px) {
+    .about-grid {
+        grid-template-columns: 320px 1fr;
+    }
+    .about-portrait {
+        height: 360px;
+    }
+}
+
+/* Tablet / mobile landscape */
 @media (max-width: 768px) {
     .header {
         padding: 1.2rem 5vw 0 5vw;
         align-items: center;
     }
 
-
+    /* Nav becomes an overlay panel on smaller screens */
     .nav {
         display: flex;
         position: absolute;
         top: 70px;
         right: 5vw;
-        background: rgba(24,24,24,0.98);
+        /* glassy background for mobile overlay */
+        background: rgba(255,255,255,0.06);
+        -webkit-backdrop-filter: blur(10px) saturate(120%);
+        backdrop-filter: blur(10px) saturate(120%);
         flex-direction: column;
-        gap: 1.2rem;
-        padding: 1.2rem 1.6rem;
-        border-radius: 1rem;
-        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18);
+        gap: 1rem;
+        padding: 1rem 1.2rem;
+        border-radius: 12px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.45);
         z-index: 100;
-        min-width: 180px;
+        min-width: 200px;
 
         /* transition-friendly hiding */
         opacity: 0;
@@ -57,6 +77,7 @@
     .hamburger {
         display: flex;
     }
+
     .hero-title {
         font-size: 1.5rem;
     }
@@ -75,9 +96,37 @@
 
     .about-inner { padding: 1rem; }
     .about-portrait { margin: 0 auto 1rem auto; }
+
+    .typewriter { max-width: 22ch; }
 }
 
-/* Ipon down  */
+/* Narrow phones */
+@media (max-width: 720px) {
+    .about-card {
+        padding: 1rem;
+    }
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+    .about-portrait {
+        max-width: 280px;
+        height: 320px;
+        margin-bottom: 1rem;
+    }
+
+    /* portrait panel placed and centered on mobile */
+    .portrait-panel {
+        left: 50%;
+        right: auto;
+        transform: translate(-50%, 8px);
+        width: min(88%, 360px);
+    }
+    .about-left.active .portrait-panel { transform: translate(-50%, 0); }
+
+    .typewriter { max-width: 16ch; border-right-width: 1.5px; }
+}
+
+/* Small phones */
 @media (max-width: 480px) {
     .header {
         padding: 0.7rem 3vw 0 3vw;
@@ -93,16 +142,16 @@
         font-size: 0.95rem;
         padding: 0.6em 1.2em;
     }
+    .typewriter { max-width: 14ch; border-right-width: 1.2px; }
 }
 
-@media (max-width: 768px) {
-    .typewriter { max-width: 22ch; }
-}
-@media (max-width: 480px) {
-    .typewriter { max-width: 16ch; border-right-width: 1.5px; }
-}
-
-
+/* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
     .typewriter { border-right: 0; }
+    .hero-title, .hero-subtitle, .hero-actions, .logo, .nav, .hamburger, .header {
+        transition: none !important;
+        animation: none !important;
+    }
+    .glassy.glassy-active::after { animation: none; opacity: 0.12; left: 0; }
+    .skill-detail, .skill, .portrait-panel { transition: none !important; transform: none !important; }
 }

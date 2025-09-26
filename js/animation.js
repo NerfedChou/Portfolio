@@ -262,6 +262,211 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startGlassyCycle('.glassy', 2000);
+
+    /* -------------------------------------------------------------
+       Skill -> portrait panel wiring: show skill details in panel,
+       fade portrait out, type description with cancellation, and
+       switch between skills without closing the panel (works on touch).
+       ------------------------------------------------------------- */
+
+    (function wireSkillPortrait() {
+        const skillsContainer = document.querySelector('.skills');
+        const skills = Array.from(document.querySelectorAll('.skill'));
+        const portraitPanel = document.getElementById('portraitPanel');
+        const panelTitle = document.getElementById('panelTitle');
+        const panelDesc = document.getElementById('panelDesc');
+        const aboutLeft = document.querySelector('.about-left');
+        if (!skillsContainer || !skills.length || !portraitPanel || !panelDesc || !aboutLeft) return;
+
+        let activeSkill = null;
+        let hideTimer = null;
+        const HIDE_DELAY = 160;
+        // suppress closing right after a skill interaction (for touch)
+        let suppressDocumentClose = false;
+        const SUPPRESS_MS = 420;
+
+        // typing controller
+        let currentTyper = null;
+        function createTyper(el, speed = 36) {
+            let cancelled = false;
+            let timers = [];
+
+            function clearAll() {
+                timers.forEach(t => clearTimeout(t));
+                timers = [];
+            }
+            function cancel() {
+                cancelled = true;
+                clearAll();
+            }
+            function type(text) {
+                cancel();
+                cancelled = false;
+                el.textContent = '';
+                let i = 0;
+                return new Promise((resolve) => {
+                    const tick = () => {
+                        if (cancelled) { resolve(false); return; }
+                        el.textContent = text.slice(0, ++i);
+                        if (i < text.length) {
+                            timers.push(setTimeout(tick, speed + (Math.random() * 40 - 20)));
+                        } else {
+                            resolve(true);
+                        }
+                    };
+                    timers.push(setTimeout(tick, speed));
+                });
+            }
+            return { type, cancel };
+        }
+
+        const typer = () => {
+            if (currentTyper && currentTyper.cancel) currentTyper.cancel();
+            currentTyper = createTyper(panelDesc, 36);
+            return currentTyper;
+        };
+
+        const clearHideTimer = () => {
+            if (hideTimer) {
+                clearTimeout(hideTimer);
+                hideTimer = null;
+            }
+        };
+
+        const setSuppress = (ms = SUPPRESS_MS) => {
+            suppressDocumentClose = true;
+            setTimeout(() => { suppressDocumentClose = false; }, ms);
+        };
+
+        // showDetail orchestrates fade: if panel already visible -> immediate switch;
+        // otherwise fade image then reveal panel with delay, then start typing
+        async function showDetail(skillEl) {
+            clearHideTimer();
+            setSuppress();
+
+            const label = (skillEl.querySelector('.skill-label') || { textContent: '' }).textContent.trim();
+            const detail = skillEl.getAttribute('data-detail') || '';
+
+            // If same skill already active, do nothing (or restart typing)
+            if (activeSkill === skillEl) {
+                // restart typing for the same item
+                if (currentTyper && currentTyper.cancel) currentTyper.cancel();
+                const tSame = typer();
+                await tSame.type(detail);
+                return;
+            }
+
+            // If panel is already visible (open), switch immediately without hide
+            const panelIsVisible = portraitPanel.classList.contains('visible');
+
+            // update title immediately
+            if (panelTitle) panelTitle.textContent = label;
+            // clear description before typing
+            if (panelDesc) panelDesc.textContent = '';
+
+            // set new active skill reference
+            activeSkill = skillEl;
+
+            if (panelIsVisible) {
+                // quick switch: cancel previous typing and type new content
+                if (currentTyper && currentTyper.cancel) currentTyper.cancel();
+                const t = typer();
+                await t.type(detail);
+                return;
+            }
+
+            // Normal open sequence: fade portrait (add active), then reveal panel with delay, then start typing
+            aboutLeft.classList.add('active');         // portrait will fade due to CSS
+            // small delay to let portrait begin fading
+            setTimeout(async () => {
+                portraitPanel.classList.add('visible'); // panel fades in (CSS has small transition-delay)
+                // start typing after panel is visible (small additional delay to feel natural)
+                await new Promise(res => setTimeout(res, 80));
+                if (currentTyper && currentTyper.cancel) currentTyper.cancel();
+                const t = typer();
+                await t.type(detail);
+            }, 140);
+        }
+
+        function scheduleHide(skillEl) {
+            clearHideTimer();
+            hideTimer = setTimeout(() => {
+                if (activeSkill === skillEl) hideDetail();
+                hideTimer = null;
+            }, HIDE_DELAY);
+        }
+
+        function hideDetail() {
+            clearHideTimer();
+            // cancel typing
+            if (currentTyper && currentTyper.cancel) currentTyper.cancel();
+
+            // hide panel first for quick reversal
+            portraitPanel.classList.add('hiding');
+            portraitPanel.classList.remove('visible');
+
+            // after panel hide transition finishes, remove hiding class and restore portrait by removing 'active'
+            setTimeout(() => {
+                portraitPanel.classList.remove('hiding');
+                aboutLeft.classList.remove('active'); // portrait returns
+            }, 220);
+
+            activeSkill = null;
+        }
+
+        // pointerdown/click delegation so clicks on progress bar work
+        skillsContainer.addEventListener('pointerdown', (e) => {
+            const skill = e.target.closest('.skill');
+            if (!skill) return;
+            setSuppress();
+        }, { passive: true });
+
+        skillsContainer.addEventListener('click', (e) => {
+            const skill = e.target.closest('.skill');
+            if (!skill) return;
+            e.stopPropagation();
+            clearHideTimer();
+            setSuppress();
+            // clicking same active skill toggles off, otherwise switch to clicked skill
+            if (activeSkill === skill) {
+                hideDetail();
+            } else {
+                showDetail(skill);
+            }
+        });
+
+        // hover/focus behavior for desktop
+        skills.forEach(skill => {
+            skill.addEventListener('mouseenter', () => {
+                // immediate show on hover
+                showDetail(skill);
+            });
+            skill.addEventListener('mouseleave', () => {
+                // schedule hide but short delay to allow switching
+                scheduleHide(skill);
+            });
+            skill.setAttribute('tabindex', skill.getAttribute('tabindex') || '0');
+            skill.addEventListener('focus', () => showDetail(skill));
+            skill.addEventListener('blur', () => scheduleHide(skill));
+        });
+
+        // document click should close the panel, but ignore clicks within the suppress window
+        document.addEventListener('click', (e) => {
+            if (suppressDocumentClose) return;
+            if (!aboutLeft.contains(e.target) && !skills.some(s => s.contains(e.target))) {
+                hideDetail();
+            }
+        });
+
+        // defensive: hide on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' || e.key === 'Esc') {
+                hideDetail();
+            }
+        });
+
+    })();
+
 });
 
 

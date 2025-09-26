@@ -79,13 +79,18 @@
                         <div class="about-grid">
                             <div class="about-left" aria-hidden="false">
                                 <img src="/assets/me.jpeg" alt="Portrait of Jan Rhian Angulo" class="about-portrait">
+                                <!-- panel updated by JS when a skill is shown -->
+                                <div class="portrait-panel" id="portraitPanel" aria-live="polite" aria-atomic="true">
+                                    <h4 class="panel-title" id="panelTitle"></h4>
+                                    <div class="panel-desc" id="panelDesc" aria-hidden="false"></div>
+                                </div>
                             </div>
-                            <div class="about-right">
-                                <h3 class="about-heading">I'm Mr. Jan Rhian Angulo — Fullstack Developer</h3>
-                                <p class="about-desc">I build scalable web applications and thoughtful UIs. Below are some of my core skills and their proficiency levels.</p>
+                             <div class="about-right">
+                                 <h3 class="about-heading">I'm Mr. Jan Rhian Angulo — Fullstack Developer</h3>
+                                 <p class="about-desc">I build scalable web applications and thoughtful UIs. Below are some of my core skills and their proficiency levels. I'm your partner or even your companion my skill sets is accurate and you will expect whats on my skills is who I am.</p>
 
-                                <div class="skills" role="list" aria-label="Skill proficiency">
-                                    <div class="skill" role="listitem" aria-label="JavaScript 90%">
+                                 <ul class="skills" role="list" aria-label="Skill proficiency">
+                                    <li class="skill" role="listitem" aria-label="JavaScript 90%" data-detail="JavaScript — ES6+, async/await, DOM manipulation, tooling (Webpack), testing (Jest).">
                                         <div class="skill-row">
                                             <div class="skill-label">JavaScript</div>
                                             <div class="skill-percent">90%</div>
@@ -93,9 +98,9 @@
                                         <div class="skill-track" aria-hidden="true">
                                             <div class="skill-fill" style="--skill-percent:90%"></div>
                                         </div>
-                                    </div>
+                                    </li>
 
-                                    <div class="skill" role="listitem" aria-label="React 88%">
+                                    <li class="skill" role="listitem" aria-label="React 88%" data-detail="React — Hooks, functional components, state management, performance tuning.">
                                         <div class="skill-row">
                                             <div class="skill-label">React</div>
                                             <div class="skill-percent">88%</div>
@@ -103,9 +108,9 @@
                                         <div class="skill-track" aria-hidden="true">
                                             <div class="skill-fill" style="--skill-percent:88%"></div>
                                         </div>
-                                    </div>
+                                    </li>
 
-                                    <div class="skill" role="listitem" aria-label="HTML & CSS 95%">
+                                    <li class="skill" role="listitem" aria-label="HTML & CSS 95%" data-detail="HTML/CSS — Semantic markup, responsive layouts, Grid & Flexbox, accessibility best practices.">
                                         <div class="skill-row">
                                             <div class="skill-label">HTML / CSS</div>
                                             <div class="skill-percent">95%</div>
@@ -113,19 +118,19 @@
                                         <div class="skill-track" aria-hidden="true">
                                             <div class="skill-fill" style="--skill-percent:95%"></div>
                                         </div>
-                                    </div>
+                                    </li>
 
-                                    <div class="skill" role="listitem" aria-label="Node.js 82%">
+                                    <li class="skill" role="listitem" aria-label="C# 82%" data-detail="C# — OOP, .NET basics, tooling, common backend patterns. Mastered Unity for game development.">
                                         <div class="skill-row">
-                                            <div class="skill-label">Node.js</div>
+                                            <div class="skill-label">C#</div>
                                             <div class="skill-percent">82%</div>
                                         </div>
                                         <div class="skill-track" aria-hidden="true">
                                             <div class="skill-fill" style="--skill-percent:82%"></div>
                                         </div>
-                                    </div>
+                                    </li>
 
-                                    <div class="skill" role="listitem" aria-label="Python 78%">
+                                    <li class="skill" role="listitem" aria-label="Python 78%" data-detail="Python — Scripting, Flask/Django basics, automation, data processing.">
                                         <div class="skill-row">
                                             <div class="skill-label">Python</div>
                                             <div class="skill-percent">78%</div>
@@ -133,9 +138,9 @@
                                         <div class="skill-track" aria-hidden="true">
                                             <div class="skill-fill" style="--skill-percent:78%"></div>
                                         </div>
-                                    </div>
+                                    </li>
 
-                                    <div class="skill" role="listitem" aria-label="Rust 60%">
+                                    <li class="skill" role="listitem" aria-label="Rust 60%" data-detail="Rust — Systems programming fundamentals, memory safety, performance-oriented tooling.">
                                         <div class="skill-row">
                                             <div class="skill-label">Rust</div>
                                             <div class="skill-percent">60%</div>
@@ -143,9 +148,9 @@
                                         <div class="skill-track" aria-hidden="true">
                                             <div class="skill-fill" style="--skill-percent:60%"></div>
                                         </div>
-                                    </div>
+                                    </li>
 
-                                    <div class="skill" role="listitem" aria-label="Java 70%">
+                                    <li class="skill" role="listitem" aria-label="Java 70%" data-detail="Java — OOP, common frameworks and backend services experience.">
                                         <div class="skill-row">
                                             <div class="skill-label">Java</div>
                                             <div class="skill-percent">70%</div>
@@ -153,13 +158,13 @@
                                         <div class="skill-track" aria-hidden="true">
                                             <div class="skill-fill" style="--skill-percent:70%"></div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                                    </li>
+                                </ul>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </section>
          </main>
      </section>
      <script src="js/animation.js">
