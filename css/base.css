@@ -39,6 +39,20 @@
     /* Font */
     --font-main: 'Poppins', Arial, sans-serif;
 }
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    background: var(--eerie-black);
+    color: var(--white);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 a {
     text-decoration: none;
