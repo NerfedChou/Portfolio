@@ -1,0 +1,45 @@
+:root {
+    /* CSS HEX */
+    --eerie-black: #181818ff;
+    --eerie-black-2: #252525ff;
+    --jet: #373638ff;
+    --davys-gray: #4F4F51ff;
+    --night: #121212ff;
+
+    /* CSS HSL */
+    --eerie-black-hsl: hsla(0, 0%, 9%, 1);
+    --eerie-black-2-hsl: hsla(0, 0%, 15%, 1);
+    --jet-hsl: hsla(270, 2%, 22%, 1);
+    --davys-gray-hsl: hsla(240, 1%, 31%, 1);
+    --night-hsl: hsla(0, 0%, 7%, 1);
+
+    /* CSS RGB */
+    --eerie-black-rgb: rgba(24, 24, 24, 1);
+    --eerie-black-2-rgb: rgba(37, 37, 37, 1);
+    --jet-rgb: rgba(55, 54, 56, 1);
+    --davys-gray-rgb: rgba(79, 79, 81, 1);
+    --night-rgb: rgba(18, 18, 18, 1);
+
+    /* CSS Gradients */
+    --gradient-top: linear-gradient(0deg, #181818ff, #252525ff, #373638ff, #4F4F51ff, #121212ff);
+    --gradient-right: linear-gradient(90deg, #181818ff, #252525ff, #373638ff, #4F4F51ff, #121212ff);
+    --gradient-bottom: linear-gradient(180deg, #181818ff, #252525ff, #373638ff, #4F4F51ff, #121212ff);
+    --gradient-left: linear-gradient(270deg, #181818ff, #252525ff, #373638ff, #4F4F51ff, #121212ff);
+    --gradient-top-right: linear-gradient(45deg, #181818ff, #252525ff, #373638ff, #4F4F51ff, #121212ff);
+    --gradient-bottom-right: linear-gradient(135deg, #181818ff, #252525ff, #373638ff, #4F4F51ff, #121212ff);
+    --gradient-top-left: linear-gradient(225deg, #181818ff, #252525ff, #373638ff, #4F4F51ff, #121212ff);
+    --gradient-bottom-left: linear-gradient(315deg, #181818ff, #252525ff, #373638ff, #4F4F51ff, #121212ff);
+    --gradient-radial: radial-gradient(#181818ff, #252525ff, #373638ff, #4F4F51ff, #121212ff);
+
+    /* Accent & Utility Colors */
+    --accent: #ff7300;
+    --accent-hover: #ff8c1a;
+    --white: #fff;
+
+    /* Font */
+    --font-main: 'Poppins', Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}

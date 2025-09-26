@@ -1,0 +1,108 @@
+/*Desktop Onli*/
+@media (max-width: 1024px) {
+    .header {
+        max-width: 100vw;
+        padding: 1rem 2vw 0 2vw;
+        align-items: center;
+    }
+    .hero-content {
+        max-width: 90vw;
+    }
+    .nav {
+        gap: 1.2rem;
+    }
+    .hero-title {
+        font-size: 2rem;
+    }
+}
+
+/*For Tablit*/
+@media (max-width: 768px) {
+    .header {
+        padding: 1.2rem 5vw 0 5vw;
+        align-items: center;
+    }
+
+
+    .nav {
+        display: flex;
+        position: absolute;
+        top: 70px;
+        right: 5vw;
+        background: rgba(24,24,24,0.98);
+        flex-direction: column;
+        gap: 1.2rem;
+        padding: 1.2rem 1.6rem;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18);
+        z-index: 100;
+        min-width: 180px;
+
+        /* transition-friendly hiding */
+        opacity: 0;
+        transform: translateY(-8px) scale(0.995);
+        pointer-events: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: opacity 240ms cubic-bezier(.2,.9,.3,1), transform 240ms cubic-bezier(.2,.9,.3,1), max-height 280ms ease;
+    }
+
+    .nav.open {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+        max-height: 420px;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    .hero-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .hero-section {
+        min-height: 400px;
+        height: 100vh;
+        background-position: center top;
+    }
+
+    .about-inner { padding: 1rem; }
+    .about-portrait { margin: 0 auto 1rem auto; }
+}
+
+/* Ipon down  */
+@media (max-width: 480px) {
+    .header {
+        padding: 0.7rem 3vw 0 3vw;
+        align-items: center;
+    }
+    .hero-title {
+        font-size: 1.1rem;
+    }
+    .hero-subtitle {
+        font-size: 0.85rem;
+    }
+    .btn {
+        font-size: 0.95rem;
+        padding: 0.6em 1.2em;
+    }
+}
+
+@media (max-width: 768px) {
+    .typewriter { max-width: 22ch; }
+}
+@media (max-width: 480px) {
+    .typewriter { max-width: 16ch; border-right-width: 1.5px; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    .typewriter { border-right: 0; }
+}

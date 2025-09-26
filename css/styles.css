@@ -1,0 +1,511 @@
+@import "base.css";
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--eerie-black);
+    color: var(--white);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: var(--font-main);
+}
+
+.site-container {
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+
+}
+
+.hero-section {
+    position: relative;
+    width: 100vw;
+    height: 92vh;
+    min-height: 520px;
+    max-height: 900px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    background-image:
+        linear-gradient(to bottom, rgba(24,24,24,0) 58%, rgba(24,24,24,0.25) 75%, var(--eerie-black) 100%),
+        url('/assets/me.jpeg');
+    background-position: top center, top center;
+    background-size: cover, cover;
+    background-repeat: no-repeat, no-repeat;
+    overflow: visible;
+}
+
+
+.hero-section::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 22vh;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(24,24,24,0) 0%, rgba(24,24,24,0.18) 50%, var(--eerie-black) 100%);
+    z-index: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(24,24,24,0.85) 60%, rgba(24,24,24,0.6) 100%);
+    z-index: 1;
+}
+
+.header {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3vw 0 3vw;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--white);
+    letter-spacing: 2px;
+}
+
+.nav {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+}
+
+.nav-link {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    position: relative;
+    transition: color 0.2s;
+    display: inline-block;
+    padding: 0.45rem 0.9rem; /* clickable region */
+    border-radius: 10px;
+    background: rgba(255,255,255,0.02);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+    backdrop-filter: blur(6px) saturate(120%);
+    transition: background 220ms ease, box-shadow 220ms ease, color 180ms ease, transform 180ms ease;
+    z-index: 1;
+    pointer-events: auto; /* defensive: ensure links accept clicks */
+}
+.nav-link:hover {
+    color: var(--accent);
+    background: rgba(255,255,255,0.035);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+
+.hamburger {
+    display: none; /* Always hidden by default, only shown in responsive.css */
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1rem;   /* Optional: add a little space from nav/logo */
+}
+.hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: var(--white);
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1; /* lower than header/nav so header stays on top */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    height: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+    animation: fadeIn 1.2s ease;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Remove automatic keyframe animation on load; will be triggered by JS via .animate */
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin: 0 0 0.7rem 0;
+    color: var(--white);
+    text-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1);
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #e0e0e0;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 420ms 120ms cubic-bezier(.2,.9,.3,1), transform 420ms 120ms cubic-bezier(.2,.9,.3,1);
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.static-title {
+    color: #e0e0e0;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+
+.typewriter {
+    color: var(--white);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    max-width: 28ch;
+    vertical-align: middle;
+    border-right: 2px solid var(--white);
+    padding-right: 4px;
+    box-sizing: content-box;
+    transition: opacity 220ms ease;
+}
+
+
+
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 420ms 220ms cubic-bezier(.2,.9,.3,1), transform 420ms 220ms cubic-bezier(.2,.9,.3,1);
+}
+
+
+.site-container.animate .hero-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+.site-container.animate .hero-subtitle {
+    opacity: 1;
+    transform: translateY(0);
+}
+.site-container.animate .hero-actions {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.logo, .nav, .hamburger, .header {
+    transition: padding 220ms ease, margin 220ms ease, transform 220ms ease;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-title,
+    .hero-subtitle,
+    .hero-actions,
+    .logo,
+    .nav,
+    .hamburger,
+    .header {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+.btn {
+    padding: 0.7em 1.7em;
+    border: 1.5px solid var(--white);
+    border-radius: 2em;
+    background: transparent;
+    color: var(--white);
+    font-size: 1rem;
+    font-family: var(--font-main);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s;
+    box-shadow: 0 2px 12px 0 rgba(255,115,0,0.08);
+    outline: none;
+    position: relative;
+    overflow: hidden;
+}
+.btn:hover, .btn:focus {
+    background: var(--accent);
+    color: var(--white);
+    border-color: var(--accent);
+    box-shadow: 0 4px 24px 0 rgba(255,115,0,0.18);
+    animation: btnPulse 0.4s;
+}
+.btn.glassy {
+
+    background: rgba(255,255,255,0.03);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+    backdrop-filter: blur(6px) saturate(120%);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: background 260ms ease, box-shadow 260ms ease, transform 200ms ease;
+}
+.btn.glassy:hover, .btn.glassy:focus {
+    background: rgba(255,255,255,0.045);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 10px 30px rgba(0,0,0,0.40);
+    transform: translateY(-1px);
+}
+@keyframes btnPulse {
+    0% { box-shadow: 0 0 0 0 rgba(255,115,0,0.18);}
+    70% { box-shadow: 0 0 0 10px rgba(255,115,0,0.10);}
+    100% { box-shadow: 0 0 0 0 rgba(255,115,0,0.18);}
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+
+.skip-link {
+    position: absolute;
+    top: -999px;
+    left: 0;
+    background: var(--accent);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    z-index: 9999;
+    border-radius: 0 0.5rem 0.5rem 0;
+    text-decoration: none;
+    font-weight: 600;
+}
+.skip-link:focus {
+    top: 1rem;
+    left: 1rem;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.35);
+}
+
+
+:focus {
+    outline: none;
+}
+:focus-visible, .nav-link:focus, .btn:focus, .hamburger:focus {
+    outline: 3px solid rgba(255, 115, 0, 0.18);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+
+.nav-link:focus, .nav-link:focus-visible {
+    color: var(--accent);
+    background: rgba(255,115,0,0.06);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+
+.hamburger {
+
+}
+.hamburger:focus {
+    box-shadow: 0 6px 24px rgba(255,115,0,0.12);
+}
+
+
+.sr-only {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* About section layout */
+.about-section {
+    width: 100%;
+    padding: 2.25rem 2rem;
+    box-sizing: border-box;
+    color: #e6e6e6;
+}
+
+.about-inner {
+    max-width: 1200px;
+    margin: 2.5rem auto;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+/* Portrait image (left) */
+.about-portrait {
+    width: 100%;
+    max-width: 360px;
+    height: 420px;
+    object-fit: contain; /* use contain so whole body is visible */
+    border-radius: 14px;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.04);
+    background: linear-gradient(180deg, rgba(24,24,24,0.7), rgba(37,37,37,0.6));
+}
+
+/* Right column */
+.about-heading {
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--white);
+}
+.about-desc {
+    margin: 0 0 1rem 0;
+    color: #cfcfcf;
+}
+
+/* Skills list */
+.skills {
+    display: grid;
+    gap: 1rem;
+}
+
+/* Individual skill */
+.skill {
+    display: block;
+    background: rgba(255,255,255,0.01);
+    padding: 0.55rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(2,2,2,0.55);
+    transition: transform 180ms ease, box-shadow 180ms ease, background 160ms ease;
+}
+
+/* Row with label and percent */
+.skill-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.45rem;
+}
+.skill-label {
+    font-weight: 600;
+    color: #f0f0f0;
+    font-size: 0.98rem;
+}
+.skill-percent {
+    font-weight: 600;
+    color: #d6d6d6;
+    font-size: 0.92rem;
+}
+
+/* Track and fill */
+.skill-track {
+    width: 100%;
+    height: 12px;
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* Fill is initially 0, target is --skill-percent. Use transition for smooth fill. */
+/* Gradient from near-theme-black to orange accent */
+.skill-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(24,24,24,0.85) 0%, rgba(24,24,24,0.4) 30%, var(--accent) 100%);
+    box-shadow: 0 6px 18px rgba(255,115,0,0.08);
+    transition: width 900ms cubic-bezier(.2,.9,.3,1), box-shadow 350ms ease;
+}
+
+/* When site entrance animation class is present, expand fill to the declared percent */
+.site-container.animate .skill-fill {
+    width: var(--skill-percent, 0%) ;
+}
+
+/* small enhancement: give longer delay per skill for stagger */
+.skill:nth-child(1) .skill-fill { transition-delay: 120ms; }
+.skill:nth-child(2) .skill-fill { transition-delay: 180ms; }
+.skill:nth-child(3) .skill-fill { transition-delay: 240ms; }
+.skill:nth-child(4) .skill-fill { transition-delay: 300ms; }
+.skill:nth-child(5) .skill-fill { transition-delay: 360ms; }
+.skill:nth-child(6) .skill-fill { transition-delay: 420ms; }
+.skill:nth-child(7) .skill-fill { transition-delay: 480ms; }
+
+/* Make entire skill track clickable region if needed (no change to semantics) */
+.skill-track, .skill-label {
+    cursor: default;
+}
+
+/* Card wrapper for About */
+.about-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+    backdrop-filter: blur(8px) saturate(120%);
+    border-radius: 14px;
+    padding: 1.25rem;
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 18px 50px rgba(6,6,6,0.7);
+    transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+/* Slight lift on hover for the whole card (desktop) */
+@media (hover: hover) and (min-width: 720px) {
+    .about-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 28px 72px rgba(6,6,6,0.75);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 980px) {
+    .about-grid {
+        grid-template-columns: 320px 1fr;
+    }
+    .about-portrait {
+        height: 360px;
+    }
+}
+
+@media (max-width: 720px) {
+    .about-card {
+        padding: 1rem;
+    }
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+    .about-portrait {
+        max-width: 280px;
+        height: 320px;
+        margin-bottom: 1rem;
+    }
+}
