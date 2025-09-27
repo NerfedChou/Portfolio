@@ -434,6 +434,12 @@ body {
     pointer-events: none;
 }
 
+.panel-title {
+    text-align: center;
+    color: var(--accent);
+    font-weight: 900;
+}
+
 /* when panel is removed, about-left.active removed later so portrait returns */
 .about-left:not(.active) .portrait-panel {
     opacity: 0;
