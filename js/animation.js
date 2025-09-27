@@ -8,6 +8,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // one-time about overlay entrance (moved from inline about.html)
+    (function aboutOverlayEntrance() {
+        const overlay = document.getElementById('aboutHeroOverlay');
+        const qt = document.querySelector('.about-hero-qt');
+        if (!overlay && !qt) return;
+        const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const revealOverlay = () => {
+            if (overlay) overlay.classList.add('entrance');
+        };
+
+        if (reduced) {
+            if (overlay) overlay.classList.add('entrance');
+            if (qt) qt.classList.add('show');
+            return;
+        }
+
+        requestAnimationFrame(() => {
+            revealOverlay();
+
+            // Wait until the overlay no longer has the transient "entrance" class
+            // (which is removed later for cleanup). Polling is used to be robust
+            // across browsers. Fallback after a max timeout so quote always appears.
+            const MAX_WAIT = 1400; // safe upper bound
+            const POLL_MS = 50;
+            const start = performance.now();
+
+            const checkAndShow = () => {
+                const elapsed = performance.now() - start;
+                // If overlay no longer carries the transient "entrance" class, reveal qt
+                if (!overlay || !overlay.classList.contains('entrance')) {
+                    if (qt) qt.classList.add('show');
+                    return;
+                }
+                if (elapsed < MAX_WAIT) {
+                    setTimeout(checkAndShow, POLL_MS);
+                } else {
+                    // fallback: reveal after max wait
+                    if (qt) qt.classList.add('show');
+                }
+            };
+
+            // start checking shortly after the entrance begins
+            setTimeout(checkAndShow, 220);
+
+            // keep transient overlay animation class for cleanup (unchanged behavior)
+            setTimeout(() => {
+                if (overlay) overlay.classList.remove('entrance');
+            }, 1200);
+        });
+    })();
+
     // Typewriter setup
     const typeEl = document.getElementById('typewriter');
     if (typeEl) {

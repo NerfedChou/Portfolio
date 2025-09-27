@@ -451,6 +451,12 @@ body {
     color: #cfcfcf;
 }
 
+.primary-link {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
 /* Skills list */
 .skills {
     list-style: none;
@@ -636,88 +642,167 @@ body {
    to centralize breakpoint logic and avoid duplication.
 */
 
-/* Panel title */
-.portrait-panel .panel-title {
-    margin: 0 0 0.35rem 0;
-    font-size: 1rem;
-    color: var(--accent);
-    font-weight: 700;
-    justify-content: center;
-    display: flex;
-}
-
-/* Glassy surface used for nav items and CTAs (works on .nav-link, .btn.glassy, etc.) */
-.glassy {
+/* About page full-bleed hero (keeps consistent with .hero-section but scoped for about page) */
+.about-hero-section {
     position: relative;
-    display: inline-block;
-    padding: 0.45rem 0.9rem;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.02);
-    -webkit-backdrop-filter: blur(6px) saturate(120%);
-    backdrop-filter: blur(6px) saturate(120%);
-    border: 1px solid rgba(255,255,255,0.03);
-    box-shadow: 0 8px 18px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    min-height: 60vh;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
-    z-index: 2;
-    transition: transform 180ms ease, box-shadow 220ms ease, background 180ms ease;
+    background-color: var(--eerie-black);
+    z-index: 0;
+    /* ensure hero doesn't create horizontal scroll on odd viewports */
+    box-sizing: border-box;
 }
 
-/* Sheen pseudo-element (kept small/subtle for nav/CTA) */
-.glassy::after {
+/* background image layer (keeps photo visible, anchored at top) */
+.about-hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(to bottom, rgba(24,24,24,0.12) 20%, rgba(24,24,24,0.6) 70%),
+        url('../assets/photoshoot.jpg');
+    background-position: center;
+    background-size: cover; /* ensure full coverage */
+    background-repeat: no-repeat;
+    transform-origin: center;
+    z-index: 0;
+    will-change: transform, opacity;
+    overflow: hidden;
+}
+
+/* add a dedicated bottom fade so the photo blends into the page background
+   without altering the image itself. This pseudo element sits above the image
+   but below the overlay content. */
+.about-hero-bg::after {
     content: "";
     position: absolute;
-    top: -10%;
-    left: -60%;
-    width: 40%;
-    height: 120%;
-    transform: skewX(-18deg);
-    background: linear-gradient(
-        90deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.20) 50%,
-        rgba(255,255,255,0) 100%
-    );
-    opacity: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 30%; /* adjust how much of the bottom fades */
     pointer-events: none;
-    z-index: 3;
-    will-change: left, opacity;
+    z-index: 1;
+    background: linear-gradient(
+        180deg,
+        rgba(24,24,24,0) 0%,
+        rgba(24,24,24,0.25) 45%,
+        rgba(24,24,24,0.55) 70%,
+        var(--eerie-black) 100%
+    );
 }
 
-/* Active sweep: triggered by JS toggling .glassy-active (reflow in JS ensures restart) */
-@keyframes glassNavSheen {
-    0%   { left: -60%; opacity: 0; }
-    8%   { opacity: 1; }
-    60%  { left: 120%; opacity: 1; }
-    100% { left: 120%; opacity: 0; }
+/* overlay panel centered over the hero background */
+.about-hero-overlay {
+    position: relative;
+    z-index: 3; /* raised so overlay content remains fully on top */
+    text-align: center;
+    color: var(--white);
+    padding: clamp(1rem, 2.5vw, 2.25rem); /* responsive padding */
+    max-width: min(1100px, 92vw); /* responsive max width */
+    width: 100%;
+    margin: 0 1rem;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(12,12,12,0.55), rgba(12,12,12,0.38));
+    box-shadow: 0 12px 40px rgba(0,0,0,0.56);
+    opacity: 0;
+    transform: translateY(18px) scale(0.995);
+    transition: opacity 560ms cubic-bezier(.2,.9,.3,1), transform 560ms cubic-bezier(.2,.9,.3,1);
+    pointer-events: none;
 }
 
-.glassy.glassy-active::after {
-    animation: glassNavSheen 1100ms cubic-bezier(.2,.9,.3,1) 80ms both;
+/* Entrance class: toggled once by script */
+.about-hero-overlay.entrance {
     opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
 }
 
-/* subtle brightening when sheen active */
-.glassy.glassy-active {
-    background: linear-gradient(180deg, rgba(255,255,255,0.032), rgba(255,255,255,0.018));
-    box-shadow: 0 12px 28px rgba(0,0,0,0.52), inset 0 1px 0 rgba(255,255,255,0.03);
-    transform: translateY(-2px);
+/* Title and description styles - make sizing responsive */
+.about-hero-title {
+    margin: 0 0 0.35rem 0;
+    font-family: var(--font-main);
+    font-weight: 800;
+    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+    color: var(--accent);
+    text-shadow: 0 4px 18px rgba(0,0,0,0.65);
 }
 
-/* Make sure .nav-link & .btn.glassy inherit the glassy visuals cleanly */
-.nav-link.glassy, .btn.glassy {
-    /* keep previous .nav-link/.btn spacing but ensure they take glass surface */
-    background: transparent; /* let .glassy background show */
+.about-hero-desc {
+    margin: 0;
+    font-family: var(--font-main);
+    font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+    color: rgba(255,255,255,0.94);
+    opacity: 0.96;
 }
 
-/* Respect reduced motion: skip animated sweep */
-@media (prefers-reduced-motion: reduce) {
-    .glassy::after,
-    .glassy.glassy-active::after {
-        animation: none !important;
-        opacity: 0.12 !important;
-        left: 0 !important;
-    }
-    .glassy.glassy-active {
-        transform: none !important;
-    }
+/* About hero left overlay (quote / quick text) */
+.about-hero-qt {
+    position: absolute;
+    left: clamp(30%, 3.5vw, 48px);       /* keep it near the left but responsive */
+    top: 50%;
+    transform: translateY(-50%) translateX(-14%); /* start off-edge */
+    width: clamp(220px, 18vw, 320px);
+    max-width: 34%;
+    color: rgba(255,255,255,0.95);
+    z-index: 4;
+    pointer-events: none; /* disabled until visible */
+    opacity: 0;
+    transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1);
+    will-change: transform, opacity;
 }
+
+/* visible state: slide inward (center a bit), enable interactions */
+.about-hero-qt.show {
+    opacity: 1;
+    transform: translateY(-50%) translateX(6%); /* shifts toward center when shown */
+    pointer-events: auto;
+}
+
+/* Use existing .glassy visuals + tweak padding for the overlay card */
+.about-hero-qt.glassy {
+    padding: 1rem;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(12,12,12,0.7), rgba(18,18,18,0.9));
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+    backdrop-filter: blur(8px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+/* blockquote / cite styling */
+.about-hero-qt blockquote {
+    margin: 0 0 0.6rem 0;
+    font-size: 0.98rem;
+    line-height: 1.35;
+    font-weight: 500;
+    color: rgba(255,255,255,0.95);
+}
+.about-hero-qt cite {
+    display: block;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.68);
+    margin-top: 0.25rem;
+    text-align: right;
+    font-style: normal;
+}
+
+/* entrance helper: add this class from JS or rely on CSS transition when page loads */
+.about-hero-qt.show {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Small visual tweak when hero overlay entrance runs concurrently */
+.about-hero-overlay.entrance + .about-hero-qt,
+.about-hero-qt { /* ensure a tiny delay so overlay and qt don't compete */
+    transition-delay: 120ms;
+}
+
+/* ensure overlay doesn't create horizontal scroll */
+.about-hero-section { overflow-x: hidden; }
