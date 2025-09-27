@@ -670,12 +670,7 @@ body {
     }
 }
 
-/* NOTE:
-   Responsive (media-query) rules have been moved to css/responsive.css
-   to centralize breakpoint logic and avoid duplication.
-*/
 
-/* About page full-bleed hero (keeps consistent with .hero-section but scoped for about page) */
 .about-hero-section {
     position: relative;
     width: 100vw;
@@ -709,9 +704,7 @@ body {
     overflow: hidden;
 }
 
-/* add a dedicated bottom fade so the photo blends into the page background
-   without altering the image itself. This pseudo element sits above the image
-   but below the overlay content. */
+
 .about-hero-bg::after {
     content: "";
     position: absolute;
