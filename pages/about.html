@@ -33,7 +33,6 @@
     <!-- Stylesheets -->
      <link rel="stylesheet" href="../css/styles.css">
      <link rel="stylesheet" href="../css/responsive.css">
-     <script defer src="../js/animation.js"></script>
 </head>
 <body>
     <a class="skip-link" href="#main-content" aria-label="Skip to main content">Skip to content</a>
@@ -44,7 +43,7 @@
 
         <div class="about-hero-overlay" id="aboutHeroOverlay" aria-live="polite">
             <h1 id="about-hero-title" class="about-hero-title">About Me</h1>
-            <p class="about-hero-desc">Know more about me and discover my more</p>
+            <p class="about-hero-desc">Jan Rhian Angulo</p>
         </div>
 
         <!-- REPLACED: Qt became a semantic aside overlay placed to the left of the hero -->
@@ -58,7 +57,141 @@
     </section>
 
     <main id="main-content" tabindex="-1">
+        <!-- Profile card: picture on the left, details on the right -->
+        <section class="about-card profile-card" aria-labelledby="profile-card-title">
+            <div class="profile-inner">
+                <div class="profile-left" aria-hidden="false">
+                    <img src="../assets/selfie.jpeg" alt="Portrait of Jan Rhian Angulo" class="profile-photo">
+                </div>
+                <div class="profile-right">
+                    <h3 id="profile-card-title" class="profile-name">Mr. Jan Rhian Angulo</h3>
+                    <p class="profile-role">Fullstack Developer</p>
+                    <p class="profile-bio">
+                        I build reliable, maintainable web applications — from API design and backend systems to
+                        performant front-end interfaces and thoughtful UX. I focus on clean architecture, testing,
+                        and shipping value. As a lifelong learner, I stay updated with the latest technologies and best practices
+                        to deliver high-quality solutions. When I'm not coding, I enjoy hiking, photography, and exploring new tech trends.
+                        I'm passionate about creating impactful digital experiences that solve real-world problems.
+                    </p>
+                    <p class="profile-bio">
+                        Off work, I spend my time on Drums and Guitars. One thing about me is that I love to travel and explore new places.
+                        I also enjoy reading books on technology, self-improvement, and fiction.
+                        I'm always eager to connect with like-minded professionals and explore new opportunities.
+                        Taking my talent to the next level is one of the challenge I really want to master.
+                        Even so far, I am still on the process of learning and improving my skills.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- New: Childhood card with images on both sides and centered description -->
+        <section class="about-card childhood-card" aria-labelledby="childhood-title">
+            <div class="childhood-inner">
+                <div class="child-left">
+                    <img src="../assets/childhood2.jpg" alt="Young Jan left photo" class="child-photo">
+                </div>
+
+                <div class="child-middle" role="region" aria-labelledby="childhood-title">
+                    <h3 id="childhood-title" class="child-title">My Childhood</h3>
+                    <p class="child-desc">
+                        I grew up as a simple person without programming knowledge. My family didn't have much, but we had each other.
+                        I was born in a small town in the Philippines, where I spent most of my childhood playing outside with friends and exploring nature.
+                        My parents worked hard to provide for us, and they always encouraged me to pursue my dreams.
+                        I was fascinated by technology from a young age, and I would often take apart old electronics to see how they worked, to the point a 220V of electricity
+                        almost erase my entire existence. My Mom and Dad were not happy about that incident, but they were relieved that I was okay.
+                        They found out my strange behavior about school instead of going to learn and follow the system and curriculum, I cut and ditch my class to go to the
+                        library and read books about computers and technology.
+                        This curiosity eventually led me to discover programming, and I was hooked.
+                        Despite the challenges, I was determined to learn and improve my skills.
+                        I spent countless hours studying online resources, practicing coding exercises, and building small projects.
+                        Over time, I gained more confidence and experience, and I eventually landed my first job as a junior developer.
+                        Looking back, I'm grateful for my humble beginnings and the lessons I learned along the way.
+                        They taught me the value of hard work, perseverance, and the importance of following my passions.
+                        Today, I'm proud of how far I've come, and I'm excited to see where my journey will take me next.
+                    </p>
+                </div>
+
+                <div class="child-right">
+                    <img src="../assets/childhood1.jpg" alt="Young Jan right photo" class="child-photo">
+                </div>
+            </div>
+        </section>
+
+        <!-- New bottom hero: full-bleed image that blends top & bottom -->
+        <section class="about-bottom-hero" aria-hidden="false" role="region" aria-labelledby="about-bottom-hero-title">
+            <div class="about-bottom-hero-bg" aria-hidden="true"></div>
+            <div class="about-bottom-hero-overlay" aria-live="polite">
+                <h2 id="about-bottom-hero-title" class="about-bottom-hero-title">Life is Full of Mystic Experience</h2>
+                <a href="../index.html" class="about-bottom-hero-sub glassy" aria-label="Go back home">Go Back Home</a>
+            </div>
+        </section>
+
+        <!-- New: School card placed under the second (bottom) hero — image on the right -->
+        <section class="about-card school-card" aria-labelledby="school-card-title-2">
+            <div class="school-inner">
+                <div class="school-left">
+                    <h3 id="school-card-title-2" class="school-name">Metro Dumaguete College</h3>
+                    <p class="school-degree">B.S. Computer Science — 2024 – Current</p>
+                    <p class="school-desc">
+                        Focused on software engineering, algorithms, and system design. Participated in collaborative projects,
+                        led a campus developer group, and contributed to student open-source initiatives. At first, I struggled with
+                        balancing coursework and personal projects, but over time I developed strong time management skills and a disciplined
+                        work ethic. I also learned the importance of networking and building relationships with peers and professors.
+                        These experiences have shaped my approach to problem-solving and teamwork, and I am excited to apply
+                        these skills in my future career as a developer.
+                    </p>
+                </div>
+
+                <div class="school-right" aria-hidden="false">
+                    <img src="../assets/school.jpg" alt="Institute building or campus photo" class="school-photo">
+                </div>
+            </div>
+        </section>
+
+        <!-- New: Desktop environment card (Arch Linux + Hyprland) -->
+        <section class="about-card desktop-card" aria-labelledby="desktop-title">
+            <div class="desktop-inner">
+                <div class="desktop-left">
+                    <img src="../assets/desktop.png" alt="Arch + Hyprland desktop" class="desktop-photo">
+                </div>
+
+                <div class="desktop-body" role="region" aria-labelledby="desktop-title">
+                    <h3 id="desktop-title" class="desktop-name">My Desktop — Arch + Hyprland</h3>
+                    <p class="desktop-sub">A minimal, high-performance setup for development and focus.</p>
+                    <p class="desktop-desc">
+                        My workstation runs Arch Linux with Hyprland as the Wayland compositor. The setup is tuned for responsiveness,
+                        tiling workflows, and minimal distractions: Hyprland for window management, Sway/Hyprland configs for keyboard-driven
+                        navigation, Alacritty as terminal, and a lightweight bar and notification stack. I optimize for fast context switching,
+                        reproducible dotfiles, and performant tooling (neovim, node, docker). Screenshots show my typical workspace layout
+                        and theming.
+                    </p>
+                </div>
+            </div>
+        </section>
 
     </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo" aria-label="Site footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="logo" aria-hidden="true">Coder</div>
+                <p class="footer-desc">Mr. Jan Rhian Angulo — Fullstack Developer</p>
+            </div>
+
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <a href="../index.html">Home</a>
+                <a href="#about">About</a>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#contact">Contact</a>
+            </nav>
+
+            <div class="footer-legal" aria-hidden="false">
+                <small>© 2025 Jan Rhian Angulo. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/animation.js"></script>
 </body>
 </html>

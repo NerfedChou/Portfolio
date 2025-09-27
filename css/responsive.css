@@ -49,7 +49,8 @@
     }
 
     .about-hero-title {
-        font-size: 1.6rem;
+        font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+        margin-bottom: 0.25rem;
     }
 
     .about-hero-desc {
@@ -172,6 +173,76 @@
     .about-left.active .portrait-panel { transform: translate(-50%, 0); }
 
     .typewriter { max-width: 16ch; border-right-width: 1.5px; }
+
+    /* Stack profile card vertically on narrow viewports */
+    .profile-card .profile-inner {
+        flex-direction: column;
+        gap: 0.9rem;
+        align-items: center;
+        text-align: center;
+    }
+    .profile-card .profile-left {
+        width: min(92%, 320px);
+        flex-basis: auto;
+    }
+    .profile-card .profile-right {
+        width: 100%;
+    }
+
+    /* Make the profile card span the full content width on small screens */
+    .profile-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 1rem auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        box-sizing: border-box;
+    }
+
+    /* Ensure the left photo column fills the card width when stacked */
+    .profile-card .profile-left {
+        width: 100%;
+        max-width: 100%;
+        flex-basis: auto;
+    }
+
+    /* Make the portrait responsive inside the card */
+    .profile-card .profile-photo {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Childhood card responsive: stack images and center text on narrow screens */
+    .childhood-inner {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    .child-left,
+    .child-right {
+        width: min(92%, 360px);
+        max-width: 360px;
+        flex: none;
+    }
+    .child-photo {
+        height: auto;
+        width: 100%;
+    }
+    .child-middle {
+        width: 100%;
+        padding: 0 0.6rem;
+        text-align: center;
+    }
+
+    .about-bottom-hero {
+        min-height: 30vh;
+        padding: 1.1rem 0;
+    }
+    .about-bottom-hero-bg::before { height: 14%; }
+    .about-bottom-hero-bg::after { height: 42%; }
+    .about-bottom-hero-title { font-size: 1.05rem; }
+    .about-bottom-hero-sub { font-size: 0.95rem; }
 }
 
 /* Small phones */
@@ -181,7 +252,9 @@
         align-items: center;
     }
     .hero-title {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
+        line-height: 1.08;
+        padding: 0 0.6rem;
     }
     .hero-subtitle {
         font-size: 0.85rem;
@@ -210,6 +283,131 @@
     .about-hero-desc {
         font-size: 0.9rem;
     }
+
+    .history-heading,
+    .about-bottom-hero-title {
+        font-size: 0.98rem;
+        padding: 0 0.6rem;
+    }
+}
+
+/* Mid-size screens: tablets in landscape and smaller laptops
+   Fixes layout issues between ~720px and 1200px */
+@media (min-width: 721px) and (max-width: 1200px) {
+    .school-card {
+        width: calc(100% - 3rem);
+        max-width: 880px;
+    }
+
+    /* keep school photo proportionate on medium screens */
+    .school-right {
+        flex: 0 0 220px;
+        max-width: 220px;
+    }
+
+    .school-photo {
+        height: 160px;
+        max-height: 180px;
+        object-fit: cover;
+    }
+
+    /* Make profile card centered but not too narrow */
+    .profile-card {
+        width: calc(100% - 3rem);
+        max-width: 920px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* Keep the about grid readable: fixed portrait column and flexible content */
+    .about-grid {
+        grid-template-columns: 320px 1fr;
+        gap: 1.25rem;
+        align-items: start;
+    }
+
+    /* Slightly reduce portrait size to avoid pushing content */
+    .about-portrait {
+        max-width: 320px;
+        height: auto;
+    }
+
+    /* Constrain hero content so it doesn't overflow on mid screens */
+    .hero-content {
+        max-width: 720px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* Reduce header padding and nav gaps to avoid wrapping */
+    .header {
+        padding: 1rem 2vw 0 2vw;
+    }
+    .nav {
+        gap: 1rem;
+    }
+    .nav-link {
+        padding: 0.35rem 0.65rem;
+        font-size: 1rem;
+    }
+
+    /* Graph / timeline container sizing */
+    .graph-container {
+        max-width: 980px;
+        padding: 1.5rem 1rem;
+    }
+
+    /* Make sure hero keeps reasonable height */
+    .hero-section {
+        min-height: 56vh;
+        max-height: 760px;
+    }
+
+    /* Ensure centered main line position remains accurate */
+    .graph-main-line, .graph-svg {
+        /* no change to left = 50% but ensure transform is present */
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .about-bottom-hero { min-height: 36vh; padding: 1.6rem 0; }
+    .about-bottom-hero-title { font-size: 1.4rem; }
+}
+
+/* Ensure school card stacks and does not overflow on small screens */
+@media (max-width: 720px) {
+    .school-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 1rem auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        box-sizing: border-box;
+    }
+    .school-inner {
+        flex-direction: column;
+        gap: 0.9rem;
+        align-items: center;
+        text-align: center;
+    }
+    .school-left {
+        width: 100%;
+    }
+    .school-right {
+        width: 100%;
+        max-width: 100%;
+        flex-basis: auto;
+        display: block;
+    }
+    .school-photo {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        object-fit: cover;
+        display: block;
+    }
 }
 
 /* Respect reduced motion preferences */
@@ -221,4 +419,113 @@
     }
     .glassy.glassy-active::after { animation: none; opacity: 0.12; left: 0; }
     .skill-detail, .skill, .portrait-panel { transition: none !important; transform: none !important; }
+}
+
+/* Utilities responsive helpers */
+
+/* Force any media-like block to stack on small viewports */
+@media (max-width: 720px) {
+    .media, .profile-card .profile-inner, .school-inner, .childhood-inner, .desktop-inner {
+        flex-direction: column;
+        gap: 0.9rem;
+        align-items: center;
+        text-align: center;
+    }
+    /* ensure card containers use full available width on mobile */
+    .u-card, .about-card, .profile-card, .school-card, .childhood-card, .desktop-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 1rem auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        box-sizing: border-box;
+    }
+    /* image helpers adjust on mobile */
+    .media__figure, .profile-card .profile-left, .school-right, .child-left, .child-right, .desktop-left {
+        width: min(92%, 360px);
+        max-width: 360px;
+        flex-basis: auto;
+    }
+    .u-img, .u-img--contain, .profile-photo, .school-photo, .child-photo, .desktop-photo {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        object-fit: cover;
+    }
+}
+
+/* Mid-size screens (keep consistent card sizing) */
+@media (min-width: 721px) and (max-width: 1200px) {
+    /* give childhood side images more room on mid screens */
+    .child-left, .child-right { flex: 0 0 240px; max-width: 240px; }
+    .child-photo {
+        height: 240px;
+        max-height: 420px;
+        object-fit: cover;
+    }
+
+    /* keep other mid-size rules unchanged */
+    .u-maxwidth { max-width: 920px; width: calc(100% - 3rem); }
+    .profile-card .profile-left { flex: 0 0 300px; max-width: 300px; }
+    .school-right { flex: 0 0 260px; max-width: 260px; }
+}
+
+/* Large screens: give the childhood images a bit more room */
+@media (min-width: 1201px) {
+    .child-left, .child-right {
+        flex: 0 0 320px;    /* larger column on wide viewports */
+        max-width: 320px;
+    }
+    .child-photo {
+        height: 320px;
+        max-height: 640px;
+        object-fit: cover;
+    }
+}
+
+/* Footer responsive: stack content and center */
+@media (max-width: 720px) {
+    .footer-inner {
+        flex-direction: column;
+        gap: 0.6rem;
+        align-items: center;
+        text-align: center;
+    }
+    .footer-nav { gap: 0.5rem; flex-wrap: wrap; }
+    .footer-nav a { padding: 0.4rem 0.6rem; }
+    .footer-legal { order: 3; }
+    .footer-brand { order: 1; }
+}
+
+/* Mobile: stack childhood block vertically (description first, then photos stacked) */
+@media (max-width: 720px) {
+    .childhood-inner {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: center;
+        text-align: center;
+    }
+
+    .child-middle {
+        width: 100%;
+        grid-column: auto;
+        grid-row: auto;
+        padding: 0 0.6rem;
+        text-align: center;
+    }
+
+    .child-left,
+    .child-right {
+        width: min(92%, 360px);
+        max-width: 360px;
+        flex: none;
+    }
+
+    .child-photo {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        object-fit: cover;
+    }
 }

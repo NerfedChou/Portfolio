@@ -1,8 +1,37 @@
 @import "base.css";
 
+/* Readability helpers: central timing / easing variables */
+:root {
+    --duration-short: 160ms;
+    --duration-medium: 320ms;
+    --duration-long: 560ms;
+    --duration-very-long: 2000ms;
+
+    --ease-standard: cubic-bezier(.2,.9,.3,1);
+    --ease-soft: cubic-bezier(.25,.8,.35,1);
+}
+
+/* Subtle soft-text color shift to reduce eye strain.
+   - Cycles slowly between three near-white tints.
+   - Applied to body and common copy selectors that inherit color.
+   - Respects prefers-reduced-motion.
+*/
+@keyframes softTextShift {
+    0%   { color: #E0E7FF; } /* soft blue-white */
+    33%  { color: #EFEFEF; } /* neutral off-white */
+    66%  { color: #F0FFF0; } /* warm off-white */
+    100% { color: #E0E7FF; } /* loop back */
+}
+
+/* configuration variables for the soft text animation */
+:root {
+    --soft-text-animation-duration: 90s;
+    --soft-text-animation-easing: linear;
+}
+
 body {
     background: var(--eerie-black);
-    color: var(--white);
+    color: var(--foreground);
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -153,7 +182,7 @@ body {
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     opacity: 0;
     transform: translateY(24px);
-    transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1);
+    transition: opacity var(--duration-medium) var(--ease-standard), transform var(--duration-medium) var(--ease-standard);
 }
 
 .hero-subtitle {
@@ -163,7 +192,7 @@ body {
     margin-bottom: 2rem;
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 420ms 120ms cubic-bezier(.2,.9,.3,1), transform 420ms 120ms cubic-bezier(.2,.9,.3,1);
+    transition: opacity var(--duration-medium) 120ms var(--ease-standard), transform var(--duration-medium) 120ms var(--ease-standard);
     display: flex;
     gap: 0.6rem;
     align-items: center;
@@ -201,7 +230,7 @@ body {
     justify-content: center;
     opacity: 0;
     transform: translateY(12px);
-    transition: opacity 420ms 220ms cubic-bezier(.2,.9,.3,1), transform 420ms 220ms cubic-bezier(.2,.9,.3,1);
+    transition: opacity var(--duration-medium) 220ms var(--ease-standard), transform var(--duration-medium) 220ms var(--ease-standard);
 }
 
 
@@ -291,6 +320,14 @@ body {
 }
 
 
+/* Sheen animation for nav links and CTA buttons */
+@keyframes navCtaSheen {
+    0% { left: -60%; opacity: 0; }
+    10% { opacity: 0.8; }
+    60% { left: 110%; opacity: 0.8; }
+    100% { left: 110%; opacity: 0; }
+}
+
 .skip-link {
     position: absolute;
     top: -999px;
@@ -361,7 +398,7 @@ body {
 .about-grid {
     display: grid;
     grid-template-columns: 360px 1fr;
-    gap: 2rem;
+    gap: var(--content-gap);
     align-items: center;
 }
 
@@ -409,7 +446,7 @@ body {
     box-shadow: 0 16px 48px rgba(0,0,0,0.6);
     opacity: 0;
     transform: translateY(8px) scale(0.995);
-    transition: opacity 300ms ease, transform 320ms cubic-bezier(.2,.9,.3,1);
+    transition: opacity var(--duration-medium) var(--ease-standard), transform 320ms var(--ease-standard);
     z-index: 999;
     pointer-events: none;
     font-size: 0.95rem;
@@ -422,7 +459,7 @@ body {
     pointer-events: auto;
     opacity: 1;
     transform: translateY(0) scale(1);
-    transition-delay: 140ms; /* was 90ms, now 140ms for smoother fade-in */
+    transition-delay: 140ms;
 }
 
 /* hide sequence: ensure panel hides quickly before restoring image */
@@ -432,12 +469,6 @@ body {
     transition-duration: 180ms;
     transition-delay: 0ms;
     pointer-events: none;
-}
-
-.panel-title {
-    text-align: center;
-    color: var(--accent);
-    font-weight: 900;
 }
 
 /* when panel is removed, about-left.active removed later so portrait returns */
@@ -469,7 +500,7 @@ body {
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 1rem;
+    gap: var(--content-gap);
     width: 100%;
     box-sizing: border-box;
 }
@@ -630,7 +661,7 @@ body {
     -webkit-backdrop-filter: blur(8px) saturate(120%);
     backdrop-filter: blur(8px) saturate(120%);
     border-radius: 14px;
-    padding: 1.25rem;
+    padding: var(--card-padding);
     border: 1px solid rgba(255,255,255,0.04);
     box-shadow: 0 18px 50px rgba(6,6,6,0.7);
     transition: transform 220ms ease, box-shadow 220ms ease;
@@ -718,7 +749,7 @@ body {
     box-shadow: 0 12px 40px rgba(0,0,0,0.56);
     opacity: 0;
     transform: translateY(18px) scale(0.995);
-    transition: opacity 560ms cubic-bezier(.2,.9,.3,1), transform 560ms cubic-bezier(.2,.9,.3,1);
+    transition: opacity var(--duration-long) var(--ease-standard), transform var(--duration-long) var(--ease-standard);
     pointer-events: none;
 }
 
@@ -734,7 +765,7 @@ body {
     margin: 0 0 0.35rem 0;
     font-family: var(--font-main);
     font-weight: 800;
-    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+    font-size: clamp(1.6rem, 4.2vw, 2.6rem);
     color: var(--accent);
     text-shadow: 0 4px 18px rgba(0,0,0,0.65);
 }
@@ -813,17 +844,16 @@ body {
 /* ensure overlay doesn't create horizontal scroll */
 .about-hero-section { overflow-x: hidden; }
 
-/* Glassy surface and animated sheen for nav links and CTAs */
-.glassy {
-    position: relative;
-    overflow: hidden;
-    background: rgba(255,255,255,0.03);
-    -webkit-backdrop-filter: blur(6px) saturate(120%);
-    backdrop-filter: blur(6px) saturate(120%);
-    border-radius: 10px;
-    transition: background 260ms ease, box-shadow 260ms ease, transform 200ms ease;
+/* Apply glassy sheen to nav buttons and CTA (activated by .glassy-active) */
+.nav-link.glassy,
+.btn.glassy {
+    position: relative; /* ensure pseudo sits correctly */
+    overflow: hidden;   /* clip the sheen */
 }
-.glassy::after {
+
+/* sheen layer */
+.nav-link.glassy::after,
+.btn.glassy::after {
     content: "";
     position: absolute;
     top: 0;
@@ -831,18 +861,737 @@ body {
     width: 60%;
     height: 100%;
     pointer-events: none;
+    z-index: 2;
+    opacity: 0;
     background: linear-gradient(
         110deg,
         rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.18) 50%,
+        rgba(255,255,255,0.16) 50%,
         rgba(255,255,255,0) 100%
     );
-    opacity: 0;
-    transition: opacity 0.18s;
-    z-index: 2;
-}
-.glassy.glassy-active::after {
-    opacity: 1;
-    animation: sheenSweep 2s cubic-bezier(.2,.9,.3,1);
+    transform: skewX(-12deg);
+    transition: opacity 180ms linear;
 }
 
+/* run the sweep when JS toggles .glassy-active */
+.glassy.glassy-active::after {
+    opacity: 1;
+    animation: navCtaSheen var(--duration-very-long) var(--ease-standard) both infinite;
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .glassy.glassy-active::after {
+        animation: none;
+        opacity: 0.12;
+        left: 0;
+    }
+}
+
+/* Go Back Home — orange glassy CTA with sheen (participates in .glassy cycle) */
+.about-bottom-hero-sub {
+    display: inline-block;
+    padding: 0.6rem 1.05rem;
+    border-radius: 10px;
+    font-weight: 700;
+    color: var(--white);
+    background: linear-gradient(180deg, rgba(255,115,0,0.14), rgba(255,115,0,0.20));
+    border: 1px solid rgba(255,115,0,0.24);
+    box-shadow: 0 10px 30px rgba(255,115,0,0.06);
+    text-decoration: none;
+    position: relative;   /* required for sheen pseudo-element */
+    overflow: hidden;     /* clip sheen */
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+    backdrop-filter: blur(6px) saturate(120%);
+    transition: transform 180ms var(--ease-standard), box-shadow 200ms var(--ease-standard), background 180ms var(--ease-standard);
+}
+
+/* subtle hover / focus lift */
+.about-bottom-hero-sub:hover,
+.about-bottom-hero-sub:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 42px rgba(255,115,0,0.12);
+    background: linear-gradient(180deg, rgba(255,115,0,0.18), rgba(255,115,0,0.26));
+}
+
+/* accessible focus-visible */
+.about-bottom-hero-sub:focus-visible {
+    outline: 3px solid rgba(255,115,0,0.18);
+    outline-offset: 4px;
+    border-radius: 9px;
+}
+
+/* ensure sheen pseudo can render — re-use existing .glassy pseudo rules (element must have .glassy class) */
+.about-bottom-hero-sub.glassy::after {
+    /* inherit generic sheen style but make it slightly brighter for the orange surface */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 60%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    background: linear-gradient(
+        110deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.28) 50%,
+        rgba(255,255,255,0) 100%
+    );
+    transform: skewX(-12deg);
+    transition: opacity 180ms linear;
+}
+
+/* when JS toggles .glassy-active the sheen will sweep (global navCtaSheen keyframes are used) */
+.about-bottom-hero-sub.glassy.glassy-active::after {
+    opacity: 1;
+    animation: navCtaSheen var(--duration-very-long) var(--ease-standard) both infinite;
+}
+
+/* reduced motion fallback */
+@media (prefers-reduced-motion: reduce) {
+    .about-bottom-hero-sub.glassy.glassy-active::after {
+        animation: none;
+        opacity: 0.12;
+        left: 0;
+    }
+}
+
+/* Profile card layout (picture left, content right) */
+.profile-card {
+    margin: 2.5rem auto;
+    max-width: 920px;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.profile-card .profile-inner {
+    display: flex;
+    gap: var(--content-gap);
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.profile-card .profile-left {
+    flex: 0 0 360px;
+    display: block;
+    max-width: 360px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profile-card .profile-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* content column */
+.profile-card .profile-right {
+    flex: 1 1 auto;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.profile-card .profile-name {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.profile-card .profile-role {
+    margin: 0 0 0.6rem 0;
+    font-weight: 600;
+    color: #e6e6e6;
+}
+
+.profile-card .profile-bio {
+    margin: 0 0 1rem 0;
+    color: #dcdcdc;
+    line-height: 1.5;
+}
+
+/* Childhood card: images on both sides, centered description */
+.childhood-card {
+    margin: 2.5rem auto;
+    max-width: 1100px;
+    width: min(92%, 1100px);
+    box-sizing: border-box;
+    padding: 1rem;
+}
+
+/* Two-column grid: left = description, right = stacked photos */
+.childhood-inner {
+    display: grid;
+    grid-template-columns: 1fr minmax(240px, 360px); /* left flexible, right stacked column */
+    grid-auto-rows: auto;
+    gap: var(--content-gap);
+    align-items: start;
+    justify-content: center;
+}
+
+/* description sits in the left column and spans both rows */
+.child-middle {
+    grid-column: 1 / 2;
+    grid-row: 1 / span 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 220px;
+    padding: 0 0.75rem;
+    text-align: left;
+}
+
+/* photos occupy the right column in two rows (stacked) */
+.child-left {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.child-right {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ensure right column photos scale and share same width */
+.child-left, .child-right {
+    width: 100%;
+    max-width: 360px;
+}
+.child-photo {
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.04);
+    display: block;
+}
+
+/* small visual polish to keep centered on wide screens */
+.child-middle { display: flex; flex-direction: column; justify-content: center; }
+
+/* Bottom hero under cards — full-bleed background that blends top & bottom */
+.about-bottom-hero {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 10;
+    min-height: 70vh;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    padding: clamp(2rem, 4vw, 3rem) 0;
+    background: transparent;
+}
+
+/* background layer (image) */
+.about-bottom-hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(to bottom, rgba(24,24,24,0.0) 0%, rgba(24,24,24,0.12) 20%, rgba(24,24,24,0.45) 65%),
+        url('../assets/hobby.jpg');
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 0;
+    will-change: transform, opacity;
+}
+
+/* top fade (soft) - sits above image but below overlay */
+.about-bottom-hero-bg::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 22%;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(180deg, var(--eerie-black) 0%, rgba(24,24,24,0.2) 60%, rgba(24,24,24,0) 100%);
+}
+
+/* bottom fade (blend into page background) */
+.about-bottom-hero-bg::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 34%;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(24,24,24,0) 0%, rgba(24,24,24,0.22) 45%, var(--eerie-black) 100%);
+}
+
+/* overlay content centered over image */
+.about-bottom-hero-overlay {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: var(--white);
+    max-width: min(980px, 92vw);
+    width: 100%;
+    padding: 0 1rem;
+    pointer-events: auto;
+}
+
+/* overlay text styling */
+.about-bottom-hero-title {
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 2.6vw, 1.8rem);
+    color: var(--accent);
+    text-shadow: 0 6px 20px rgba(0,0,0,0.6);
+}
+
+.about-bottom-hero-sub {
+    display: inline-block;
+    padding: 0.6rem 1.05rem;
+    border-radius: 10px;
+    font-weight: 700;
+    color: var(--white);
+    background: linear-gradient(180deg, rgba(255,115,0,0.14), rgba(255,115,0,0.20));
+    border: 1px solid rgba(255,115,0,0.24);
+    box-shadow: 0 10px 30px rgba(255,115,0,0.06);
+    text-decoration: none;
+    position: relative;   /* required for sheen pseudo-element */
+    overflow: hidden;     /* clip sheen */
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+    backdrop-filter: blur(6px) saturate(120%);
+    transition: transform 180ms var(--ease-standard), box-shadow 200ms var(--ease-standard), background 180ms var(--ease-standard);
+}
+
+/* subtle hover / focus lift */
+.about-bottom-hero-sub:hover,
+.about-bottom-hero-sub:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 42px rgba(255,115,0,0.12);
+    background: linear-gradient(180deg, rgba(255,115,0,0.18), rgba(255,115,0,0.26));
+}
+
+/* accessible focus-visible */
+.about-bottom-hero-sub:focus-visible {
+    outline: 3px solid rgba(255,115,0,0.18);
+    outline-offset: 4px;
+    border-radius: 9px;
+}
+
+/* ensure sheen pseudo can render — re-use existing .glassy pseudo rules (element must have .glassy class) */
+.about-bottom-hero-sub.glassy::after {
+    /* inherit generic sheen style but make it slightly brighter for the orange surface */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 60%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    background: linear-gradient(
+        110deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.28) 50%,
+        rgba(255,255,255,0) 100%
+    );
+    transform: skewX(-12deg);
+    transition: opacity 180ms linear;
+}
+
+/* when JS toggles .glassy-active the sheen will sweep (global navCtaSheen keyframes are used) */
+.about-bottom-hero-sub.glassy.glassy-active::after {
+    opacity: 1;
+    animation: navCtaSheen var(--duration-very-long) var(--ease-standard) both infinite;
+}
+
+/* reduced motion fallback */
+@media (prefers-reduced-motion: reduce) {
+    .about-bottom-hero-sub.glassy.glassy-active::after {
+        animation: none;
+        opacity: 0.12;
+        left: 0;
+    }
+}
+
+/* Desktop card: Arch + Hyprland showcase (image left, description right) */
+.desktop-card {
+    margin: 2rem auto;
+    padding: 1rem;
+    max-width: 920px;
+    width: min(92%, 920px);
+    box-sizing: border-box;
+}
+
+.desktop-inner {
+    display: flex;
+    gap: var(--content-gap);
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+}
+
+/* left image column */
+.desktop-left {
+    flex: 0 0 300px;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* desktop photo: moderate height and responsive */
+.desktop-photo {
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.04);
+    display: block;
+}
+
+/* descriptive body */
+.desktop-body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.desktop-name {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.desktop-sub {
+    margin: 0 0 0.6rem 0;
+    color: #dcdcdc;
+    font-weight: 600;
+}
+
+.desktop-desc {
+    margin: 0;
+    color: #e6e6e6;
+    line-height: 1.5;
+}
+
+/* subtle hover lift consistent with other cards */
+@media (hover: hover) and (min-width: 720px) {
+    .desktop-card:hover { transform: translateY(-6px); }
+}
+
+/* -------------------------
+   Utility & Reusable Classes
+   ------------------------- */
+
+/* Card base: use for any visual card (about-card, profile-card, etc.) */
+.u-card,
+.about-card,
+.profile-card,
+.childhood-card,
+.school-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+    backdrop-filter: blur(8px) saturate(120%);
+    border-radius: 14px;
+    padding: var(--card-padding);
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 18px 50px rgba(6,6,6,0.7);
+    transition: transform 220ms var(--ease-standard), box-shadow 220ms var(--ease-standard);
+    box-sizing: border-box;
+}
+
+/* Small elevation variant (use .u-elevated) */
+.u-elevated {
+    box-shadow: 0 18px 50px rgba(6,6,6,0.7);
+}
+
+/* Subtle hover lift */
+@media (hover: hover) and (min-width: 720px) {
+    .u-card:hover { transform: translateY(-6px); box-shadow: 0 28px 72px rgba(6,6,6,0.75); }
+}
+
+/* Generic media/layout pattern: image + content
+   Use .media for left-image layout, .media--reverse for right-image.
+   Apply .media--stack at small screens to stack vertically.
+*/
+.media {
+    display: flex;
+    gap: var(--content-gap);
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0; /* ensure flex children can shrink */
+}
+.media__figure {
+    flex: 0 0 260px; /* default media image column */
+    max-width: 360px;
+    box-sizing: border-box;
+}
+.media__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Reverse media (image on right) */
+.media--reverse { flex-direction: row-reverse; }
+
+/* Stack helper: switches to column (used on small screens) */
+.media--stack { flex-direction: column; align-items: center; text-align: center; }
+@media (max-width: 720px) {
+    .media--stack { gap: 0.9rem; }
+}
+
+/* Reusable responsive image */
+.u-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* best default; use contain where full-body required */
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* For full visible-body photos (use .u-img--contain) */
+.u-img--contain { object-fit: contain; max-height: 80vh; }
+
+/* Glass surface: reusable glass panel styling */
+.u-glass {
+    background: linear-gradient(180deg, rgba(12,12,12,0.7), rgba(18,18,18,0.9));
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+    backdrop-filter: blur(8px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+/* Glassy sheen target (pseudo ::after used by JS .glassy-active) */
+.u-glassy {
+    position: relative;
+    overflow: hidden;
+}
+.u-glassy::after {
+    content:"";
+    position: absolute;
+    top:0; left:-60%;
+    width:60%; height:100%;
+    pointer-events:none; z-index:2;
+    opacity:0;
+    background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-12deg);
+    transition: opacity 180ms linear;
+}
+.u-glassy.glassy-active::after {
+    opacity:1;
+    animation: navCtaSheen var(--duration-very-long) var(--ease-standard) both infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .u-glassy.glassy-active::after { animation:none; opacity: 0.12; left:0; }
+}
+
+/* Utility spacing helpers */
+.u-center { margin-left:auto; margin-right:auto; }
+.u-maxwidth { max-width: 920px; width: min(92%, 920px); }
+
+/* -------------------------
+   Replace duplicated card rules with shared utilities
+   ------------------------- */
+
+/* make profile-card, school-card, childhood-card use the media pattern */
+.profile-card { /* semantic hook preserved */
+    margin: 2.5rem auto;
+}
+.profile-card .profile-inner { /* adapt to new utility naming */
+    display: flex;
+    gap: var(--content-gap);
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+}
+.profile-card .profile-left { /* image column uses media__figure + img helper */
+    flex: 0 0 260px;
+    max-width: 260px;
+}
+.profile-card .profile-photo { /* reuse image utility */
+    /* apply base img styles */
+    width: 100%; height: auto; object-fit: cover; border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.04);
+    max-height: 520px;
+}
+
+/* Childhood card uses media layout with small side-figures */
+.childhood-card { margin: 2.5rem auto; padding: 1rem; }
+.childhood-inner { display:grid; grid-template-columns:1fr minmax(240px,360px); grid-auto-rows:auto; gap:var(--content-gap); align-items:start; justify-content:center; }
+.child-middle { grid-column:1 / 2; grid-row:1 / span 2; display:flex; flex-direction:column; justify-content:center; min-width:220px; padding:0 0.75rem; text-align:left; }
+.child-left, .child-right { width:100%; max-width:360px; }
+.child-photo { width:100%; height:auto; max-height:420px; object-fit:cover; border-radius:10px; }
+
+/* School card uses media pattern but centered */
+.school-card {
+    margin: 2rem auto;
+    padding: 1rem;
+    max-width: 920px;
+    width: min(92%, 920px);
+}
+.school-inner { display:flex; gap:var(--content-gap); align-items:center; justify-content:space-between; min-width:0; }
+.school-left { flex:1 1 60%; min-width:0; }
+.school-right { flex:0 0 260px; max-width:260px; display:flex; align-items:center; justify-content:center; }
+.school-photo { width:100%; height:auto; max-height:420px; object-fit:cover; border-radius:12px; }
+
+/* Shared card title color */
+.profile-name, .child-title, .school-name, .history-heading {
+    color: var(--accent);
+}
+
+/* Ensure about-card keeps common visual via .u-card usage */
+.about-card { /* this preserves previous about-card usage while reusing utilities */
+    /* existing about-card visual kept by .u-card rule above (we kept selector in that group) */
+}
+
+/* Skill card & track utilities unchanged (kept original, reused by classes) */
+
+/* Footer styles (glassy, centered, responsive) */
+.site-footer {
+    background: linear-gradient(180deg, rgba(12,12,12,0.6), rgba(12,12,12,0.5));
+    border-top: 1px solid rgba(255,255,255,0.03);
+    padding: 1.25rem 1rem;
+    color: var(--white);
+    box-sizing: border-box;
+    -webkit-backdrop-filter: blur(6px) saturate(110%);
+    backdrop-filter: blur(6px) saturate(110%);
+}
+.footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.footer-brand .logo {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--white);
+    letter-spacing: 1.5px;
+}
+.footer-desc {
+    margin: 0.25rem 0 0 0;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.95rem;
+}
+.footer-nav {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+    justify-content: center;
+}
+.footer-nav a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
+    transition: color 180ms var(--ease-standard), background 180ms var(--ease-standard), transform 160ms ease;
+}
+.footer-nav a:hover,
+.footer-nav a:focus {
+    color: var(--accent);
+    background: rgba(255,255,255,0.02);
+    transform: translateY(-2px);
+}
+.footer-legal {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.88rem;
+}
+
+/* small adjustments to ensure footer doesn't create horizontal scroll */
+.site-footer { overflow: hidden; }
+
+/* keep links keyboard-friendly */
+.footer-nav a:focus-visible { outline: 3px solid rgba(255,115,0,0.14); outline-offset: 4px; border-radius: 6px; }
+
+/* apply the soft color shift to common white/foreground text:
+   include nav, buttons, logo, hero copy, card copy, skill labels, footer, timeline, etc.
+   Reduced-motion respected below. */
+body,
+body p,
+body li,
+body dd,
+body dt,
+body span,
+body small,
+.logo,
+.nav-link,
+.btn,
+.about-hero-desc,
+.about-desc,
+.profile-bio,
+.profile-role,
+.child-desc,
+.school-desc,
+.desktop-desc,
+.history-card p,
+.history-card h3,
+.commit-event .history-card,
+.skill-label,
+.skill-percent,
+.footer-desc,
+.footer-legal,
+.footer-nav a,
+.timeline .history-card,
+.main .description {
+    will-change: color;
+    animation: softTextShift var(--soft-text-animation-duration) var(--soft-text-animation-easing) infinite;
+}
+
+/* Respect reduced-motion preference: disable the color animation */
+@media (prefers-reduced-motion: reduce) {
+    body,
+    body p,
+    body li,
+    body dd,
+    body dt,
+    body span,
+    body small,
+    .logo,
+    .nav-link,
+    .btn,
+    .about-hero-desc,
+    .about-desc,
+    .profile-bio,
+    .profile-role,
+    .child-desc,
+    .school-desc,
+    .desktop-desc,
+    .history-card p,
+    .history-card h3,
+    .commit-event .history-card,
+    .skill-label,
+    .skill-percent,
+    .footer-desc,
+    .footer-legal,
+    .footer-nav a,
+    .timeline .history-card,
+    .main .description {
+        animation: none !important;
+    }
+}

@@ -1,69 +1,70 @@
-// ENTRANCE SA BAYLEHAN SA AKONG WEBSAYT
+// Refactored and self-documenting animation/interaction module
+
 document.addEventListener('DOMContentLoaded', () => {
-    // trigger entrance once
-    const site = document.querySelector('.site-container');
-    if (site) {
-        requestAnimationFrame(() => {
-            setTimeout(() => site.classList.add('animate'), 60);
-        });
+    /* -------------------------
+       Helpers & configuration
+       ------------------------- */
+    const PREFERS_REDUCED_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function deferRun(fn, delay = 0) {
+        requestAnimationFrame(() => setTimeout(fn, delay));
     }
 
-    // one-time about overlay entrance (moved from inline about.html)
-    (function aboutOverlayEntrance() {
+    /* -------------------------
+       Site entrance animation
+       ------------------------- */
+    function initializeSiteEntrance() {
+        const siteContainer = document.querySelector('.site-container');
+        if (!siteContainer) return;
+        deferRun(() => siteContainer.classList.add('animate'), 60);
+    }
+
+    /* -------------------------
+       About hero overlay (one-time)
+       ------------------------- */
+    function initializeAboutOverlayEntrance() {
         const overlay = document.getElementById('aboutHeroOverlay');
-        const qt = document.querySelector('.about-hero-qt');
-        if (!overlay && !qt) return;
-        const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        const revealOverlay = () => {
+        const quotePanel = document.querySelector('.about-hero-qt');
+        if (!overlay && !quotePanel) return;
+        if (PREFERS_REDUCED_MOTION) {
             if (overlay) overlay.classList.add('entrance');
-        };
-
-        if (reduced) {
-            if (overlay) overlay.classList.add('entrance');
-            if (qt) qt.classList.add('show');
+            if (quotePanel) quotePanel.classList.add('show');
             return;
         }
 
-        requestAnimationFrame(() => {
-            revealOverlay();
+        deferRun(() => {
+            if (overlay) overlay.classList.add('entrance');
 
-            // Wait until the overlay no longer has the transient "entrance" class
-            // (which is removed later for cleanup). Polling is used to be robust
-            // across browsers. Fallback after a max timeout so quote always appears.
-            const MAX_WAIT = 1400; // safe upper bound
-            const POLL_MS = 50;
-            const start = performance.now();
+            const MAX_WAIT_MS = 1400;
+            const POLL_INTERVAL_MS = 50;
+            const startTime = performance.now();
 
-            const checkAndShow = () => {
-                const elapsed = performance.now() - start;
-                // If overlay no longer carries the transient "entrance" class, reveal qt
+            const pollForOverlayEnd = () => {
+                const elapsed = performance.now() - startTime;
                 if (!overlay || !overlay.classList.contains('entrance')) {
-                    if (qt) qt.classList.add('show');
+                    if (quotePanel) quotePanel.classList.add('show');
                     return;
                 }
-                if (elapsed < MAX_WAIT) {
-                    setTimeout(checkAndShow, POLL_MS);
+                if (elapsed < MAX_WAIT_MS) {
+                    setTimeout(pollForOverlayEnd, POLL_INTERVAL_MS);
                 } else {
-                    // fallback: reveal after max wait
-                    if (qt) qt.classList.add('show');
+                    if (quotePanel) quotePanel.classList.add('show');
                 }
             };
 
-            // start checking shortly after the entrance begins
-            setTimeout(checkAndShow, 220);
+            setTimeout(pollForOverlayEnd, 220);
+            // cleanup transient state later (keeps prior behavior)
+            setTimeout(() => { if (overlay) overlay.classList.remove('entrance'); }, 1200);
+        }, 0);
+    }
 
-            // keep transient overlay animation class for cleanup (unchanged behavior)
-            setTimeout(() => {
-                if (overlay) overlay.classList.remove('entrance');
-            }, 1200);
-        });
-    })();
+    /* -------------------------
+       Typewriter (roles cycle)
+       ------------------------- */
+    function initializeTypewriter() {
+        const typewriterEl = document.getElementById('typewriter');
+        if (!typewriterEl) return;
 
-    // Typewriter setup
-    const typeEl = document.getElementById('typewriter');
-    if (typeEl) {
-        const acceptsReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const roles = [
             'Back End Developer',
             'Front End Developer',
@@ -72,127 +73,123 @@ document.addEventListener('DOMContentLoaded', () => {
             'Senior Developer',
             'Game Developer',
             'Cyber Security'
-        ]; //GIKUHA ra nakos youtube para sa typewriter effect
-        if (!acceptsReduced) {
-            let index = 0, char = 0, deleting = false;
-            const typeSpeed = 80;
-            const deleteSpeed = 40;
-            const pause = 1400;
+        ];
 
-            const step = () => {
-                const current = roles[index];
-                if (!deleting) {
-                    typeEl.textContent = current.slice(0, ++char);
-                    if (char === current.length) {
-                        deleting = true;
-                        setTimeout(step, pause);
-                        return;
-                    }
-                    setTimeout(step, typeSpeed);
-                } else {
-                    typeEl.textContent = current.slice(0, --char);
-                    if (char === 0) {
-                        deleting = false;
-                        index = (index + 1) % roles.length;
-                        setTimeout(step, 220);
-                        return;
-                    }
-                    setTimeout(step, deleteSpeed);
-                }
-            };
-
-            setTimeout(step, 700);
-        } else {
-
-            typeEl.textContent = roles[0];
+        if (PREFERS_REDUCED_MOTION) {
+            typewriterEl.textContent = roles[0];
+            return;
         }
+
+        let roleIndex = 0;
+        let charIndex = 0;
+        let deleting = false;
+
+        const TYPE_SPEED = 80;
+        const DELETE_SPEED = 40;
+        const PAUSE_AFTER_FULL = 1400;
+
+        function stepType() {
+            const currentRole = roles[roleIndex];
+            if (!deleting) {
+                charIndex++;
+                typewriterEl.textContent = currentRole.slice(0, charIndex);
+                if (charIndex === currentRole.length) {
+                    deleting = true;
+                    setTimeout(stepType, PAUSE_AFTER_FULL);
+                    return;
+                }
+                setTimeout(stepType, TYPE_SPEED);
+            } else {
+                charIndex--;
+                typewriterEl.textContent = currentRole.slice(0, charIndex);
+                if (charIndex === 0) {
+                    deleting = false;
+                    roleIndex = (roleIndex + 1) % roles.length;
+                    setTimeout(stepType, 220);
+                    return;
+                }
+                setTimeout(stepType, DELETE_SPEED);
+            }
+        }
+
+        setTimeout(stepType, 700);
     }
 
+    /* -------------------------
+       Accessible hamburger/navigation
+       ------------------------- */
+    function initializeNavigation() {
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navigationMenu = document.getElementById('navMenu');
+        if (!hamburgerBtn || !navigationMenu) return;
 
-    const hamburger = document.getElementById('hamburgerBtn');
-    const navMenu = document.getElementById('navMenu');
+        hamburgerBtn.setAttribute('aria-expanded', hamburgerBtn.getAttribute('aria-expanded') || 'false');
+        if (!hamburgerBtn.hasAttribute('aria-controls')) hamburgerBtn.setAttribute('aria-controls', 'navMenu');
+        hamburgerBtn.tabIndex = 0;
 
-    if (hamburger) {
+        navigationMenu.setAttribute('role', navigationMenu.getAttribute('role') || 'navigation');
+        navigationMenu.setAttribute('aria-hidden', 'true');
 
-        hamburger.setAttribute('aria-expanded', hamburger.getAttribute('aria-expanded') || 'false');
-        if (!hamburger.hasAttribute('aria-controls')) hamburger.setAttribute('aria-controls', 'navMenu');
-        hamburger.tabIndex = 0;
-    }
+        const getFirstNavLink = () => navigationMenu.querySelector('.nav-link');
 
-    if (hamburger && navMenu) {
-
-        navMenu.setAttribute('role', navMenu.getAttribute('role') || 'navigation');
-        navMenu.setAttribute('aria-hidden', 'true');
-
-        const firstLink = () => navMenu.querySelector('.nav-link');
-
-        // accept focusHint: when true, move focus to first link after opening
-        const openNav = (focusHint = false) => {
-            navMenu.classList.add('open');
-            hamburger.setAttribute('aria-expanded', 'true');
-            navMenu.setAttribute('aria-hidden', 'false');
-            if (focusHint) {
-                const first = firstLink();
+        function openNavigation(focusFirst = false) {
+            navigationMenu.classList.add('open');
+            hamburgerBtn.setAttribute('aria-expanded', 'true');
+            navigationMenu.setAttribute('aria-hidden', 'false');
+            if (focusFirst) {
+                const first = getFirstNavLink();
                 if (first) first.focus();
             }
-        };
+        }
 
-        // closeNav optionally returns focus to hamburger (default true)
-        const closeNav = (returnFocus = true) => {
-            navMenu.classList.remove('open');
-            hamburger.setAttribute('aria-expanded', 'false');
-            navMenu.setAttribute('aria-hidden', 'true');
-            if (returnFocus) hamburger.focus();
-        };
+        function closeNavigation(returnFocusToBtn = true) {
+            navigationMenu.classList.remove('open');
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+            navigationMenu.setAttribute('aria-hidden', 'true');
+            if (returnFocusToBtn) hamburgerBtn.focus();
+        }
 
-        const toggleNav = (focusHint = false) => {
-            const isOpen = navMenu.classList.contains('open');
-            if (isOpen) closeNav(true);
-            else openNav(focusHint);
-        };
+        function toggleNavigation(focusHint = false) {
+            if (navigationMenu.classList.contains('open')) closeNavigation(true);
+            else openNavigation(focusHint);
+        }
 
-        hamburger.addEventListener('click', (e) => {
-            e.stopPropagation();
-            // mouse click: open/close without forcing focus into nav
-            toggleNav(false);
+        hamburgerBtn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            toggleNavigation(false);
         });
-        hamburger.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                // keyboard activation: move focus to first link for accessibility
-                toggleNav(true);
-            } else if (e.key === 'ArrowDown') {
 
-                e.preventDefault();
-                openNav(true);
+        hamburgerBtn.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                toggleNavigation(true);
+            } else if (ev.key === 'ArrowDown') {
+                ev.preventDefault();
+                openNavigation(true);
             }
         });
 
-        // Handle in-page hash links reliably: only intercept on mobile / when overlay is open.
-        const navLinks = Array.from(navMenu.querySelectorAll('a[href^="#"]'));
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
+        // reliable in-page link handling on mobile/overlay
+        const inPageLinks = Array.from(navigationMenu.querySelectorAll('a[href^="#"]'));
+        inPageLinks.forEach(link => {
+            link.addEventListener('click', (ev) => {
                 const href = link.getAttribute('href');
                 if (!href || !href.startsWith('#')) return;
-                const id = href.slice(1);
-                const target = document.getElementById(id);
-                if (!target) return;
+                const targetId = href.slice(1);
+                const targetEl = document.getElementById(targetId);
+                if (!targetEl) return;
 
-                // Only intercept navigation when the mobile overlay is active or on small screens.
-                const isSmallScreen = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
-                if (!isSmallScreen && !navMenu.classList.contains('open')) {
-                    // Desktop: allow default anchor behavior
+                const smallScreen = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+                if (!smallScreen && !navigationMenu.classList.contains('open')) {
+                    // desktop: allow default
                     return;
                 }
 
-                e.preventDefault();
-                // close overlay/menu (don't force focus back — user is navigating)
-                closeNav(false);
+                ev.preventDefault();
+                closeNavigation(false);
 
-                const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                // allow the close animation to finish, then scroll with appropriate offset
+                const prefersReduced = PREFERS_REDUCED_MOTION;
                 setTimeout(() => {
-                    // only subtract header height if header is fixed
                     const headerEl = document.querySelector('.header');
                     let headerOffset = 0;
                     if (headerEl) {
@@ -201,103 +198,95 @@ document.addEventListener('DOMContentLoaded', () => {
                             headerOffset = Math.ceil(headerEl.getBoundingClientRect().height);
                         }
                     }
-                    const rect = target.getBoundingClientRect();
+                    const rect = targetEl.getBoundingClientRect();
                     const targetY = rect.top + window.pageYOffset - headerOffset - 8;
                     try {
                         window.scrollTo({ top: targetY, behavior: prefersReduced ? 'auto' : 'smooth' });
-                    } catch (err) {
-                        window.location.hash = `#${id}`;
+                    } catch {
+                        window.location.hash = `#${targetId}`;
                     }
                 }, 180);
             });
         });
 
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-                if (navMenu.classList.contains('open')) {
-                    closeNav();
-                }
+        document.addEventListener('click', (ev) => {
+            if (!hamburgerBtn.contains(ev.target) && !navigationMenu.contains(ev.target)) {
+                if (navigationMenu.classList.contains('open')) closeNavigation();
             }
         });
 
-        // Close on Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' || e.key === 'Esc') {
-                if (navMenu.classList.contains('open')) {
-                    closeNav();
-                }
+        document.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Escape' || ev.key === 'Esc') {
+                if (navigationMenu.classList.contains('open')) closeNavigation();
             }
         });
 
-
-        const observer = new MutationObserver(() => {
-            const isOpen = navMenu.classList.contains('open');
-            hamburger.setAttribute('aria-expanded', String(isOpen));
-            navMenu.setAttribute('aria-hidden', String(!isOpen));
+        const menuObserver = new MutationObserver(() => {
+            const isOpen = navigationMenu.classList.contains('open');
+            hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
+            navigationMenu.setAttribute('aria-hidden', String(!isOpen));
         });
-        observer.observe(navMenu, { attributes: true, attributeFilter: ['class'] });
+        menuObserver.observe(navigationMenu, { attributes: true, attributeFilter: ['class'] });
     }
 
-
-    // Reusable glassy cycle function
+    /* -------------------------
+       Glassy sheen cycle (reusable)
+       ------------------------- */
     function startGlassyCycle(selector = '.glassy', intervalMs = 2000) {
-        const items = Array.from(document.querySelectorAll(selector)).filter(Boolean);
-        if (!items.length) return null;
+        const elements = Array.from(document.querySelectorAll(selector)).filter(Boolean);
+        if (!elements.length) return null;
 
         if (window.__glassyInterval) {
             clearInterval(window.__glassyInterval);
             window.__glassyInterval = null;
         }
 
-        let idx = -1;
-        const activate = (i) => {
+        let currentIndex = -1;
 
-            items.forEach(el => el.classList.remove('glassy-active'));
-
-            const target = items[i];
+        function activateIndex(index) {
+            elements.forEach(el => el.classList.remove('glassy-active'));
+            const target = elements[index];
             if (target) {
-                // force reflow
+                // force reflow to restart animation
                 void target.offsetWidth;
                 target.classList.add('glassy-active');
             }
-        };
+        }
 
-        const step = () => {
-            idx = (idx + 1) % items.length;
-            activate(idx);
-        };
-
+        function step() {
+            currentIndex = (currentIndex + 1) % elements.length;
+            activateIndex(currentIndex);
+        }
 
         step();
         window.__glassyInterval = setInterval(step, intervalMs);
 
-        // pause/resume handlers (unchanged behavior)
-        items.forEach((el, i) => {
-            let hoverTimeout = null;
-            el.addEventListener('mouseenter', () => {
+        // pause on interaction
+        elements.forEach((element, idx) => {
+            let resumeTimeout = null;
+            element.addEventListener('mouseenter', () => {
                 if (window.__glassyInterval) clearInterval(window.__glassyInterval);
-                items.forEach(it => it.classList.remove('glassy-active'));
-
-                void el.offsetWidth;
-                el.classList.add('glassy-active');
-                if (hoverTimeout) clearTimeout(hoverTimeout);
+                elements.forEach(it => it.classList.remove('glassy-active'));
+                void element.offsetWidth;
+                element.classList.add('glassy-active');
+                if (resumeTimeout) clearTimeout(resumeTimeout);
             });
-            el.addEventListener('mouseleave', () => {
-                hoverTimeout = setTimeout(() => {
+            element.addEventListener('mouseleave', () => {
+                resumeTimeout = setTimeout(() => {
                     if (window.__glassyInterval) clearInterval(window.__glassyInterval);
-                    idx = i;
+                    currentIndex = idx;
                     window.__glassyInterval = setInterval(step, intervalMs);
                 }, 300);
             });
-            el.addEventListener('focus', () => {
+            element.addEventListener('focus', () => {
                 if (window.__glassyInterval) clearInterval(window.__glassyInterval);
-                items.forEach(it => it.classList.remove('glassy-active'));
-                void el.offsetWidth;
-                el.classList.add('glassy-active');
+                elements.forEach(it => it.classList.remove('glassy-active'));
+                void element.offsetWidth;
+                element.classList.add('glassy-active');
             });
-            el.addEventListener('blur', () => {
+            element.addEventListener('blur', () => {
                 if (window.__glassyInterval) clearInterval(window.__glassyInterval);
-                idx = i;
+                currentIndex = idx;
                 window.__glassyInterval = setInterval(step, intervalMs);
             });
         });
@@ -308,22 +297,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearInterval(window.__glassyInterval);
                     window.__glassyInterval = null;
                 }
-                items.forEach(it => it.classList.remove('glassy-active'));
+                elements.forEach(it => it.classList.remove('glassy-active'));
             }
         };
     }
 
-    startGlassyCycle('.glassy', 2000);
+    /* -------------------------
+       Skill progress intersection observer
+       ------------------------- */
+    function initializeSkillObserver() {
+        const prefersReduced = PREFERS_REDUCED_MOTION;
+        const skillNodes = Array.from(document.querySelectorAll('.skill'));
+        if (!skillNodes.length) return;
 
-    // Reveal skill progress bars when they enter the viewport
-    (function initSkillObserver() {
-        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const skills = Array.from(document.querySelectorAll('.skill'));
-        if (!skills.length) return;
-
-        // Fast path for reduced motion: reveal immediately without animation
         if (prefersReduced) {
-            skills.forEach(skill => {
+            skillNodes.forEach(skill => {
                 const fill = skill.querySelector('.skill-fill');
                 if (!fill) return;
                 const percent = getComputedStyle(fill).getPropertyValue('--skill-percent').trim() || '0%';
@@ -333,7 +321,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // IntersectionObserver to reveal fills when visible
         const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) return;
@@ -341,157 +328,141 @@ document.addEventListener('DOMContentLoaded', () => {
                 const fill = skill.querySelector('.skill-fill');
                 if (fill) {
                     const percent = getComputedStyle(fill).getPropertyValue('--skill-percent').trim() || '0%';
-                    // set inline width to trigger transition reliably, and add class
                     fill.style.width = percent;
                     skill.classList.add('in-view');
                 }
-                obs.unobserve(skill); // reveal once
+                obs.unobserve(skill);
             });
         }, { threshold: 0.28 });
 
-        skills.forEach(s => observer.observe(s));
-    })();
+        skillNodes.forEach(n => observer.observe(n));
+    }
 
-    /* -------------------------------------------------------------
-       Skill -> portrait panel wiring: show skill details in panel,
-       fade portrait out, type description with cancellation, and
-       switch between skills without closing the panel (works on touch).
-       Reworked to use pointerover/pointerout with relatedTarget checks
-       to avoid redundant retriggers when moving inside the same skill.
-       ------------------------------------------------------------- */
-
-    (function wireSkillPortrait() {
+    /* -------------------------
+       Skill ↔ Portrait wiring (pointer delegation + cancellable typing)
+       ------------------------- */
+    function wireSkillPortraitPanel() {
         const skillsContainer = document.querySelector('.skills');
-        const skills = Array.from(document.querySelectorAll('.skill'));
+        const skillNodes = Array.from(document.querySelectorAll('.skill'));
         const portraitPanel = document.getElementById('portraitPanel');
         const panelTitle = document.getElementById('panelTitle');
-        const panelDesc = document.getElementById('panelDesc');
+        const panelDescription = document.getElementById('panelDesc');
         const aboutLeft = document.querySelector('.about-left');
-        if (!skillsContainer || !skills.length || !portraitPanel || !panelDesc || !aboutLeft) return;
 
-        let activeSkill = null;
+        if (!skillsContainer || !skillNodes.length || !portraitPanel || !panelDescription || !aboutLeft) return;
+
+        let activeSkillNode = null;
         let hideTimer = null;
-        const HIDE_DELAY = 160;
+        const HIDE_DELAY_MS = 160;
         let suppressDocumentClose = false;
         const SUPPRESS_MS = 420;
 
-        // typing controller
-        let currentTyper = null;
-        function createTyper(el, speed = 36) {
+        // cancellable typing factory
+        function createCancellableTyper(targetEl, charDelay = 36) {
             let cancelled = false;
-            let timers = [];
+            const timers = [];
+            function clearTimers() { timers.forEach(t => clearTimeout(t)); }
 
-            function clearAll() {
-                timers.forEach(t => clearTimeout(t));
-                timers = [];
-            }
             function cancel() {
                 cancelled = true;
-                clearAll();
+                clearTimers();
             }
-            function type(text) {
+
+            function typeText(text) {
                 cancel();
                 cancelled = false;
-                el.textContent = '';
-                let i = 0;
-                return new Promise((resolve) => {
+                targetEl.textContent = '';
+                let pos = 0;
+                return new Promise(resolve => {
                     const tick = () => {
                         if (cancelled) { resolve(false); return; }
-                        el.textContent = text.slice(0, ++i);
-                        if (i < text.length) {
-                            timers.push(setTimeout(tick, speed + (Math.random() * 40 - 20)));
+                        targetEl.textContent = text.slice(0, ++pos);
+                        if (pos < text.length) {
+                            timers.push(setTimeout(tick, charDelay + (Math.random() * 40 - 20)));
                         } else {
                             resolve(true);
                         }
                     };
-                    timers.push(setTimeout(tick, speed));
+                    timers.push(setTimeout(tick, charDelay));
                 });
             }
-            return { type, cancel };
+
+            return { typeText, cancel };
         }
 
-        const typer = () => {
-            if (currentTyper && currentTyper.cancel) currentTyper.cancel();
-            currentTyper = createTyper(panelDesc, 36);
-            return currentTyper;
-        };
+        let activeTyper = null;
+        function resetTyper() {
+            if (activeTyper && activeTyper.cancel) activeTyper.cancel();
+            activeTyper = createCancellableTyper(panelDescription, 36);
+            return activeTyper;
+        }
 
-        const clearHideTimer = () => {
-            if (hideTimer) {
-                clearTimeout(hideTimer);
-                hideTimer = null;
-            }
-        };
+        function clearHideTimer() {
+            if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+        }
 
-        const setSuppress = (ms = SUPPRESS_MS) => {
+        function setSuppressDocumentClose(ms = SUPPRESS_MS) {
             suppressDocumentClose = true;
             setTimeout(() => { suppressDocumentClose = false; }, ms);
-        };
+        }
 
-        // NOTE: showDetail now early-returns if the clicked/entered skill is already active
-        async function showDetail(skillEl) {
+        async function showSkillDetail(skillNode) {
             clearHideTimer();
-            setSuppress();
+            setSuppressDocumentClose();
 
-            const label = (skillEl.querySelector('.skill-label') || { textContent: '' }).textContent.trim();
-            const detail = skillEl.getAttribute('data-detail') || '';
+            const labelText = (skillNode.querySelector('.skill-label') || { textContent: '' }).textContent.trim();
+            const detailText = skillNode.getAttribute('data-detail') || '';
 
             // Prevent redundant re-processing for the same active skill
-            if (activeSkill === skillEl) return;
+            if (activeSkillNode === skillNode) return;
 
             // update title immediately and clear description before typing
-            if (panelTitle) panelTitle.textContent = label;
-            if (panelDesc) panelDesc.textContent = '';
+            if (panelTitle) panelTitle.textContent = labelText;
+            if (panelDescription) panelDescription.textContent = '';
 
-            // set new active skill reference
-            activeSkill = skillEl;
-
-            const panelIsVisible = portraitPanel.classList.contains('visible');
-
-            // add about-left active to dim portrait (CSS handles visual)
+            activeSkillNode = skillNode;
             aboutLeft.classList.add('active');
 
-            if (panelIsVisible) {
-                // quick switch while panel already open: cancel previous typing and type new content
-                if (currentTyper && currentTyper.cancel) currentTyper.cancel();
-                const t = typer();
-                const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                if (prefersReduced) {
-                    panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+            const panelAlreadyVisible = portraitPanel.classList.contains('visible');
+
+            if (panelAlreadyVisible) {
+                if (activeTyper && activeTyper.cancel) activeTyper.cancel();
+                const typer = resetTyper();
+                if (PREFERS_REDUCED_MOTION) {
+                    panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
                 } else {
-                    await t.type(detail);
-                    if (activeSkill === skillEl) panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+                    await typer.typeText(detailText);
+                    if (activeSkillNode === skillNode) panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
                 }
                 return;
             }
 
-            // Normal open sequence: reveal panel after slight delay, then type
+            // Normal open: reveal panel then type
             setTimeout(async () => {
                 portraitPanel.classList.add('visible');
                 await new Promise(res => setTimeout(res, 140));
-                if (currentTyper && currentTyper.cancel) currentTyper.cancel();
-                const t = typer();
-                const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                if (prefersReduced) {
-                    panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+                if (activeTyper && activeTyper.cancel) activeTyper.cancel();
+                const typer = resetTyper();
+                if (PREFERS_REDUCED_MOTION) {
+                    panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
                 } else {
-                    await t.type(detail);
-                    if (activeSkill === skillEl) panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
+                    await typer.typeText(detailText);
+                    if (activeSkillNode === skillNode) panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
                 }
             }, 180);
         }
 
-        function scheduleHide(skillEl) {
+        function scheduleHideForSkill(skillNode) {
             clearHideTimer();
             hideTimer = setTimeout(() => {
-                if (activeSkill === skillEl) hideDetail();
+                if (activeSkillNode === skillNode) hideSkillDetail();
                 hideTimer = null;
-            }, HIDE_DELAY);
+            }, HIDE_DELAY_MS);
         }
 
-        function hideDetail() {
+        function hideSkillDetail() {
             clearHideTimer();
-            if (currentTyper && currentTyper.cancel) currentTyper.cancel();
+            if (activeTyper && activeTyper.cancel) activeTyper.cancel();
 
             portraitPanel.classList.add('hiding');
             portraitPanel.classList.remove('visible');
@@ -501,129 +472,121 @@ document.addEventListener('DOMContentLoaded', () => {
                 aboutLeft.classList.remove('active');
             }, 220);
 
-            // remove pull from all skills when panel fully hides
-            skills.forEach(s => s.classList.remove('pull'));
-            activeSkill = null;
+            skillNodes.forEach(s => s.classList.remove('pull'));
+            activeSkillNode = null;
         }
 
-        // pointerdown/click delegation so clicks on progress bar work
-        skillsContainer.addEventListener('pointerdown', (e) => {
-            const skill = e.target.closest('.skill');
-            if (!skill) return;
-            setSuppress();
+        // pointerdown: ensure taps on small interactive children are recognized
+        skillsContainer.addEventListener('pointerdown', (ev) => {
+            const clicked = ev.target.closest('.skill');
+            if (!clicked) return;
+            setSuppressDocumentClose();
         }, { passive: true });
 
-        skillsContainer.addEventListener('click', (e) => {
-            const skill = e.target.closest('.skill');
-            if (!skill) return;
-            e.stopPropagation();
+        // click: toggle or switch
+        skillsContainer.addEventListener('click', (ev) => {
+            const clicked = ev.target.closest('.skill');
+            if (!clicked) return;
+            ev.stopPropagation();
             clearHideTimer();
-            setSuppress();
-            // clicking same active skill toggles off, otherwise switch to clicked skill
-            if (activeSkill === skill) {
-                hideDetail();
+            setSuppressDocumentClose();
+            if (activeSkillNode === clicked) {
+                hideSkillDetail();
             } else {
-                // ensure pull is applied immediately on click
-                skills.forEach(s => s.classList.remove('pull'));
-                skill.classList.add('pull');
-                showDetail(skill);
+                skillNodes.forEach(s => s.classList.remove('pull'));
+                clicked.classList.add('pull');
+                showSkillDetail(clicked);
             }
         });
 
-        // --- Use pointerover/pointerout delegation to avoid redundant triggers ---
-        skillsContainer.addEventListener('pointerover', (e) => {
-            const skill = e.target.closest('.skill');
-            if (!skill) return;
-            // ignore when moving between elements within the same skill
-            const from = e.relatedTarget;
-            if (from && skill.contains(from)) return;
+        // pointerover/pointerout with relatedTarget checks prevents redundant retriggers
+        skillsContainer.addEventListener('pointerover', (ev) => {
+            const entered = ev.target.closest('.skill');
+            if (!entered) return;
+            const from = ev.relatedTarget;
+            if (from && entered.contains(from)) return;
 
-            // apply pull visual always on enter
-            skills.forEach(s => s.classList.remove('pull'));
-            skill.classList.add('pull');
+            skillNodes.forEach(s => s.classList.remove('pull'));
+            entered.classList.add('pull');
 
-            // only show detail if entering a different skill
-            if (activeSkill !== skill) {
-                showDetail(skill);
-            }
+            if (activeSkillNode !== entered) showSkillDetail(entered);
         });
 
-        skillsContainer.addEventListener('pointerout', (e) => {
-            const skill = e.target.closest('.skill');
-            if (!skill) return;
-            // ignore when moving to elements inside the same skill
-            const to = e.relatedTarget;
-            if (to && skill.contains(to)) return;
+        skillsContainer.addEventListener('pointerout', (ev) => {
+            const left = ev.target.closest('.skill');
+            if (!left) return;
+            const to = ev.relatedTarget;
+            if (to && left.contains(to)) return;
 
-            // schedule hide for this skill
-            scheduleHide(skill);
-            // remove pull as we leave
-            skill.classList.remove('pull');
+            scheduleHideForSkill(left);
+            left.classList.remove('pull');
         });
 
-        // keyboard: focus/blur still drive show/hide and pull
-        skillsContainer.addEventListener('focusin', (e) => {
-            const skill = e.target.closest('.skill');
-            if (!skill) return;
-            skills.forEach(s => s.classList.remove('pull'));
-            skill.classList.add('pull');
-            if (activeSkill !== skill) showDetail(skill);
+        // keyboard focus support
+        skillsContainer.addEventListener('focusin', (ev) => {
+            const focused = ev.target.closest('.skill');
+            if (!focused) return;
+            skillNodes.forEach(s => s.classList.remove('pull'));
+            focused.classList.add('pull');
+            if (activeSkillNode !== focused) showSkillDetail(focused);
+        });
+        skillsContainer.addEventListener('focusout', (ev) => {
+            const blurred = ev.target.closest('.skill');
+            if (!blurred) return;
+            scheduleHideForSkill(blurred);
+            blurred.classList.remove('pull');
         });
 
-        skillsContainer.addEventListener('focusout', (e) => {
-            const skill = e.target.closest('.skill');
-            if (!skill) return;
-            scheduleHide(skill);
-            skill.classList.remove('pull');
-        });
-
-        document.addEventListener('click', (e) => {
+        // document-level close unless suppressed immediately after a skill interaction
+        document.addEventListener('click', (ev) => {
             if (suppressDocumentClose) return;
-            if (!aboutLeft.contains(e.target) && !skills.some(s => s.contains(e.target))) {
-                hideDetail();
-            }
+            if (!aboutLeft.contains(ev.target) && !skillNodes.some(s => s.contains(ev.target))) hideSkillDetail();
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' || e.key === 'Esc') {
-                hideDetail();
-            }
+        // Escape hides panel
+        document.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Escape' || ev.key === 'Esc') hideSkillDetail();
         });
+    }
 
-    })();
-
+    /* -------------------------
+       Initialization sequence
+       ------------------------- */
+    initializeSiteEntrance();
+    initializeAboutOverlayEntrance();
+    initializeTypewriter();
+    initializeNavigation();
+    startGlassyCycle('.glassy', 2000);
+    initializeSkillObserver();
+    wireSkillPortraitPanel();
 });
 
+/* -------------------------
+   Window resize debounce helper (use window property to avoid redeclaration)
+   ------------------------- */
+// ensure global debounce slot exists and is safe to reuse across multiple script evaluations
+if (typeof window.__resizeDebounceTimer === 'undefined') window.__resizeDebounceTimer = null;
 
-let resizeTimer = null;
 window.addEventListener('resize', () => {
-    if (resizeTimer) clearTimeout(resizeTimer);
-
-    resizeTimer = setTimeout(() => {
-        resizeTimer = null;
-    }, 200);
+    if (window.__resizeDebounceTimer) clearTimeout(window.__resizeDebounceTimer);
+    window.__resizeDebounceTimer = setTimeout(() => { window.__resizeDebounceTimer = null; }, 200);
 });
 
-// helper to escape HTML for safe insertion
-function escapeHtml(str = '') {
-    return String(str).replace(/[&<>"']/g, (s) => {
-        return ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#39;'
-        })[s];
-    });
+/* -------------------------
+   Small DOM helpers
+   ------------------------- */
+function escapeHtml(unsafe = '') {
+    return String(unsafe).replace(/[&<>"']/g, (s) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[s]);
 }
 
-// highlight first occurrence of label inside text (case-insensitive)
-function highlightFirstOccurrence(text = '', label = '') {
-    if (!label) return escapeHtml(text);
-    const idx = String(text).toLowerCase().indexOf(String(label).toLowerCase());
-    if (idx === -1) return escapeHtml(text);
-    const before = escapeHtml(String(text).slice(0, idx));
-    const match = escapeHtml(String(text).slice(idx, idx + String(label).length));
-    const after = escapeHtml(String(text).slice(idx + String(label).length));
+function highlightFirstOccurrence(text = '', keyword = '') {
+    if (!keyword) return escapeHtml(text);
+    const lowerText = String(text).toLowerCase();
+    const lowerKeyword = String(keyword).toLowerCase();
+    const index = lowerText.indexOf(lowerKeyword);
+    if (index === -1) return escapeHtml(text);
+    const before = escapeHtml(String(text).slice(0, index));
+    const match = escapeHtml(String(text).slice(index, index + String(keyword).length));
+    const after = escapeHtml(String(text).slice(index + String(keyword).length));
     return `${before}<span class="panel-keyword">${match}</span>${after}`;
 }
