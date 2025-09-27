@@ -304,6 +304,8 @@ document.addEventListener('DOMContentLoaded', () => {
        Skill -> portrait panel wiring: show skill details in panel,
        fade portrait out, type description with cancellation, and
        switch between skills without closing the panel (works on touch).
+       Reworked to use pointerover/pointerout with relatedTarget checks
+       to avoid redundant retriggers when moving inside the same skill.
        ------------------------------------------------------------- */
 
     (function wireSkillPortrait() {
@@ -318,7 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let activeSkill = null;
         let hideTimer = null;
         const HIDE_DELAY = 160;
-        // suppress closing right after a skill interaction (for touch)
         let suppressDocumentClose = false;
         const SUPPRESS_MS = 420;
 
@@ -375,8 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => { suppressDocumentClose = false; }, ms);
         };
 
-        // showDetail orchestrates fade: if panel already visible -> immediate switch;
-        // otherwise fade image then reveal panel with delay, then start typing
+        // NOTE: showDetail now early-returns if the clicked/entered skill is already active
         async function showDetail(skillEl) {
             clearHideTimer();
             setSuppress();
@@ -384,34 +384,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const label = (skillEl.querySelector('.skill-label') || { textContent: '' }).textContent.trim();
             const detail = skillEl.getAttribute('data-detail') || '';
 
-            // If same skill already active, do nothing (or restart typing)
-            if (activeSkill === skillEl) {
-                if (currentTyper && currentTyper.cancel) currentTyper.cancel();
-                // handle reduced-motion
-                const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                const tSame = typer();
-                if (prefersReduced) {
-                    panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
-                } else {
-                    await tSame.type(detail);
-                    if (activeSkill === skillEl) panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
-                }
-                return;
-            }
+            // Prevent redundant re-processing for the same active skill
+            if (activeSkill === skillEl) return;
 
-            // If panel is already visible (open), switch immediately without hide
-            const panelIsVisible = portraitPanel.classList.contains('visible');
-
-            // update title immediately
+            // update title immediately and clear description before typing
             if (panelTitle) panelTitle.textContent = label;
-            // clear description before typing
             if (panelDesc) panelDesc.textContent = '';
 
             // set new active skill reference
             activeSkill = skillEl;
 
+            const panelIsVisible = portraitPanel.classList.contains('visible');
+
+            // add about-left active to dim portrait (CSS handles visual)
+            aboutLeft.classList.add('active');
+
             if (panelIsVisible) {
-                // quick switch: cancel previous typing and type new content
+                // quick switch while panel already open: cancel previous typing and type new content
                 if (currentTyper && currentTyper.cancel) currentTyper.cancel();
                 const t = typer();
                 const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -424,13 +413,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Normal open sequence: fade portrait (add active), then reveal panel with delay, then start typing
-            aboutLeft.classList.add('active');         // portrait will fade due to CSS
-            // small delay to let portrait begin fading
+            // Normal open sequence: reveal panel after slight delay, then type
             setTimeout(async () => {
-                portraitPanel.classList.add('visible'); // panel fades in (CSS has small transition-delay)
-                // start typing after panel is visible (small additional delay to feel natural)
-                await new Promise(res => setTimeout(res, 80));
+                portraitPanel.classList.add('visible');
+                await new Promise(res => setTimeout(res, 140));
                 if (currentTyper && currentTyper.cancel) currentTyper.cancel();
                 const t = typer();
                 const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -440,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     await t.type(detail);
                     if (activeSkill === skillEl) panelDesc.innerHTML = highlightFirstOccurrence(detail, label);
                 }
-            }, 140);
+            }, 180);
         }
 
         function scheduleHide(skillEl) {
@@ -453,19 +439,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function hideDetail() {
             clearHideTimer();
-            // cancel typing
             if (currentTyper && currentTyper.cancel) currentTyper.cancel();
 
-            // hide panel first for quick reversal
             portraitPanel.classList.add('hiding');
             portraitPanel.classList.remove('visible');
 
-            // after panel hide transition finishes, remove hiding class and restore portrait by removing 'active'
             setTimeout(() => {
                 portraitPanel.classList.remove('hiding');
-                aboutLeft.classList.remove('active'); // portrait returns
+                aboutLeft.classList.remove('active');
             }, 220);
 
+            // remove pull from all skills when panel fully hides
+            skills.forEach(s => s.classList.remove('pull'));
             activeSkill = null;
         }
 
@@ -486,26 +471,60 @@ document.addEventListener('DOMContentLoaded', () => {
             if (activeSkill === skill) {
                 hideDetail();
             } else {
+                // ensure pull is applied immediately on click
+                skills.forEach(s => s.classList.remove('pull'));
+                skill.classList.add('pull');
                 showDetail(skill);
             }
         });
 
-        // hover/focus behavior for desktop
-        skills.forEach(skill => {
-            skill.addEventListener('mouseenter', () => {
-                // immediate show on hover
+        // --- Use pointerover/pointerout delegation to avoid redundant triggers ---
+        skillsContainer.addEventListener('pointerover', (e) => {
+            const skill = e.target.closest('.skill');
+            if (!skill) return;
+            // ignore when moving between elements within the same skill
+            const from = e.relatedTarget;
+            if (from && skill.contains(from)) return;
+
+            // apply pull visual always on enter
+            skills.forEach(s => s.classList.remove('pull'));
+            skill.classList.add('pull');
+
+            // only show detail if entering a different skill
+            if (activeSkill !== skill) {
                 showDetail(skill);
-            });
-            skill.addEventListener('mouseleave', () => {
-                // schedule hide but short delay to allow switching
-                scheduleHide(skill);
-            });
-            skill.setAttribute('tabindex', skill.getAttribute('tabindex') || '0');
-            skill.addEventListener('focus', () => showDetail(skill));
-            skill.addEventListener('blur', () => scheduleHide(skill));
+            }
         });
 
-        // document click should close the panel, but ignore clicks within the suppress window
+        skillsContainer.addEventListener('pointerout', (e) => {
+            const skill = e.target.closest('.skill');
+            if (!skill) return;
+            // ignore when moving to elements inside the same skill
+            const to = e.relatedTarget;
+            if (to && skill.contains(to)) return;
+
+            // schedule hide for this skill
+            scheduleHide(skill);
+            // remove pull as we leave
+            skill.classList.remove('pull');
+        });
+
+        // keyboard: focus/blur still drive show/hide and pull
+        skillsContainer.addEventListener('focusin', (e) => {
+            const skill = e.target.closest('.skill');
+            if (!skill) return;
+            skills.forEach(s => s.classList.remove('pull'));
+            skill.classList.add('pull');
+            if (activeSkill !== skill) showDetail(skill);
+        });
+
+        skillsContainer.addEventListener('focusout', (e) => {
+            const skill = e.target.closest('.skill');
+            if (!skill) return;
+            scheduleHide(skill);
+            skill.classList.remove('pull');
+        });
+
         document.addEventListener('click', (e) => {
             if (suppressDocumentClose) return;
             if (!aboutLeft.contains(e.target) && !skills.some(s => s.contains(e.target))) {
@@ -513,7 +532,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // defensive: hide on Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' || e.key === 'Esc') {
                 hideDetail();

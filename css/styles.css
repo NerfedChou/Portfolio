@@ -422,7 +422,7 @@ body {
     pointer-events: auto;
     opacity: 1;
     transform: translateY(0) scale(1);
-    transition-delay: 90ms; /* small delay so portrait dim appears first but photo stays visible */
+    transition-delay: 140ms; /* was 90ms, now 140ms for smoother fade-in */
 }
 
 /* hide sequence: ensure panel hides quickly before restoring image */
@@ -472,6 +472,19 @@ body {
     border-radius: 10px;
     box-shadow: 0 8px 20px rgba(2,2,2,0.55);
     transition: transform 180ms ease, box-shadow 180ms ease, background 160ms ease;
+}
+
+/* Pull effect: skill lifts and shows a sharp orange accent (no faded shadow) */
+.skill.pull {
+    transform: translateY(-8px) scale(1.035);
+    transition: transform 160ms cubic-bezier(.2,.9,.3,1), box-shadow 160ms ease, background 160ms ease;
+    z-index: 3;
+    /* crisp orange border and subtle glow */
+    border: 1px solid rgba(255,115,0,0.14);
+    background: linear-gradient(180deg, rgba(255,115,0,0.02), rgba(255,115,0,0.005));
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.6),
+        0 0 0 3px rgba(255,115,0,0.045); /* sharp orange ring */
 }
 
 /* deep, recessed skill track */
