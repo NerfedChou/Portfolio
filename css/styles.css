@@ -1692,6 +1692,24 @@ body {
     padding: 2.5rem 1rem;
 }
 
+/* Replace the small, plain projects container with a card-like surface
+    visually consistent with .services-container */
+.projects-container {
+    background: linear-gradient(180deg, rgba(18,18,18,0.98) 80%, rgba(32,32,32,1) 100%);
+    border-radius: 2rem;
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 3rem auto 2.5rem auto;
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+    box-shadow:
+        0 12px 48px 0 rgba(0,0,0,0.65),
+        0 2px 24px 0 rgba(255,115,0,0.08),
+        0 0 0 2px rgba(255,255,255,0.04) inset,
+        0 24px 80px 0 rgba(0,0,0,0.45);
+}
+
 .project-card {
     display: flex;
     align-items: center;
@@ -1702,10 +1720,44 @@ body {
     margin-bottom: 2.5rem;
     padding: 1.5rem 1.2rem;
     flex-direction: row;
+    transition: transform 180ms var(--ease-standard), box-shadow 220ms var(--ease-standard), background 180ms var(--ease-standard);
+    cursor: pointer;
+    will-change: transform, box-shadow;
 }
-.project-card--reverse {
-    flex-direction: row-reverse;
+
+/* Mirror the hover treatment used by service cards to lift and emphasize the project */
+.project-card:hover,
+.project-card:focus-within {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow:
+        0 8px 36px 0 rgba(255,115,0,0.18),
+        0 16px 48px 0 rgba(0,0,0,0.45),
+        0 0 0 2px var(--accent);
+    background: linear-gradient(180deg, rgba(24,24,24,1) 70%, rgba(32,32,32,1) 100%);
+    z-index: 3;
 }
+
+/* Keep hover friendly on keyboard too */
+.project-card:focus {
+    outline: 3px solid rgba(255,115,0,0.12);
+    outline-offset: 4px;
+    border-radius: 12px;
+}
+
+/* Respect reduced-motion: remove transform animations */
+@media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .projects-container {
+        transition: none !important;
+        animation: none !important;
+    }
+    .project-card:hover,
+    .project-card:focus-within {
+        transform: none;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+}
+
 .project-card__img {
     flex: 0 0 320px;
     max-width: 320px;
