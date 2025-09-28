@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* -------------------------
-       About hero overlay (one-time)
+       About hero overlay entrance animation
        ------------------------- */
     function initializeAboutOverlayEntrance() {
         const overlay = document.getElementById('aboutHeroOverlay');
@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             setTimeout(pollForOverlayEnd, 220);
-            // cleanup transient state later (keeps prior behavior)
             setTimeout(() => { if (overlay) overlay.classList.remove('entrance'); }, 1200);
         }, 0);
     }
@@ -169,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // reliable in-page link handling on mobile/overlay
+
         const inPageLinks = Array.from(navigationMenu.querySelectorAll('a[href^="#"]'));
         inPageLinks.forEach(link => {
             link.addEventListener('click', (ev) => {
@@ -181,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const smallScreen = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
                 if (!smallScreen && !navigationMenu.classList.contains('open')) {
-                    // desktop: allow default
+
                     return;
                 }
 
@@ -230,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* -------------------------
-       Glassy sheen cycle (reusable)
+       Glassy sheen cycle
        ------------------------- */
     function startGlassyCycle(selector = '.glassy', intervalMs = 2000) {
         const elements = Array.from(document.querySelectorAll(selector)).filter(Boolean);
@@ -339,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* -------------------------
-       Skill ↔ Portrait wiring (pointer delegation + cancellable typing)
+       Skill ↔ Portrait wiring
        ------------------------- */
     function wireSkillPortraitPanel() {
         const skillsContainer = document.querySelector('.skills');
@@ -357,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let suppressDocumentClose = false;
         const SUPPRESS_MS = 420;
 
-        // cancellable typing factory
+
         function createCancellableTyper(targetEl, charDelay = 36) {
             let cancelled = false;
             const timers = [];
@@ -413,10 +412,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const labelText = (skillNode.querySelector('.skill-label') || { textContent: '' }).textContent.trim();
             const detailText = skillNode.getAttribute('data-detail') || '';
 
-            // Prevent redundant re-processing for the same active skill
+
             if (activeSkillNode === skillNode) return;
 
-            // update title immediately and clear description before typing
+
             if (panelTitle) panelTitle.textContent = labelText;
             if (panelDescription) panelDescription.textContent = '';
 
@@ -476,14 +475,14 @@ document.addEventListener('DOMContentLoaded', () => {
             activeSkillNode = null;
         }
 
-        // pointerdown: ensure taps on small interactive children are recognized
+
         skillsContainer.addEventListener('pointerdown', (ev) => {
             const clicked = ev.target.closest('.skill');
             if (!clicked) return;
             setSuppressDocumentClose();
         }, { passive: true });
 
-        // click: toggle or switch
+
         skillsContainer.addEventListener('click', (ev) => {
             const clicked = ev.target.closest('.skill');
             if (!clicked) return;
@@ -499,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // pointerover/pointerout with relatedTarget checks prevents redundant retriggers
+
         skillsContainer.addEventListener('pointerover', (ev) => {
             const entered = ev.target.closest('.skill');
             if (!entered) return;
@@ -522,7 +521,6 @@ document.addEventListener('DOMContentLoaded', () => {
             left.classList.remove('pull');
         });
 
-        // keyboard focus support
         skillsContainer.addEventListener('focusin', (ev) => {
             const focused = ev.target.closest('.skill');
             if (!focused) return;
@@ -537,13 +535,12 @@ document.addEventListener('DOMContentLoaded', () => {
             blurred.classList.remove('pull');
         });
 
-        // document-level close unless suppressed immediately after a skill interaction
+
         document.addEventListener('click', (ev) => {
             if (suppressDocumentClose) return;
             if (!aboutLeft.contains(ev.target) && !skillNodes.some(s => s.contains(ev.target))) hideSkillDetail();
         });
 
-        // Escape hides panel
         document.addEventListener('keydown', (ev) => {
             if (ev.key === 'Escape' || ev.key === 'Esc') hideSkillDetail();
         });
@@ -556,7 +553,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const serviceList = document.querySelector('.service-list');
         if (!serviceList) return;
 
-        // If prefers-reduced-motion, show instantly
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             serviceList.classList.add('services-animate');
             serviceList.querySelectorAll('.service-list-item').forEach(item => {
@@ -594,9 +590,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* -------------------------
-   Window resize debounce helper (use window property to avoid redeclaration)
+   Window resize debounce helper
    ------------------------- */
-// ensure global debounce slot exists and is safe to reuse across multiple script evaluations
 if (typeof window.__resizeDebounceTimer === 'undefined') window.__resizeDebounceTimer = null;
 
 window.addEventListener('resize', () => {
@@ -605,7 +600,7 @@ window.addEventListener('resize', () => {
 });
 
 /* -------------------------
-   Small DOM helpers
+   Small DOM helpers Youtube: https://www.youtube.com/c/DevTipsForDesigners
    ------------------------- */
 function escapeHtml(unsafe = '') {
     return String(unsafe).replace(/[&<>"']/g, (s) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[s]);
