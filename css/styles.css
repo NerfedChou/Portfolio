@@ -2026,6 +2026,12 @@ body {
     color: #fff;
     font-size: 1rem;
     font-weight: 500;
+    justify-content: end;
+}
+
+#ratings {
+    display: flex;
+    justify-content: end;
 }
 
 .form-group input,
