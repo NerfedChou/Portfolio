@@ -550,6 +550,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* -------------------------
+       Service cards entrance animation
+       ------------------------- */
+    function initializeServicesEntrance() {
+        const serviceList = document.querySelector('.service-list');
+        if (!serviceList) return;
+
+        // If prefers-reduced-motion, show instantly
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            serviceList.classList.add('services-animate');
+            serviceList.querySelectorAll('.service-list-item').forEach(item => {
+                item.style.opacity = '1';
+                item.style.transform = 'none';
+                item.style.animation = 'none';
+            });
+            return;
+        }
+
+        // Animate when in viewport
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    serviceList.classList.add('services-animate');
+                    obs.disconnect();
+                }
+            });
+        }, { threshold: 0.18 });
+
+        observer.observe(serviceList);
+    }
+
+    /* -------------------------
        Initialization sequence
        ------------------------- */
     initializeSiteEntrance();
@@ -559,6 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startGlassyCycle('.glassy', 2000);
     initializeSkillObserver();
     wireSkillPortraitPanel();
+    initializeServicesEntrance();
 });
 
 /* -------------------------
