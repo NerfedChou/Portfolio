@@ -113,14 +113,14 @@ body {
     letter-spacing: 1px;
     position: relative;
     display: inline-block;
-    padding: 0.45rem 0.9rem; /* clickable region */
+    padding: 0.45rem 0.9rem;
     border-radius: 10px;
     background: rgba(255,255,255,0.02);
     -webkit-backdrop-filter: blur(6px) saturate(120%);
     backdrop-filter: blur(6px) saturate(120%);
     transition: background 220ms ease, box-shadow 220ms ease, color 180ms ease, transform 180ms ease;
     z-index: 1;
-    pointer-events: auto; /* defensive: ensure links accept clicks */
+    pointer-events: auto;
 }
 .nav-link:hover {
     color: var(--accent);
@@ -130,7 +130,7 @@ body {
 }
 
 .hamburger {
-    display: none; /* Always hidden by default, only shown in responsive.css */
+    display: none;
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
@@ -138,7 +138,7 @@ body {
     height: 32px;
     justify-content: center;
     align-items: center;
-    margin-left: 1rem;   /* Optional: add a little space from nav/logo */
+    margin-left: 1rem;
 }
 .hamburger span {
     display: block;
@@ -151,7 +151,7 @@ body {
 
 .hero-content {
     position: relative;
-    z-index: 1; /* lower than header/nav so header stays on top */
+    z-index: 1;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -167,14 +167,14 @@ body {
     margin-right: auto;
 }
 
-/* Remove automatic keyframe animation on load; will be triggered by JS via .animate */
+
 .hero-title {
     font-size: 2.5rem;
     font-weight: 800;
     letter-spacing: 2px;
     margin: 0 0 0.7rem 0;
     color: var(--accent);
-    /* darker subtle shadow to keep orange readable on varied backgrounds */
+
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     opacity: 0;
     transform: translateY(24px);
@@ -403,7 +403,7 @@ body {
     width: 100%;
     max-width: 360px;
     height: 420px;
-    object-fit: contain; /* use contain so whole body is visible */
+    object-fit: contain;
     border-radius: 14px;
     display: block;
     margin: 0 auto;
@@ -412,9 +412,8 @@ body {
     background: linear-gradient(180deg, rgba(24,24,24,0.7), rgba(37,37,37,0.6));
 }
 
-/* ensure about-left can host overlay and transitions */
 .about-left {
-    position: relative; /* enable overlay positioning */
+    position: relative;
     overflow: visible;
     z-index: 80;
     will-change: transform, opacity;
@@ -422,14 +421,12 @@ body {
 
 /* portrait: fade partially when active (keep photo visible) */
 .about-left.active .about-portrait {
-    /* subtle dim instead of fully removing the photo so the image remains visible */
     opacity: 0.18;
     transform: scale(0.995);
     filter: saturate(0.95) blur(0.2px);
     transition: opacity 260ms ease, transform 260ms ease, filter 260ms ease;
 }
 
-/* portrait panel: slide & fade in with a slight delay so image fades out first */
 .portrait-panel {
     position: absolute;
     left: 12px;
@@ -450,7 +447,7 @@ body {
     will-change: transform, opacity;
 }
 
-/* visible state: slight delay so portrait fades first */
+
 .portrait-panel.visible {
     pointer-events: auto;
     opacity: 1;
@@ -458,7 +455,7 @@ body {
     transition-delay: 140ms;
 }
 
-/* hide sequence: ensure panel hides quickly before restoring image */
+
 .portrait-panel.hiding {
     opacity: 0;
     transform: translateY(6px) scale(0.995);
@@ -467,7 +464,6 @@ body {
     pointer-events: none;
 }
 
-/* when panel is removed, about-left.active removed later so portrait returns */
 .about-left:not(.active) .portrait-panel {
     opacity: 0;
     pointer-events: none;
@@ -501,7 +497,7 @@ body {
     box-sizing: border-box;
 }
 
-/* Individual skill: ensure it fills available width and accounts for padding */
+
 .skill {
     display: block;
     width: 100%;
@@ -513,29 +509,29 @@ body {
     transition: transform 180ms ease, box-shadow 180ms ease, background 160ms ease;
 }
 
-/* Pull effect: skill lifts and shows a sharp orange accent (no faded shadow) */
+
 .skill.pull {
     transform: translateY(-8px) scale(1.035);
     transition: transform 160ms cubic-bezier(.2,.9,.3,1), box-shadow 160ms ease, background 160ms ease;
     z-index: 3;
-    /* crisp orange border and subtle glow */
+
     border: 1px solid rgba(255,115,0,0.14);
     background: linear-gradient(180deg, rgba(255,115,0,0.02), rgba(255,115,0,0.005));
     box-shadow:
         0 10px 30px rgba(0,0,0,0.6),
-        0 0 0 3px rgba(255,115,0,0.045); /* sharp orange ring */
+        0 0 0 3px rgba(255,115,0,0.045);
 }
 
-/* deep, recessed skill track */
+
 .skill-track {
-     position: relative;               /* for pseudo layers */
+     position: relative;
      width: 100%;
      height: 14px;
      border-radius: 999px;
      background: linear-gradient(180deg, rgba(0,0,0,0.62), rgba(12,12,12,0.78));
      border: 1px solid rgba(255,255,255,0.03);
      box-shadow:
-         inset 0 6px 18px rgba(0,0,0,0.72), /* deep inner shadow */
+         inset 0 6px 18px rgba(0,0,0,0.72),
          inset 0 -3px 6px rgba(255,255,255,0.02);
      overflow: hidden;
      will-change: transform, opacity;
@@ -545,7 +541,7 @@ body {
     text-align: end;
 }
 
-/* liquid-like fill with layered visual elements */
+
 .skill-fill {
      position: relative;
      display: block;
@@ -564,7 +560,7 @@ body {
      overflow: visible;
  }
 
-/* large soft wave (slow) to create fluid surface */
+
 .skill-fill::before {
      content: "";
      position: absolute;
@@ -585,7 +581,7 @@ body {
      transition: opacity 260ms ease;
  }
 
-/* fast sheen that sweeps across the liquid surface */
+
 .skill-fill::after {
      content: "";
      position: absolute;
@@ -603,7 +599,7 @@ body {
      z-index: 3;
  }
 
-/* wave and sheen animations */
+
 @keyframes liquidWave {
      0% { transform: translateX(-8%) rotate(-6deg) scale(1); }
      50% { transform: translateX(6%) rotate(-5deg) scale(1.02); }
@@ -616,31 +612,29 @@ body {
      100% { left: 120%; opacity: 0; }
 }
 
-/* start animations when skill becomes visible */
+
 .skill.in-view .skill-fill::before {
      opacity: 1;
      animation: liquidWave 4800ms linear infinite;
 }
 .skill.in-view .skill-fill::after {
-    /* run the sweep over 2000ms and repeat indefinitely (one sweep every ~2s) */
     animation: sheenSweep 2000ms cubic-bezier(.2,.9,.3,1) 220ms both infinite;
     opacity: 0.95;
 }
 
-/* small repeated sweep while the fill is settling (optional class can be toggled by JS) */
+
 .skill.in-view .skill-fill.glassy-sheen::after {
      animation-iteration-count: infinite;
      animation-duration: 1600ms;
      animation-delay: 600ms;
 }
 
-/* reduce intensity for very small fills */
+
 .skill-fill[style*="--skill-percent:0"]::before,
 .skill-fill[style*="--skill-percent:0%"]::before {
      opacity: 0.18;
 }
 
-/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
      .skill-fill::before,
      .skill-fill::after {
@@ -651,7 +645,7 @@ body {
      .skill-fill { transition: none !important; }
 }
 
-/* Card wrapper for About */
+
 .about-card {
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     -webkit-backdrop-filter: blur(8px) saturate(120%);
@@ -684,11 +678,10 @@ body {
     overflow: hidden;
     background-color: var(--eerie-black);
     z-index: 0;
-    /* ensure hero doesn't create horizontal scroll on odd viewports */
+
     box-sizing: border-box;
 }
 
-/* background image layer (keeps photo visible, anchored at top) */
 .about-hero-bg {
     position: absolute;
     inset: 0;
@@ -696,7 +689,7 @@ body {
         linear-gradient(to bottom, rgba(24,24,24,0.12) 20%, rgba(24,24,24,0.6) 70%),
         url('../assets/photoshoot.jpg');
     background-position: center;
-    background-size: cover; /* ensure full coverage */
+    background-size: cover;
     background-repeat: no-repeat;
     transform-origin: center;
     z-index: 0;
@@ -711,7 +704,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    height: 30%; /* adjust how much of the bottom fades */
+    height: 30%;
     pointer-events: none;
     z-index: 1;
     background: linear-gradient(
@@ -726,11 +719,11 @@ body {
 /* overlay panel centered over the hero background */
 .about-hero-overlay {
     position: relative;
-    z-index: 3; /* raised so overlay content remains fully on top */
+    z-index: 3;
     text-align: center;
     color: var(--white);
-    padding: clamp(1rem, 2.5vw, 2.25rem); /* responsive padding */
-    max-width: min(1100px, 92vw); /* responsive max width */
+    padding: clamp(1rem, 2.5vw, 2.25rem);
+    max-width: min(1100px, 92vw);
     width: 100%;
     margin: 0 1rem;
     border-radius: 12px;
@@ -742,14 +735,14 @@ body {
     pointer-events: none;
 }
 
-/* Entrance class: toggled once by script */
+
 .about-hero-overlay.entrance {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
 }
 
-/* Title and description styles - make sizing responsive */
+
 .about-hero-title {
     margin: 0 0 0.35rem 0;
     font-family: var(--font-main);
@@ -767,30 +760,30 @@ body {
     opacity: 0.96;
 }
 
-/* About hero left overlay (quote / quick text) */
+
 .about-hero-qt {
     position: absolute;
-    left: clamp(30%, 3.5vw, 48px);       /* keep it near the left but responsive */
+    left: clamp(30%, 3.5vw, 48px);
     top: 50%;
-    transform: translateY(-50%) translateX(-14%); /* start off-edge */
+    transform: translateY(-50%) translateX(-14%);
     width: clamp(220px, 18vw, 320px);
     max-width: 34%;
     color: rgba(255,255,255,0.95);
     z-index: 4;
-    pointer-events: none; /* disabled until visible */
+    pointer-events: none;
     opacity: 0;
     transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1);
     will-change: transform, opacity;
 }
 
-/* visible state: slide inward (center a bit), enable interactions */
+
 .about-hero-qt.show {
     opacity: 1;
     transform: translateY(-50%) translateX(6%); /* shifts toward center when shown */
     pointer-events: auto;
 }
 
-/* Use existing .glassy visuals + tweak padding for the overlay card */
+
 .about-hero-qt.glassy {
     padding: 1rem;
     border-radius: 12px;
@@ -801,7 +794,7 @@ body {
     box-shadow: 0 20px 50px rgba(0,0,0,0.6);
 }
 
-/* blockquote / cite styling */
+
 .about-hero-qt blockquote {
     margin: 0 0 0.6rem 0;
     font-size: 0.98rem;
@@ -818,29 +811,28 @@ body {
     font-style: normal;
 }
 
-/* entrance helper: add this class from JS or rely on CSS transition when page loads */
 .about-hero-qt.show {
     opacity: 1;
     transform: translateY(-50%) translateX(0);
 }
 
-/* Small visual tweak when hero overlay entrance runs concurrently */
+
 .about-hero-overlay.entrance + .about-hero-qt,
-.about-hero-qt { /* ensure a tiny delay so overlay and qt don't compete */
+.about-hero-qt {
     transition-delay: 120ms;
 }
 
-/* ensure overlay doesn't create horizontal scroll */
+
 .about-hero-section { overflow-x: hidden; }
 
-/* Apply glassy sheen to nav buttons and CTA (activated by .glassy-active) */
+
 .nav-link.glassy,
 .btn.glassy {
-    position: relative; /* ensure pseudo sits correctly */
-    overflow: hidden;   /* clip the sheen */
+    position: relative;
+    overflow: hidden;
 }
 
-/* sheen layer */
+
 .nav-link.glassy::after,
 .btn.glassy::after {
     content: "";
@@ -862,13 +854,13 @@ body {
     transition: opacity 180ms linear;
 }
 
-/* run the sweep when JS toggles .glassy-active */
+
 .glassy.glassy-active::after {
     opacity: 1;
     animation: navCtaSheen var(--duration-very-long) var(--ease-standard) both infinite;
 }
 
-/* Respect reduced-motion */
+
 @media (prefers-reduced-motion: reduce) {
     .glassy.glassy-active::after {
         animation: none;
@@ -877,7 +869,7 @@ body {
     }
 }
 
-/* Go Back Home — orange glassy CTA with sheen (participates in .glassy cycle) */
+
 .about-bottom-hero-sub {
     display: inline-block;
     padding: 0.6rem 1.05rem;
@@ -910,9 +902,7 @@ body {
     border-radius: 9px;
 }
 
-/* ensure sheen pseudo can render — re-use existing .glassy pseudo rules (element must have .glassy class) */
 .about-bottom-hero-sub.glassy::after {
-    /* inherit generic sheen style but make it slightly brighter for the orange surface */
     content: "";
     position: absolute;
     top: 0;
@@ -932,13 +922,13 @@ body {
     transition: opacity 180ms linear;
 }
 
-/* when JS toggles .glassy-active the sheen will sweep (global navCtaSheen keyframes are used) */
+
 .about-bottom-hero-sub.glassy.glassy-active::after {
     opacity: 1;
     animation: navCtaSheen var(--duration-very-long) var(--ease-standard) both infinite;
 }
 
-/* reduced motion fallback */
+
 @media (prefers-reduced-motion: reduce) {
     .about-bottom-hero-sub.glassy.glassy-active::after {
         animation: none;
@@ -1006,7 +996,7 @@ body {
     line-height: 1.5;
 }
 
-/* Childhood card: images on both sides, centered description */
+
 .childhood-card {
     margin: 2.5rem auto;
     max-width: 1100px;
@@ -1015,17 +1005,17 @@ body {
     padding: 1rem;
 }
 
-/* Two-column grid: left = description, right = stacked photos */
+
 .childhood-inner {
     display: grid;
-    grid-template-columns: 1fr minmax(240px, 360px); /* left flexible, right stacked column */
+    grid-template-columns: 1fr minmax(240px, 360px);
     grid-auto-rows: auto;
     gap: var(--content-gap);
     align-items: start;
     justify-content: center;
 }
 
-/* description sits in the left column and spans both rows */
+
 .child-middle {
     grid-column: 1 / 2;
     grid-row: 1 / span 2;
@@ -1037,7 +1027,7 @@ body {
     text-align: left;
 }
 
-/* photos occupy the right column in two rows (stacked) */
+
 .child-left {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
@@ -1053,7 +1043,7 @@ body {
     justify-content: center;
 }
 
-/* ensure right column photos scale and share same width */
+
 .child-left, .child-right {
     width: 100%;
     max-width: 360px;
@@ -1069,10 +1059,10 @@ body {
     display: block;
 }
 
-/* small visual polish to keep centered on wide screens */
+
 .child-middle { display: flex; flex-direction: column; justify-content: center; }
 
-/* Bottom hero under cards — full-bleed background that blends top & bottom */
+
 .about-bottom-hero {
     position: relative;
     width: 100vw;
@@ -1089,7 +1079,7 @@ body {
     background: transparent;
 }
 
-/* background layer (image) */
+
 .about-bottom-hero-bg {
     position: absolute;
     inset: 0;
@@ -1103,7 +1093,7 @@ body {
     will-change: transform, opacity;
 }
 
-/* top fade (soft) - sits above image but below overlay */
+
 .about-bottom-hero-bg::before {
     content: "";
     position: absolute;
@@ -1114,7 +1104,7 @@ body {
     background: linear-gradient(180deg, var(--eerie-black) 0%, rgba(24,24,24,0.2) 60%, rgba(24,24,24,0) 100%);
 }
 
-/* bottom fade (blend into page background) */
+
 .about-bottom-hero-bg::after {
     content: "";
     position: absolute;
@@ -1125,7 +1115,7 @@ body {
     background: linear-gradient(180deg, rgba(24,24,24,0) 0%, rgba(24,24,24,0.22) 45%, var(--eerie-black) 100%);
 }
 
-/* overlay content centered over image */
+
 .about-bottom-hero-overlay {
     position: relative;
     z-index: 3;
@@ -1137,7 +1127,7 @@ body {
     pointer-events: auto;
 }
 
-/* overlay text styling */
+
 .about-bottom-hero-title {
     margin: 0 0 0.5rem 0;
     font-family: var(--font-main);
@@ -1157,14 +1147,14 @@ body {
     border: 1px solid rgba(255,115,0,0.24);
     box-shadow: 0 10px 30px rgba(255,115,0,0.06);
     text-decoration: none;
-    position: relative;   /* required for sheen pseudo-element */
-    overflow: hidden;     /* clip sheen */
+    position: relative;
+    overflow: hidden;
     -webkit-backdrop-filter: blur(6px) saturate(120%);
     backdrop-filter: blur(6px) saturate(120%);
     transition: transform 180ms var(--ease-standard), box-shadow 200ms var(--ease-standard), background 180ms var(--ease-standard);
 }
 
-/* subtle hover / focus lift */
+
 .about-bottom-hero-sub:hover,
 .about-bottom-hero-sub:focus {
     transform: translateY(-3px);
@@ -1172,16 +1162,16 @@ body {
     background: linear-gradient(180deg, rgba(255,115,0,0.18), rgba(255,115,0,0.26));
 }
 
-/* accessible focus-visible */
+
 .about-bottom-hero-sub:focus-visible {
     outline: 3px solid rgba(255,115,0,0.18);
     outline-offset: 4px;
     border-radius: 9px;
 }
 
-/* ensure sheen pseudo can render — re-use existing .glassy pseudo rules (element must have .glassy class) */
+
 .about-bottom-hero-sub.glassy::after {
-    /* inherit generic sheen style but make it slightly brighter for the orange surface */
+
     content: "";
     position: absolute;
     top: 0;
@@ -1201,13 +1191,12 @@ body {
     transition: opacity 180ms linear;
 }
 
-/* when JS toggles .glassy-active the sheen will sweep (global navCtaSheen keyframes are used) */
+
 .about-bottom-hero-sub.glassy.glassy-active::after {
     opacity: 1;
     animation: navCtaSheen var(--duration-very-long) var(--ease-standard) both infinite;
 }
 
-/* reduced motion fallback */
 @media (prefers-reduced-motion: reduce) {
     .about-bottom-hero-sub.glassy.glassy-active::after {
         animation: none;
@@ -1216,7 +1205,7 @@ body {
     }
 }
 
-/* Desktop card: Arch + Hyprland showcase (image left, description right) */
+
 .desktop-card {
     margin: 2rem auto;
     padding: 1rem;
@@ -1233,7 +1222,7 @@ body {
     min-width: 0;
 }
 
-/* left image column */
+
 .desktop-left {
     flex: 0 0 300px;
     max-width: 300px;
@@ -1242,7 +1231,7 @@ body {
     justify-content: center;
 }
 
-/* desktop photo: moderate height and responsive */
+
 .desktop-photo {
     width: 100%;
     height: auto;
@@ -1254,7 +1243,7 @@ body {
     display: block;
 }
 
-/* descriptive body */
+
 .desktop-body {
     flex: 1 1 auto;
     min-width: 0;
@@ -1294,7 +1283,7 @@ body {
     position: relative;
     z-index: 1;
     overflow: visible;
-    /* Make the container look deeper */
+
     box-shadow:
         0 12px 48px 0 rgba(0,0,0,0.65),
         0 2px 24px 0 rgba(255,115,0,0.08),
@@ -1471,7 +1460,7 @@ body {
    Utility & Reusable Classes
    ------------------------- */
 
-/* Card base: use for any visual card (about-card, profile-card, etc.) */
+
 .u-card,
 .about-card,
 .profile-card,
@@ -1488,12 +1477,12 @@ body {
     box-sizing: border-box;
 }
 
-/* Small elevation variant (use .u-elevated) */
+
 .u-elevated {
     box-shadow: 0 18px 50px rgba(6,6,6,0.7);
 }
 
-/* Subtle hover lift */
+
 @media (hover: hover) and (min-width: 720px) {
     .u-card:hover { transform: translateY(-6px); box-shadow: 0 28px 72px rgba(6,6,6,0.75); }
 }
@@ -1506,10 +1495,10 @@ body {
     justify-content: flex-start;
     width: 100%;
     box-sizing: border-box;
-    min-width: 0; /* ensure flex children can shrink */
+    min-width: 0;
 }
 .media__figure {
-    flex: 0 0 260px; /* default media image column */
+    flex: 0 0 260px;
     max-width: 360px;
     box-sizing: border-box;
 }
@@ -1519,10 +1508,9 @@ body {
     box-sizing: border-box;
 }
 
-/* Reverse media (image on right) */
+
 .media--reverse { flex-direction: row-reverse; }
 
-/* Stack helper: switches to column (used on small screens) */
 .media--stack { flex-direction: column; align-items: center; text-align: center; }
 @media (max-width: 720px) {
     .media--stack { gap: 0.9rem; }
@@ -1533,13 +1521,12 @@ body {
     display: block;
     width: 100%;
     height: auto;
-    object-fit: cover; /* best default; use contain where full-body required */
+    object-fit: cover;
     border-radius: 12px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.55);
     border: 1px solid rgba(255,255,255,0.04);
 }
 
-/* For full visible-body photos (use .u-img--contain) */
 .u-img--contain { object-fit: contain; max-height: 80vh; }
 
 /* Glass surface: reusable glass panel styling */
@@ -1552,7 +1539,7 @@ body {
     box-shadow: 0 20px 50px rgba(0,0,0,0.6);
 }
 
-/* Glassy sheen target (pseudo ::after used by JS .glassy-active) */
+
 .u-glassy {
     position: relative;
     overflow: hidden;
@@ -1692,8 +1679,7 @@ body {
     padding: 2.5rem 1rem;
 }
 
-/* Replace the small, plain projects container with a card-like surface
-    visually consistent with .services-container */
+
 .projects-container {
     background: linear-gradient(180deg, rgba(18,18,18,0.98) 80%, rgba(32,32,32,1) 100%);
     border-radius: 2rem;

@@ -1,6 +1,3 @@
-/* Consolidated responsive rules for the site */
-
-/* Large tablets / small desktops */
 @media (max-width: 1024px) {
     .header {
         max-width: 100vw;
@@ -19,7 +16,6 @@
 
 }
 
-/* Slightly narrower than large desktop (keeps layout balanced) */
 @media (max-width: 980px) {
     .about-grid {
         grid-template-columns: 320px 1fr;
@@ -29,7 +25,7 @@
     }
 }
 
-/* Tablet / mobile landscape */
+
 @media (max-width: 768px) {
 
     .about-hero-section {
@@ -38,7 +34,7 @@
     }
 
     .about-hero-bg {
-        /* on narrower screens, center the focal point */
+
         background-position: center top;
         background-size: cover;
     }
@@ -62,13 +58,12 @@
         align-items: center;
     }
 
-    /* Nav becomes an overlay panel on smaller screens */
     .nav {
         display: flex;
         position: absolute;
         top: 70px;
         right: 5vw;
-        /* glassy background for mobile overlay */
+
         background: rgba(255,255,255,0.06);
         -webkit-backdrop-filter: blur(10px) saturate(120%);
         backdrop-filter: blur(10px) saturate(120%);
@@ -80,7 +75,7 @@
         z-index: 100;
         min-width: 200px;
 
-        /* transition-friendly hiding */
+
         opacity: 0;
         transform: translateY(-8px) scale(0.995);
         pointer-events: none;
@@ -121,23 +116,22 @@
 
     .typewriter { max-width: 22ch; }
 
-    /* SHOW the left hero quote on small screens as a centered bottom overlay,
-       rather than hiding it — keep .show for the staged reveal. */
+
     .about-hero-qt {
         display: block !important;
         left: 50%;
         top: auto;
         bottom: clamp(6vh, 10vh, 14vh);
-        transform: translateX(-50%) translateY(0); /* centered horizontally */
+        transform: translateX(-50%) translateY(0);
         width: min(92vw, 520px);
         max-width: 92vw;
-        pointer-events: none; /* enabled only when .show adds visibility */
+        pointer-events: none;
         opacity: 0;
         z-index: 6;
         transition: opacity 320ms cubic-bezier(.2,.9,.3,1), transform 320ms cubic-bezier(.2,.9,.3,1);
     }
 
-    /* when revealed (js toggles .show), enable interactions and slight lift */
+
     .about-hero-qt.show {
         pointer-events: auto;
         opacity: 1;
@@ -149,7 +143,7 @@
     }
 }
 
-/* Narrow phones */
+
 @media (max-width: 720px) {
     .about-card {
         padding: 1rem;
@@ -163,7 +157,7 @@
         margin-bottom: 1rem;
     }
 
-    /* portrait panel placed and centered on mobile */
+
     .portrait-panel {
         left: 50%;
         right: auto;
@@ -174,7 +168,7 @@
 
     .typewriter { max-width: 16ch; border-right-width: 1.5px; }
 
-    /* Stack profile card vertically on narrow viewports */
+
     .profile-card .profile-inner {
         flex-direction: column;
         gap: 0.9rem;
@@ -189,7 +183,7 @@
         width: 100%;
     }
 
-    /* Make the profile card span the full content width on small screens */
+
     .profile-card {
         width: 100%;
         max-width: 100%;
@@ -199,21 +193,20 @@
         box-sizing: border-box;
     }
 
-    /* Ensure the left photo column fills the card width when stacked */
+
     .profile-card .profile-left {
         width: 100%;
         max-width: 100%;
         flex-basis: auto;
     }
 
-    /* Make the portrait responsive inside the card */
+
     .profile-card .profile-photo {
         width: 100%;
         height: auto;
         display: block;
     }
 
-    /* Childhood card responsive: stack images and center text on narrow screens */
     .childhood-inner {
         flex-direction: column;
         align-items: center;
@@ -291,15 +284,14 @@
     }
 }
 
-/* Mid-size screens: tablets in landscape and smaller laptops
-   Fixes layout issues between ~720px and 1200px */
+
 @media (min-width: 721px) and (max-width: 1200px) {
     .school-card {
         width: calc(100% - 3rem);
         max-width: 880px;
     }
 
-    /* keep school photo proportionate on medium screens */
+
     .school-right {
         flex: 0 0 220px;
         max-width: 220px;
@@ -311,7 +303,6 @@
         object-fit: cover;
     }
 
-    /* Make profile card centered but not too narrow */
     .profile-card {
         width: calc(100% - 3rem);
         max-width: 920px;
@@ -321,27 +312,26 @@
         padding-right: 1rem;
     }
 
-    /* Keep the about grid readable: fixed portrait column and flexible content */
+
     .about-grid {
         grid-template-columns: 320px 1fr;
         gap: 1.25rem;
         align-items: start;
     }
 
-    /* Slightly reduce portrait size to avoid pushing content */
+
     .about-portrait {
         max-width: 320px;
         height: auto;
     }
 
-    /* Constrain hero content so it doesn't overflow on mid screens */
     .hero-content {
         max-width: 720px;
         padding-left: 1rem;
         padding-right: 1rem;
     }
 
-    /* Reduce header padding and nav gaps to avoid wrapping */
+
     .header {
         padding: 1rem 2vw 0 2vw;
     }
@@ -353,13 +343,11 @@
         font-size: 1rem;
     }
 
-    /* Graph / timeline container sizing */
     .graph-container {
         max-width: 980px;
         padding: 1.5rem 1rem;
     }
 
-    /* Make sure hero keeps reasonable height */
     .hero-section {
         min-height: 56vh;
         max-height: 760px;
@@ -367,7 +355,7 @@
 
     /* Ensure centered main line position remains accurate */
     .graph-main-line, .graph-svg {
-        /* no change to left = 50% but ensure transform is present */
+
         left: 50%;
         transform: translateX(-50%);
     }
@@ -376,7 +364,7 @@
     .about-bottom-hero-title { font-size: 1.4rem; }
 }
 
-/* Ensure school card stacks and does not overflow on small screens */
+
 @media (max-width: 720px) {
     .school-card {
         width: 100%;
@@ -410,7 +398,6 @@
     }
 }
 
-/* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
     .typewriter { border-right: 0; }
     .hero-title, .hero-subtitle, .hero-actions, .logo, .nav, .hamburger, .header {
@@ -423,7 +410,7 @@
 
 /* Utilities responsive helpers */
 
-/* Force any media-like block to stack on small viewports */
+
 @media (max-width: 720px) {
     .media, .profile-card .profile-inner, .school-inner, .childhood-inner, .desktop-inner {
         flex-direction: column;
@@ -431,7 +418,7 @@
         align-items: center;
         text-align: center;
     }
-    /* ensure card containers use full available width on mobile */
+
     .u-card, .about-card, .profile-card, .school-card, .childhood-card, .desktop-card {
         width: 100%;
         max-width: 100%;
@@ -454,9 +441,9 @@
     }
 }
 
-/* Mid-size screens (keep consistent card sizing) */
+
 @media (min-width: 721px) and (max-width: 1200px) {
-    /* give childhood side images more room on mid screens */
+
     .child-left, .child-right { flex: 0 0 240px; max-width: 240px; }
     .child-photo {
         height: 240px;
@@ -464,16 +451,16 @@
         object-fit: cover;
     }
 
-    /* keep other mid-size rules unchanged */
+
     .u-maxwidth { max-width: 920px; width: calc(100% - 3rem); }
     .profile-card .profile-left { flex: 0 0 300px; max-width: 300px; }
     .school-right { flex: 0 0 260px; max-width: 260px; }
 }
 
-/* Large screens: give the childhood images a bit more room */
+
 @media (min-width: 1201px) {
     .child-left, .child-right {
-        flex: 0 0 320px;    /* larger column on wide viewports */
+        flex: 0 0 320px;
         max-width: 320px;
     }
     .child-photo {
@@ -483,7 +470,7 @@
     }
 }
 
-/* Footer responsive: stack content and center */
+
 @media (max-width: 720px) {
     .footer-inner {
         flex-direction: column;
@@ -497,7 +484,7 @@
     .footer-brand { order: 1; }
 }
 
-/* Mobile: stack childhood block vertically (description first, then photos stacked) */
+
 @media (max-width: 720px) {
     .childhood-inner {
         display: flex !important;
@@ -533,7 +520,7 @@
     }
 }
 
-/* Projects inner container (centers and constrains similar to about-inner) */
+
 .projects-inner {
     max-width: 1100px;
     margin: 0 auto;
@@ -541,10 +528,7 @@
     box-sizing: border-box;
 }
 
-/* Responsive project card behavior:
-   - stack vertically on narrow screens
-   - make images full width and body occupy full width
-*/
+
 @media (max-width: 980px) {
     .projects-container {
         padding: 2rem 1rem;
@@ -573,7 +557,7 @@
     }
 }
 
-/* Tight phones: reduce gaps and ensure comfortable padding */
+
 @media (max-width: 480px) {
     .projects-inner { padding: 0 0.75rem; }
     .project-card { gap: 0.8rem; padding: 0.85rem; }
@@ -582,7 +566,7 @@
     .project-stores { gap: 0.6rem; }
 }
 
-/* Larger screens: keep cards visually compact and aligned */
+
 @media (min-width: 981px) {
     .project-card {
         align-items: center;

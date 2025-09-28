@@ -1,4 +1,4 @@
-// Refactored and self-documenting animation/interaction module
+
 
 document.addEventListener('DOMContentLoaded', () => {
     /* -------------------------
