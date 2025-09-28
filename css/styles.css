@@ -1370,7 +1370,7 @@ body {
 
 /* Make service icons larger and more prominent */
 .service-list-item ion-icon {
-    font-size: 2.6rem;
+    font-size: 3.6rem;
     margin-bottom: 0.7rem;
     color: var(--accent);
     display: block;
@@ -1464,6 +1464,8 @@ body {
     100% { transform: rotate(0);}
 }
 .icon-swing { animation: icon-swing 0.9s cubic-bezier(.4,0,.2,1); }
+
+
 
 /* -------------------------
    Utility & Reusable Classes
@@ -1574,40 +1576,39 @@ body {
     .u-glassy.glassy-active::after { animation:none; opacity: 0.12; left:0; }
 }
 
-/* Utility spacing helpers */
 .u-center { margin-left:auto; margin-right:auto; }
 .u-maxwidth { max-width: 920px; width: min(92%, 920px); }
 
 
-.profile-card { /* semantic hook preserved */
+.profile-card {
     margin: 2.5rem auto;
 }
-.profile-card .profile-inner { /* adapt to new utility naming */
+.profile-card .profile-inner {
     display: flex;
     gap: var(--content-gap);
     align-items: center;
     justify-content: flex-start;
     min-width: 0;
 }
-.profile-card .profile-left { /* image column uses media__figure + img helper */
+.profile-card .profile-left {
     flex: 0 0 260px;
     max-width: 260px;
 }
-.profile-card .profile-photo { /* reuse image utility */
-    /* apply base img styles */
+.profile-card .profile-photo {
+
     width: 100%; height: auto; object-fit: cover; border-radius: 12px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.04);
     max-height: 520px;
 }
 
-/* Childhood card uses media layout with small side-figures */
+
 .childhood-card { margin: 2.5rem auto; padding: 1rem; }
 .childhood-inner { display:grid; grid-template-columns:1fr minmax(240px,360px); grid-auto-rows:auto; gap:var(--content-gap); align-items:start; justify-content:center; }
 .child-middle { grid-column:1 / 2; grid-row:1 / span 2; display:flex; flex-direction:column; justify-content:center; min-width:220px; padding:0 0.75rem; text-align:left; }
 .child-left, .child-right { width:100%; max-width:360px; }
 .child-photo { width:100%; height:auto; max-height:420px; object-fit:cover; border-radius:10px; }
 
-/* School card uses media pattern but centered */
+
 .school-card {
     margin: 2rem auto;
     padding: 1rem;
@@ -1619,7 +1620,7 @@ body {
 .school-right { flex:0 0 260px; max-width:260px; display:flex; align-items:center; justify-content:center; }
 .school-photo { width:100%; height:auto; max-height:420px; object-fit:cover; border-radius:12px; }
 
-/* Shared card title color */
+
 .profile-name, .child-title, .school-name, .history-heading {
     color: var(--accent);
 }
@@ -1679,8 +1680,195 @@ body {
     font-size: 0.88rem;
 }
 
-/* small adjustments to ensure footer doesn't create horizontal scroll */
+
 .site-footer { overflow: hidden; }
 
-/* keep links keyboard-friendly */
+
 .footer-nav a:focus-visible { outline: 3px solid rgba(255,115,0,0.14); outline-offset: 4px; border-radius: 6px; }
+
+.projects-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1rem;
+}
+
+.project-card {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    margin-bottom: 2.5rem;
+    padding: 1.5rem 1.2rem;
+    flex-direction: row;
+}
+.project-card--reverse {
+    flex-direction: row-reverse;
+}
+.project-card__img {
+    flex: 0 0 320px;
+    max-width: 320px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.project-image {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.22);
+    background: #181818;
+    border: 1px solid rgba(255,255,255,0.04);
+}
+.project-card__body {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 0.5rem;
+}
+.project-card__body h3 {
+    margin: 0 0 0.6rem 0;
+    color: var(--accent);
+    font-size: 1.18rem;
+    font-weight: 700;
+}
+.project-card__body p {
+    margin: 0 0 1rem 0;
+    color: #e6e6e6;
+    font-size: 1rem;
+}
+.project-link {
+    display: inline-block;
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+    margin-top: 0.2rem;
+    font-size: 1rem;
+    transition: color 180ms var(--ease-standard);
+}
+.project-link:hover,
+.project-link:focus {
+    color: #ffb366;
+}
+
+
+.project-stores {
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0 0.2rem 0;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.store-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.04);
+    border-radius: 0.7em;
+    padding: 0.3em 0.7em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+    border: 1px solid rgba(255,255,255,0.06);
+    min-width: 44px;
+    min-height: 36px;
+    cursor: pointer;
+    color: var(--accent);
+}
+.store-badge:hover,
+.store-badge:focus {
+    background: rgba(255,115,0,0.10);
+    transform: translateY(-2px) scale(1.06);
+    box-shadow: 0 6px 18px rgba(255,115,0,0.10);
+    outline: none;
+}
+
+
+.mentor-card.glassy {
+
+    background: linear-gradient(180deg, rgba(255,115,0,0.14), rgba(255,115,0,0.06));
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    backdrop-filter: blur(10px) saturate(120%);
+    border: 1px solid rgba(255,115,0,0.20);
+    box-shadow:
+        0 18px 48px rgba(6,6,6,0.7),
+        0 10px 40px rgba(255,115,0,0.06);
+    color: rgba(255,245,230,0.98);
+    transition: transform 220ms var(--ease-standard), box-shadow 220ms var(--ease-standard), background 220ms ease;
+}
+
+
+.mentor-card .mentor-quote {
+    position: relative;
+    display: block;
+    margin: 0.6rem 0;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgba(255,115,0,0.02), rgba(0,0,0,0.0));
+    color: rgba(255,200,120,0.98);
+    font-weight: 700;
+    line-height: 1.35;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.02);
+    border-left: 3.5px solid rgba(255,115,0,0.18);
+    overflow: hidden; /* required so sheen pseudo is clipped */
+    transition: box-shadow 180ms ease, transform 160ms ease, color 200ms ease;
+}
+
+
+.mentor-card cite {
+    display: block;
+    margin-top: 0.45rem;
+    color: rgba(255,200,120,0.86);
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+
+
+.mentor-card .mentor-quote::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 60%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+        110deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.26) 50%,
+        rgba(255,255,255,0) 100%
+    );
+    transform: skewX(-12deg);
+    transition: opacity 160ms linear;
+    z-index: 2;
+}
+
+
+.mentor-card.glassy.glassy-active .mentor-quote::after {
+    opacity: 1;
+    animation: navCtaSheen 1400ms cubic-bezier(.2,.9,.3,1) both;
+}
+
+
+.mentor-card .mentor-quote:focus,
+.mentor-card .mentor-quote:focus-visible {
+    outline: 3px solid rgba(255,115,0,0.14);
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+.profile-right cite {
+    display: flex;
+    justify-content: end;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .mentor-card.glassy.glassy-active .mentor-quote::after {
+        animation: none;
+        opacity: 0.14;
+        left: 0;
+    }
+}
+

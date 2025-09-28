@@ -528,4 +528,7 @@
         max-height: none;
         object-fit: cover;
     }
+    .profile-right cite{
+        justify-content: center;
+    }
 }
