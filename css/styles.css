@@ -1900,8 +1900,9 @@ body {
 }
 
 
-.mentor-card cite {
-    display: block;
+.mentor-card figcaption {
+    display: flex;
+    justify-content: end;
     margin-top: 0.45rem;
     color: rgba(255,200,120,0.86);
     font-weight: 600;

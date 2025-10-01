@@ -673,8 +673,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { threshold: 0.25 });
         }
 
-        initializeServicesEntrance(); // already IntersectionObserver-based
+        initializeServicesEntrance();
+
+        if (document.querySelector('.mentor-card')) {
+            initializeMentorGlassySheen();
+        } else {
+            let glassyCtl = null;
+            const firstGlassy = document.querySelector('.glassy');
+            if (firstGlassy) {
+                observeVisibility(firstGlassy, () => {
+                    if (!glassyCtl) glassyCtl = startGlassyCycle('.glassy', 2000);
+                }, () => {
+                    if (glassyCtl && glassyCtl.stop) glassyCtl.stop();
+                    glassyCtl = null;
+                }, { threshold: 0.1 });
+            }
+        }
     });
+
+    /* -------------------------
+       Glassy sheen for About mentor section only
+       ------------------------- */
+    function initializeMentorGlassySheen() {
+        const section = document.querySelector('.mentor-card');
+        if (!section) return;
+
+        // Target only the mentor section elements with glassy sheen
+        const selector = '.mentor-card.glassy, .mentor-card .glassy, .mentor-quote.glassy';
+        const targets = Array.from(document.querySelectorAll(selector));
+        if (!targets.length) return;
+
+        // Accessibility: reveal without animation
+        if (PREFERS_REDUCED_MOTION) {
+            targets.forEach(el => el.classList.add('glassy-active'));
+            return;
+        }
+
+        let ctl = null;
+        observeVisibility(section, () => {
+            if (!ctl) ctl = startGlassyCycle(selector, 2200);
+        }, () => {
+            if (ctl && ctl.stop) ctl.stop();
+            ctl = null;
+            targets.forEach(el => el.classList.remove('glassy-active'));
+        }, { threshold: 0.2 });
+    }
 });
 
 /* -------------------------
