@@ -8,10 +8,29 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(() => setTimeout(fn, delay));
     }
 
+    const runIdle = (cb, timeout = 800) => {
+        const g = typeof globalThis !== 'undefined' ? globalThis : window;
+        
+        const scheduler = g['scheduler']; 
+        if (scheduler && typeof scheduler.postTask === 'function') {
+            try {
 
-    const runIdle = (cb, timeout = 800) =>
-        ('requestIdleCallback' in window) ? requestIdleCallback(() => cb(), { timeout }) : setTimeout(() => cb(), 0);
+                scheduler.postTask(cb, { priority: 'background' });
+                return;
+            } catch (e) {
 
+            }
+        }
+
+        if (typeof g.requestIdleCallback === 'function') {
+            g.requestIdleCallback(cb, { timeout });
+            return;
+        }
+
+        setTimeout(cb, 0);
+    };
+
+    const isEscape = (ev) => ev && (ev.key === 'Escape' || ev.code === 'Escape');
 
     function observeVisibility(target, onEnter, onExit, options = { threshold: 0.2 }) {
         const el = typeof target === 'string' ? document.querySelector(target) : target;
@@ -188,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         hamburgerBtn.addEventListener('keydown', (ev) => {
-            if (ev.key === 'Enter' || ev.key === ' ') {
+            if (ev.key === 'Enter' || ev.key === ' ' || ev.code === 'Space') {
                 ev.preventDefault();
                 toggleNavigation(true);
             } else if (ev.key === 'ArrowDown') {
@@ -244,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         document.addEventListener('keydown', (ev) => {
-            if (ev.key === 'Escape' || ev.key === 'Esc') {
+            if (isEscape(ev)) {
                 if (navigationMenu.classList.contains('open')) closeNavigation();
             }
         });
@@ -482,8 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return;
             }
-
-            // Normal open: reveal panel then type
+            
             setTimeout(async () => {
                 portraitPanel.classList.add('visible');
                 await new Promise(res => setTimeout(res, 140));
@@ -599,7 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.addEventListener('keydown', (ev) => {
             if (!panelEnabled) return;
-            if (ev.key === 'Escape' || ev.key === 'Esc') hideSkillDetail();
+            if (isEscape(ev)) hideSkillDetail();
         });
 
         return {

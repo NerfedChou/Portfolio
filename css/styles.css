@@ -798,6 +798,20 @@ body {
     will-change: transform, opacity;
 }
 
+.about-hero-figure {
+    margin: 0;
+}
+
+.about-hero-figure figcaption {
+    display: flex;
+    justify-content: end;
+    font-weight: bold;
+}
+
+.my-quote {
+    font-weight: bold;
+    font-style: italic;
+}
 
 .about-hero-qt.show {
     opacity: 1;
