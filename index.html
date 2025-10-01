@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>Jan Rhian Angulo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="css/responsive.css" as="style">
     <!-- Poppins font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
@@ -84,7 +89,7 @@
                         <h2 id="about-title" class="sr-only">About Me</h2>
                         <div class="about-grid">
                             <div class="about-left" aria-hidden="false">
-                                <img src="assets/me.jpeg" alt="Portrait of Jan Rhian Angulo" class="about-portrait">
+                                <img src="assets/me.jpeg" alt="Portrait of Jan Rhian Angulo" class="about-portrait" loading="lazy">
                                 <!-- JS animation -->
                                 <div class="portrait-panel" id="portraitPanel" aria-live="polite" aria-atomic="true">
                                     <h4 class="panel-title" id="panelTitle"></h4>
@@ -234,7 +239,7 @@
                     <!-- Project 1: GitHub Clone Website -->
                     <div class="project-card">
                         <div class="project-card__img">
-                            <img src="assets/guthib.jpg" alt="Screenshot of GitHub Clone Website" class="project-image">
+                            <img src="assets/guthib.jpg" alt="Screenshot of GitHub Clone Website" class="project-image" loading="lazy">
                         </div>
                         <div class="project-card__body">
                             <h3>GitHub Clone Website</h3>
@@ -250,7 +255,7 @@
                     <!-- Project 2: Marcos Pisot -->
                     <div class="project-card project-card--reverse">
                         <div class="project-card__img">
-                            <img src="assets/fnm.png" alt="Screenshot of Game Project" class="project-image">
+                            <img src="assets/fnm.png" alt="Screenshot of Game Project" class="project-image" loading="lazy">
                         </div>
                         <div class="project-card__body">
                             <h3>Five Nights at Malacañang</h3>
@@ -281,7 +286,7 @@
                     <!-- Project 3: b235  -->
                     <div class="project-card">
                         <div class="project-card__img">
-                            <img src="assets/b235.jpg" alt="Placeholder Project" class="project-image">
+                            <img src="assets/b235.jpg" alt="Placeholder Project" class="project-image" loading="lazy">
                         </div>
                         <div class="project-card__body">
                             <h3>BEDROOM 2:35 Framework</h3>
@@ -391,10 +396,9 @@
              </div>
          </div>
      </footer>
-     <script src="js/animation.js"></script>
-     <script src="js/customItemAnimations.js"></script>
+     <script src="js/animation.js" defer></script>
+     <script src="js/customItemAnimations.js" defer></script>
      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
      <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
  </body>
  </html>
-
