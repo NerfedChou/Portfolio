@@ -478,7 +478,22 @@
         align-items: center;
         text-align: center;
     }
-    .footer-nav { gap: 0.5rem; flex-wrap: wrap; }
+    .footer-nav {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        display: flex;
+        width: 100%;
+    }
+    .footer-list {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
     .footer-nav a { padding: 0.4rem 0.6rem; }
     .footer-legal { order: 3; }
     .footer-brand { order: 1; }
@@ -704,4 +719,12 @@
 @media (max-width: 600px) {
     .cv-container { padding: 1rem 0.5rem; }
     .cv-photo { width: 90px; height: 90px; }
+}
+
+@media (max-width: 430px) {
+    .footer-brand {
+        flex-direction: column;
+        align-items: center;
+    }
+    
 }

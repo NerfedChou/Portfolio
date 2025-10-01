@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', () => {
     /* -------------------------
        Helpers & configuration
@@ -129,7 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
         navigationMenu.setAttribute('role', navigationMenu.getAttribute('role') || 'navigation');
         navigationMenu.setAttribute('aria-hidden', 'true');
 
-        const getFirstNavLink = () => navigationMenu.querySelector('.nav-link');
+        const navList = navigationMenu.querySelector('ul.nav');
+
+        const getFirstNavLink = () => navList ? navList.querySelector('.nav-link') : navigationMenu.querySelector('.nav-link');
 
         function openNavigation(focusFirst = false) {
             navigationMenu.classList.add('open');
@@ -168,8 +168,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-
-        const inPageLinks = Array.from(navigationMenu.querySelectorAll('a[href^="#"]'));
+        // Use navList for in-page links if present, else fallback to navigationMenu
+        const linkContainer = navList || navigationMenu;
+        const inPageLinks = Array.from(linkContainer.querySelectorAll('a[href^="#"]'));
         inPageLinks.forEach(link => {
             link.addEventListener('click', (ev) => {
                 const href = link.getAttribute('href');
@@ -180,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const smallScreen = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
                 if (!smallScreen && !navigationMenu.classList.contains('open')) {
-
                     return;
                 }
 
