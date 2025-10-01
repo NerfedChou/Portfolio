@@ -1382,7 +1382,6 @@ body {
 .service-list.services-animate .service-list-item:nth-child(7) { animation-delay: 0.53s; }
 .service-list.services-animate .service-list-item:nth-child(8) { animation-delay: 0.61s; }
 
-/* Make service icons larger and more prominent */
 .service-list-item ion-icon {
     font-size: 3.6rem;
     margin-bottom: 0.7rem;

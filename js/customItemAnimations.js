@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const serviceItems = document.querySelectorAll('.service-list-item');
     if (!serviceItems.length) return;
 
-    // Store handlers per item to cleanly detach later
     const handlerMap = new WeakMap();
 
     function attachHandlers(item, idx) {
