@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificate Vitae | Jan Rhian Angulo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Certificate Vitae of Jan Rhian Angulo, Fullstack Developer.">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .cv-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: #232323;
+            color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 2.5rem 2rem;
+            font-family: var(--font-main, Arial, sans-serif);
+            display: grid;
+            grid-template-columns: 290px 1fr;
+            gap: 2.5rem;
+            align-items: start; /* Align columns to the top */
+        }
+        @media (max-width: 900px) {
+            .cv-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 1.5rem 0.5rem;
+            }
+            .cv-left, .cv-right {
+                align-items: center !important;
+                text-align: center;
+            }
+            .cv-section {
+                align-items: center !important;
+                text-align: center;
+            }
+            .cv-section h2 {
+                width: auto;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            /* Fix certificate and contact lists alignment on small screens */
+            .cv-cert-list,
+            .cv-contact-list {
+                align-items: center !important;
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+        .cv-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cv-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+            margin-bottom: 1.2rem;
+        }
+        .cv-title {
+            font-size: 2.4rem; /* enlarged */
+            font-weight: 800;
+            color: var(--accent);
+            margin: 0 0 0.5rem 0;
+            text-align: center;
+        }
+        .cv-section {
+            width: 100%;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        /* Ensure certificates and contacts are left-aligned on large screens */
+        .cv-cert-list,
+        .cv-contact-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .cv-section h2 {
+            color: var(--accent);
+            font-size: 1.5rem; /* enlarged */
+            margin-bottom: 0.7rem;
+            border-left: 4px solid var(--accent);
+            padding-left: 0.7rem;
+            width: 100%;
+        }
+        .cv-list, .cv-cert-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+        .cv-list li, .cv-cert-list li {
+            margin-bottom: 0.5rem;
+        }
+        .cv-cert-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .cv-contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+        .cv-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ffd9b3;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .cv-contact-item a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        .cv-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .cv-right .cv-section {
+            margin-bottom: 2.2rem;
+            width: 100%;
+            align-items: flex-start;
+        }
+        .cv-role {
+            font-size: 1.1rem;
+            color: #ffd9b3;
+            margin: 0.2rem 0 0.7rem 0;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .cv-container { padding: 1rem 0.5rem; }
+            .cv-photo { width: 90px; height: 90px; }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" style="display:inline-block;margin:1.2rem 0 0 2rem;color:var(--accent,#ff9800);font-weight:600;text-decoration:none;font-size:1.1rem;">
+        ← Back to Home
+    </a>
+    <div class="cv-container">
+        <!-- Left Column -->
+        <aside class="cv-left">
+            <img src="../assets/selfie.jpeg" alt="Jan Rhian Angulo" class="cv-photo">
+            <h1 class="cv-title">Jan Rhian Angulo</h1>
+            <div class="cv-role">Fullstack Developer</div>
+            <div class="cv-section">
+                <h2>Skills</h2>
+                <ul class="cv-list">
+                    <li>JavaScript (ES6+), TypeScript</li>
+                    <li>React, Next.js, Node.js, Express</li>
+                    <li>HTML5, CSS3, SASS, Responsive Design</li>
+                    <li>REST APIs, GraphQL</li>
+                    <li>MongoDB, PostgreSQL, MySQL</li>
+                    <li>Git, Docker, Linux</li>
+                    <li>UI/UX, Figma, Adobe XD</li>
+                </ul>
+            </div>
+            <div class="cv-section">
+                <h2>Achievements</h2>
+                <ul class="cv-list">
+                    <li>Dean's Lister, Metro Dumaguete College</li>
+                    <li>Top 10, Local Hackathon 2023</li>
+                    <li>International JetBrains Programming Champion</li>
+                    <li>2022 Best Awardee of Programmers Cup</li>
+                </ul>
+            </div>
+            <div class="cv-section">
+                <h2>Certificates</h2>
+                <ul class="cv-cert-list">
+                    <li>
+                        <ion-icon name="ribbon-outline"></ion-icon>
+                        <span>Responsive Web Design - FOM</span>
+                    </li>
+                    <li>
+                        <ion-icon name="ribbon-outline"></ion-icon>
+                        <span>Algorithms and Machine Learning</span>
+                    </li>
+                    <li>
+                        <ion-icon name="ribbon-outline"></ion-icon>
+                        <span>Fullstack - Metro Dumaguete College</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="cv-section">
+                <h2>Contact</h2>
+                <ul class="cv-contact-list">
+                    <li class="cv-contact-item">
+                        <ion-icon name="call-outline"></ion-icon>
+                        <span>+63 912 345 6789</span>
+                    </li>
+                    <li class="cv-contact-item">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <a href="mailto:janrhianangulo@gmail.com">janrhianangulo@gmail.com</a>
+                    </li>
+                    <li class="cv-contact-item">
+                        <ion-icon name="logo-github"></ion-icon>
+                        <a href="https://github.com/janrhian" target="_blank">github.com/janrhian</a>
+                    </li>
+                    <li class="cv-contact-item">
+                        <ion-icon name="logo-facebook"></ion-icon>
+                        <a href="https://facebook.com/janrhianangulo" target="_blank">facebook.com/janrhianangulo</a>
+                    </li>
+                    <li class="cv-contact-item">
+                        <ion-icon name="location-outline"></ion-icon>
+                        <span>Dumaguete City, Philippines</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="cv-section">
+                <h2>Interest</h2>
+                <ul class="cv-list">
+                    <li>Open Source</li>
+                    <li>Game Development</li>
+                    <li>UI/UX Design</li>
+                    <li>Travel & Photography</li>
+                </ul>
+            </div>
+        </aside>
+        <!-- Right Column -->
+        <main class="cv-right">
+            <div class="cv-section">
+                <h2>Full Stack Developer</h2>
+                <p>
+                    Passionate Fullstack Developer with experience in building robust web applications, APIs, and user interfaces.
+                    Skilled in modern JavaScript, Node.js, React, and system architecture. Strong focus on clean code, maintainability,
+                    and delivering value. Lifelong learner and team player. Managing multiple task at the same time, builds reliable and robust
+                    systems. Managed and led small teams in various projects. Team Leader of one of most noturius programmers and build massive
+                    vision that live on a life long span.
+                </p>
+            </div>
+            <div class="cv-section">
+                <h2>Education</h2>
+                <ul class="cv-list">
+                    <li>
+                        <strong>Front End Masters</strong><br>
+                        Various Full Stack and Frontend Courses — 2024 – Current
+                    </li>
+                    <li>
+                        <strong>Free Code Camp</strong><br>
+                        Responsive Web Design Certification — 2023
+                    </li>
+                    <li>
+                        <strong>FOM University of Applied Sciences</strong><br>
+                        Algorithms and Machine Learning — 2023
+                    </li>
+                    <li>
+                        <strong>Metro Dumaguete College</strong><br>
+                        B.S. Computer Science — 2024 – Current
+                    </li>
+                </ul>
+            </div>
+            <div class="cv-section">
+                <h2>Professional Experience</h2>
+                <ul class="cv-list">
+                    <li>
+                        <strong>Freelance Web Developer</strong><br>
+                        2022 – Present<br>
+                        Built and maintained web applications for local businesses and startups.
+                    </li>
+                    <li>
+                        <strong>Intern, Tech Solutions Inc.</strong><br>
+                        Summer 2023<br>
+                        Assisted in developing internal tools and automation scripts.
+                    </li>
+                    <li>
+                        <strong>Volunteer Developer, Open Source Projects</strong><br>
+                        2021 – Present<br>
+                        Contributed to various open source projects on GitHub.
+                    </li>
+                    <li>
+                        <strong>IT Support, Metro Dumaguete College</strong><br>
+                        2022 – 2023<br>
+                        Provided technical support and maintenance for college computer labs.
+                    </li>
+                    <li>
+                        <strong>Web Design Intern, Creative Agency</strong><br>
+                        Summer 2022<br>
+                        Assisted in designing and developing client websites.
+                    </li>
+                </ul>
+            </div>
+            <div class="cv-section">
+                <h2>Volunteering</h2>
+                <ul class="cv-list">
+                    <li>
+                        <strong>Code Club Volunteer</strong><br>
+                        2023 – Present<br>
+                        Mentored high school students in basic programming and web development.
+                    </li>
+                    <li>
+                        <strong>Community Tech Workshops</strong><br>
+                        2022 – Present<br>
+                        Organized and led workshops on web development for local community members.
+                    </li>
+                    <li>
+                        <strong>Hackathon Organizer</strong><br>
+                        2023<br>
+                        Helped organize a local hackathon to promote coding and innovation among students.
+                    </li>
+                    <li>
+                        <strong>Environmental Cleanup Volunteer</strong><br>
+                        2021 – Present<br>
+                        Participated in local environmental cleanup initiatives and awareness campaigns.
+                    </li>
+                    <li>
+                        <strong>Tech for Good Volunteer</strong><br>
+                        2022 – Present<br>
+                        Assisted non-profits in leveraging technology to improve their operations and outreach.
+                    </li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
