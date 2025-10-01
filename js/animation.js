@@ -8,14 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(() => setTimeout(fn, delay));
     }
 
-
-    function idleRun(fn, timeout = 1500) {
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => { try { fn(); } catch {} }, { timeout });
-        } else {
-            deferRun(fn, 0);
-        }
-    }
+    // Schedule on idle without changing existing variable names
+    const runIdle = (cb, timeout = 800) =>
+        ('requestIdleCallback' in window) ? requestIdleCallback(() => cb(), { timeout }) : setTimeout(() => cb(), 0);
 
     /* -------------------------
        Site entrance animation
@@ -241,9 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
        Glassy sheen cycle
        ------------------------- */
     function startGlassyCycle(selector = '.glassy', intervalMs = 2000) {
-        // Respect reduced motion
-        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
-
         const elements = Array.from(document.querySelectorAll(selector)).filter(Boolean);
         if (!elements.length) return null;
 
@@ -271,6 +263,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         step();
         window.__glassyInterval = setInterval(step, intervalMs);
+
+        // Pause the cycle when tab is hidden to save CPU/battery
+        function onVisibilityChange() {
+            if (document.hidden) {
+                if (window.__glassyInterval) {
+                    clearInterval(window.__glassyInterval);
+                    window.__glassyInterval = null;
+                }
+            } else {
+                if (!window.__glassyInterval) {
+                    // resume from last index
+                    window.__glassyInterval = setInterval(step, intervalMs);
+                }
+            }
+        }
+        document.addEventListener('visibilitychange', onVisibilityChange);
 
         // pause on interaction
         elements.forEach((element, idx) => {
@@ -521,7 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
             entered.classList.add('pull');
 
             if (activeSkillNode !== entered) showSkillDetail(entered);
-        });
+        }, { passive: true });
 
         skillsContainer.addEventListener('pointerout', (ev) => {
             const left = ev.target.closest('.skill');
@@ -531,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             scheduleHideForSkill(left);
             left.classList.remove('pull');
-        });
+        }, { passive: true });
 
         skillsContainer.addEventListener('focusin', (ev) => {
             const focused = ev.target.closest('.skill');
@@ -583,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     obs.disconnect();
                 }
             });
-        }, { threshold: 0.18, rootMargin: '80px 0px' }); // start a bit earlier
+        }, { threshold: 0.18 });
 
         observer.observe(serviceList);
     }
@@ -593,14 +601,16 @@ document.addEventListener('DOMContentLoaded', () => {
        ------------------------- */
     initializeSiteEntrance();
     initializeAboutOverlayEntrance();
+    initializeTypewriter();
     initializeNavigation();
 
-    // Defer non-critical features to idle time to improve TTI
-    idleRun(initializeTypewriter);
-    idleRun(() => startGlassyCycle('.glassy', 2000));
-    idleRun(initializeSkillObserver);
-    idleRun(wireSkillPortraitPanel);
-    idleRun(initializeServicesEntrance);
+    // Non-critical in idle to avoid competing with first paint
+    runIdle(() => {
+        startGlassyCycle('.glassy', 2000);
+        initializeSkillObserver();
+        wireSkillPortraitPanel();
+        initializeServicesEntrance();
+    });
 });
 
 /* -------------------------
@@ -611,7 +621,7 @@ if (typeof window.__resizeDebounceTimer === 'undefined') window.__resizeDebounce
 window.addEventListener('resize', () => {
     if (window.__resizeDebounceTimer) clearTimeout(window.__resizeDebounceTimer);
     window.__resizeDebounceTimer = setTimeout(() => { window.__resizeDebounceTimer = null; }, 200);
-}, { passive: true });
+});
 
 /* -------------------------
    Small DOM helpers Youtube: https://www.youtube.com/c/DevTipsForDesigners
