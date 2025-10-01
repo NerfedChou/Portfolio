@@ -10,21 +10,25 @@ document.addEventListener('DOMContentLoaded', () => {
         'icon-swing'        // DevOps & Deployment
     ];
 
+
+    const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (REDUCED) return;
+
     const serviceItems = document.querySelectorAll('.service-list-item');
     serviceItems.forEach((item, idx) => {
         const icon = item.querySelector('ion-icon');
         if (!icon) return;
         const animClass = iconAnimations[idx % iconAnimations.length];
 
-        // Remove animation class after animation ends
+
         icon.addEventListener('animationend', () => {
             icon.classList.remove(animClass);
         });
 
-        // On hover/focus, add the animation class
+
         item.addEventListener('mouseenter', () => {
-            icon.classList.remove(animClass); // reset if needed
-            void icon.offsetWidth; // force reflow
+            icon.classList.remove(animClass);
+            void icon.offsetWidth;
             icon.classList.add(animClass);
         });
         item.addEventListener('focusin', () => {

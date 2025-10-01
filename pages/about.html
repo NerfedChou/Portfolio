@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <title>About Me | Jan Rhian Angulo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+    <link rel="preload" href="../css/styles.css" as="style">
+    <link rel="preload" href="../css/responsive.css" as="style">
+    <link rel="preload" href="../assets/selfie.jpeg" as="image">
+    
+
+    <link rel="dns-prefetch" href="//unpkg.com">
+    
     <meta name="description" content="Learn more about Mr. Jan Rhian Angulo, a Fullstack Developer specializing in modern web technologies, UI/UX, and system architecture.">
     <meta name="keywords" content="Jan Rhian Angulo, About Me, Fullstack Developer, Portfolio, Web Developer, UI/UX, JavaScript, React, Node.js">
     <meta name="author" content="Jan Rhian Angulo">
@@ -33,6 +42,8 @@
     <!-- Stylesheets -->
      <link rel="stylesheet" href="../css/styles.css">
      <link rel="stylesheet" href="../css/responsive.css">
+     <!-- Prefetch home for quicker return navigation -->
+    <link rel="prefetch" href="../index.html" as="document">
 </head>
 <body>
     <a class="skip-link" href="#main-content" aria-label="Skip to main content">Skip to content</a>
@@ -61,7 +72,7 @@
         <section class="about-card profile-card" aria-labelledby="profile-card-title">
             <div class="profile-inner">
                 <div class="profile-left" aria-hidden="false">
-                    <img src="../assets/selfie.jpeg" alt="Portrait of Jan Rhian Angulo" class="profile-photo">
+                    <img src="../assets/selfie.jpeg" alt="Portrait of Jan Rhian Angulo" class="profile-photo" loading="eager">
                 </div>
                 <div class="profile-right">
                     <h3 id="profile-card-title" class="profile-name">Mr. Jan Rhian Angulo</h3>
@@ -88,7 +99,7 @@
         <section class="about-card childhood-card" aria-labelledby="childhood-title">
             <div class="childhood-inner">
                 <div class="child-left">
-                    <img src="../assets/childhood2.jpg" alt="Young Jan left photo" class="child-photo">
+                    <img src="../assets/childhood2.jpg" alt="Young Jan left photo" class="child-photo" loading="lazy">
                 </div>
 
                 <div class="child-middle" role="region" aria-labelledby="childhood-title">
@@ -112,7 +123,7 @@
                 </div>
 
                 <div class="child-right">
-                    <img src="../assets/childhood1.jpg" alt="Young Jan right photo" class="child-photo">
+                    <img src="../assets/childhood1.jpg" alt="Young Jan right photo" class="child-photo" loading="lazy">
                 </div>
             </div>
         </section>
@@ -142,7 +153,7 @@
                 </div>
 
                 <div class="school-right" aria-hidden="false">
-                    <img src="../assets/school.jpg" alt="Institute building or campus photo" class="school-photo">
+                    <img src="../assets/school.jpg" alt="Institute building or campus photo" class="school-photo" loading="lazy">
                 </div>
             </div>
         </section>
@@ -151,7 +162,7 @@
         <section class="about-card desktop-card" aria-labelledby="desktop-title">
             <div class="desktop-inner">
                 <div class="desktop-left">
-                    <img src="../assets/desktop.png" alt="Arch + Hyprland desktop" class="desktop-photo">
+                    <img src="../assets/desktop.png" alt="Arch + Hyprland desktop" class="desktop-photo" loading="lazy">
                 </div>
 
                 <div class="desktop-body" role="region" aria-labelledby="desktop-title">
@@ -172,7 +183,7 @@
         <section class="about-card mentor-card u-card profile-card glassy" aria-labelledby="mentor-card-title">
             <div class="profile-inner">
                 <div class="profile-left" aria-hidden="false">
-                    <img src="../assets/mentor.jpg" alt="My mentor photo" class="profile-photo mentor-photo">
+                    <img src="../assets/mentor.jpg" alt="My mentor photo" class="profile-photo mentor-photo" loading="lazy">
                 </div>
                 <div class="profile-right" role="region" aria-labelledby="mentor-card-title">
                     <h3 id="mentor-card-title" class="profile-name mentor-name">My Mentor</h3>
@@ -220,8 +231,8 @@
         </div>
     </footer>
 
-    <script src="../js/animation.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="../js/animation.js" defer></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" defer></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" defer></script>
 </body>
 </html>

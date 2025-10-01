@@ -1,0 +1,81 @@
+# Compression
+<IfModule mod_brotli.c>
+    BrotliCompressionQuality 5
+    AddOutputFilterByType BROTLI_COMPRESS text/plain text/html text/xml text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+# Serve pre-compressed files when available
+<IfModule mod_mime.c>
+    AddEncoding br .br
+    AddEncoding gzip .gz
+    AddType text/javascript .js
+    AddType text/css .css
+    AddType image/svg+xml .svg
+</IfModule>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# Prefer .br then .gz for JS/CSS if client supports it
+RewriteCond %{HTTP:Accept-encoding} br
+RewriteCond %{REQUEST_FILENAME}.br -f
+RewriteRule ^(.+\.(js|css))$ $1.br [L]
+RewriteCond %{HTTP:Accept-encoding} gzip
+RewriteCond %{REQUEST_FILENAME}.gz -f
+RewriteRule ^(.+\.(js|css))$ $1.gz [L]
+</IfModule>
+
+# Correct content types for compressed assets
+<FilesMatch "\.js\.br$">
+    ForceType application/javascript
+    Header set Content-Encoding br
+</FilesMatch>
+<FilesMatch "\.css\.br$">
+    ForceType text/css
+    Header set Content-Encoding br
+</FilesMatch>
+<FilesMatch "\.js\.gz$">
+    ForceType application/javascript
+    Header set Content-Encoding gzip
+</FilesMatch>
+<FilesMatch "\.css\.gz$">
+    ForceType text/css
+    Header set Content-Encoding gzip
+</FilesMatch>
+
+# Caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/html "access plus 10 minutes"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Strong caching for static assets
+<FilesMatch "\.(css|js|png|jpg|jpeg|webp|svg|woff2)$">
+    Header set Cache-Control "public, max-age=31536000"
+</FilesMatch>
+<FilesMatch "\.(html)$">
+    Header set Cache-Control "no-transform, public, max-age=600"
+</FilesMatch>
+
+# CORS for fonts
+<FilesMatch "\.(woff2?|ttf|otf)$">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+# Basic security/robustness
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>

@@ -8,6 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(() => setTimeout(fn, delay));
     }
 
+
+    function idleRun(fn, timeout = 1500) {
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => { try { fn(); } catch {} }, { timeout });
+        } else {
+            deferRun(fn, 0);
+        }
+    }
+
     /* -------------------------
        Site entrance animation
        ------------------------- */
@@ -232,6 +241,9 @@ document.addEventListener('DOMContentLoaded', () => {
        Glassy sheen cycle
        ------------------------- */
     function startGlassyCycle(selector = '.glassy', intervalMs = 2000) {
+        // Respect reduced motion
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
+
         const elements = Array.from(document.querySelectorAll(selector)).filter(Boolean);
         if (!elements.length) return null;
 
@@ -571,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     obs.disconnect();
                 }
             });
-        }, { threshold: 0.18 });
+        }, { threshold: 0.18, rootMargin: '80px 0px' }); // start a bit earlier
 
         observer.observe(serviceList);
     }
@@ -581,12 +593,14 @@ document.addEventListener('DOMContentLoaded', () => {
        ------------------------- */
     initializeSiteEntrance();
     initializeAboutOverlayEntrance();
-    initializeTypewriter();
     initializeNavigation();
-    startGlassyCycle('.glassy', 2000);
-    initializeSkillObserver();
-    wireSkillPortraitPanel();
-    initializeServicesEntrance();
+
+    // Defer non-critical features to idle time to improve TTI
+    idleRun(initializeTypewriter);
+    idleRun(() => startGlassyCycle('.glassy', 2000));
+    idleRun(initializeSkillObserver);
+    idleRun(wireSkillPortraitPanel);
+    idleRun(initializeServicesEntrance);
 });
 
 /* -------------------------
@@ -597,7 +611,7 @@ if (typeof window.__resizeDebounceTimer === 'undefined') window.__resizeDebounce
 window.addEventListener('resize', () => {
     if (window.__resizeDebounceTimer) clearTimeout(window.__resizeDebounceTimer);
     window.__resizeDebounceTimer = setTimeout(() => { window.__resizeDebounceTimer = null; }, 200);
-});
+}, { passive: true });
 
 /* -------------------------
    Small DOM helpers Youtube: https://www.youtube.com/c/DevTipsForDesigners
