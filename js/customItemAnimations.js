@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const PREFERS_REDUCED_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (PREFERS_REDUCED_MOTION) {
-        // Skip decorative icon animations for accessibility
-        return;
-    }
+    if (PREFERS_REDUCED_MOTION) return;
 
     const iconAnimations = [
         'icon-bounce',      // Custom Web Applications
@@ -17,24 +14,51 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const serviceItems = document.querySelectorAll('.service-list-item');
-    serviceItems.forEach((item, idx) => {
+    if (!serviceItems.length) return;
+
+    // Store handlers per item to cleanly detach later
+    const handlerMap = new WeakMap();
+
+    function attachHandlers(item, idx) {
         const icon = item.querySelector('ion-icon');
         if (!icon) return;
         const animClass = iconAnimations[idx % iconAnimations.length];
 
-        icon.addEventListener('animationend', () => {
-            icon.classList.remove(animClass);
-        });
+        const onEnd = () => icon.classList.remove(animClass);
+        const onEnter = () => { icon.classList.remove(animClass); void icon.offsetWidth; icon.classList.add(animClass); };
+        const onFocus = () => { icon.classList.remove(animClass); void icon.offsetWidth; icon.classList.add(animClass); };
 
-        item.addEventListener('mouseenter', () => {
-            icon.classList.remove(animClass);
-            void icon.offsetWidth;
-            icon.classList.add(animClass);
+        icon.addEventListener('animationend', onEnd);
+        item.addEventListener('mouseenter', onEnter);
+        item.addEventListener('focusin', onFocus);
+
+        handlerMap.set(item, { icon, animClass, onEnd, onEnter, onFocus });
+    }
+
+    function detachHandlers(item) {
+        const stored = handlerMap.get(item);
+        if (!stored) return;
+        const { icon, animClass, onEnd, onEnter, onFocus } = stored;
+        icon.removeEventListener('animationend', onEnd);
+        item.removeEventListener('mouseenter', onEnter);
+        item.removeEventListener('focusin', onFocus);
+        icon.classList.remove(animClass);
+        handlerMap.delete(item);
+    }
+
+    // Observe the services list; attach when visible, detach when hidden
+    const servicesTarget = document.querySelector('.service-list') || document.querySelector('.services-container');
+    if (!servicesTarget) return;
+
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                serviceItems.forEach(attachHandlers);
+            } else {
+                serviceItems.forEach(detachHandlers);
+            }
         });
-        item.addEventListener('focusin', () => {
-            icon.classList.remove(animClass);
-            void icon.offsetWidth;
-            icon.classList.add(animClass);
-        });
-    });
+    }, { threshold: 0.2 });
+
+    io.observe(servicesTarget);
 });
