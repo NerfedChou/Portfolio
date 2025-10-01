@@ -1344,6 +1344,7 @@ body {
     color: #ffd9b3;
     position: relative;
     z-index: 2;
+    opacity: 0;
     transition:
         box-shadow 220ms var(--ease-standard),
         transform 180ms var(--ease-standard),
