@@ -420,6 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const HIDE_DELAY_MS = 160;
         let suppressDocumentClose = false;
         const SUPPRESS_MS = 420;
+        let intentToShowNode = null;
 
         function createCancellableTyper(targetEl, charDelay = 36) {
             let cancelled = false;
@@ -470,12 +471,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         async function showSkillDetail(skillNode) {
-            if (!panelEnabled) return; // ignore when gated off
+            if (!panelEnabled) return;
 
             clearHideTimer();
+            intentToShowNode = skillNode; // Set intent
             setSuppressDocumentClose();
 
-            const labelText = (skillNode.querySelector('.skill-label') || { textContent: '' }).textContent.trim();
+            const skillLabelEl = skillNode.querySelector('.skill-label');
+            const skillNameEl = skillLabelEl ? skillLabelEl.querySelector('.skill-name') : null;
+            const labelText = (skillNameEl || skillLabelEl || { textContent: '' }).textContent.trim();
             const detailText = skillNode.getAttribute('data-detail') || '';
 
 
@@ -487,6 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             activeSkillNode = skillNode;
             aboutLeft.classList.add('active');
+            portraitPanel.classList.remove('hiding'); // Cancel any pending hide animation
 
             const panelAlreadyVisible = portraitPanel.classList.contains('visible');
 
@@ -502,31 +507,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            setTimeout(async () => {
-                portraitPanel.classList.add('visible');
-                await new Promise(res => setTimeout(res, 140));
-                if (activeTyper && activeTyper.cancel) activeTyper.cancel();
-                const typer = resetTyper();
-                if (PREFERS_REDUCED_MOTION) {
-                    panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
-                } else {
-                    await typer.typeText(detailText);
-                    if (activeSkillNode === skillNode) panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
-                }
-            }, 180);
+            // Use a microtask to ensure we are not in the middle of another animation frame
+            await Promise.resolve();
+            if (intentToShowNode !== skillNode) return; // Intent changed, abort.
+
+            portraitPanel.classList.add('visible');
+            await new Promise(res => setTimeout(res, 140));
+            if (intentToShowNode !== skillNode) return; // Check intent again after delay
+
+            if (activeTyper && activeTyper.cancel) activeTyper.cancel();
+            const typer = resetTyper();
+            if (PREFERS_REDUCED_MOTION) {
+                panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
+            } else {
+                await typer.typeText(detailText);
+                if (activeSkillNode === skillNode) panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
+            }
         }
 
         function scheduleHideForSkill(skillNode) {
             if (!panelEnabled) return;
+            intentToShowNode = null; // Clear intent
             clearHideTimer();
             hideTimer = setTimeout(() => {
-                if (activeSkillNode === skillNode) hideSkillDetail();
+                if (activeSkillNode === skillNode && !intentToShowNode) {
+                    hideSkillDetail();
+                }
                 hideTimer = null;
             }, HIDE_DELAY_MS);
         }
 
         function hideSkillDetail() {
             clearHideTimer();
+            intentToShowNode = null;
             if (activeTyper && activeTyper.cancel) activeTyper.cancel();
 
             portraitPanel.classList.add('hiding');
@@ -578,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
             skillNodes.forEach(s => s.classList.remove('pull'));
             entered.classList.add('pull');
 
-            if (activeSkillNode !== entered) showSkillDetail(entered);
+            showSkillDetail(entered);
         }, { passive: true });
 
         skillsContainer.addEventListener('pointerout', (ev) => {
@@ -598,7 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!focused) return;
             skillNodes.forEach(s => s.classList.remove('pull'));
             focused.classList.add('pull');
-            if (activeSkillNode !== focused) showSkillDetail(focused);
+            showSkillDetail(focused);
         });
         skillsContainer.addEventListener('focusout', (ev) => {
             if (!panelEnabled) return;

@@ -1,7 +1,6 @@
 @media (max-width: 1024px) {
     .header {
         max-width: 100vw;
-        padding: 1rem 2vw 0 2vw;
         align-items: center;
     }
     .hero-content {
@@ -54,7 +53,6 @@
     }
 
     .header {
-        padding: 1.2rem 5vw 0 5vw;
         align-items: center;
     }
 
@@ -111,7 +109,7 @@
         background-position: center top;
     }
 
-    .about-inner { padding: 1rem; }
+    .about-inner { padding: 0; }
     .about-portrait { margin: 0 auto 1rem auto; }
 
     .typewriter { max-width: 22ch; }
@@ -258,6 +256,10 @@
     }
     .typewriter { max-width: 14ch; border-right-width: 1.2px; }
 
+    .about-section {
+        padding: 1rem 1.5rem;
+    }
+
     .about-hero-section {
         min-height: 45vh;
         height: 52vh;
@@ -331,10 +333,6 @@
         padding-right: 1rem;
     }
 
-
-    .header {
-        padding: 1rem 2vw 0 2vw;
-    }
     .nav {
         gap: 1rem;
     }
@@ -727,4 +725,11 @@
         align-items: center;
     }
     
+}
+
+@media (max-width: 360px) {
+    .about-section {
+        padding: 0;
+    }
+
 }
