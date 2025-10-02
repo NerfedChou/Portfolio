@@ -22,6 +22,55 @@
     .about-portrait {
         height: 360px;
     }
+
+
+    /* Stack the two profile cards */
+    .my-profile { flex-direction: column; align-items: stretch; }
+    .my-profile .profile-card { width: 100%; }
+
+    /* Timeline sizing synced with connectors */
+    .timeline { --t-gap: 0.8rem; padding: 0.4rem 0.25rem 0.6rem; }
+    .timeline-item { min-width: 200px; max-width: 240px; min-height: 110px; }
+    .timeline-desc { font-size: 0.95rem; }
+}
+
+
+@media (max-width: 950px) {
+    .childhood-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 1rem;
+        align-items: start;
+    }
+    .child-left {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+    }
+    .child-right {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+    }
+    .child-middle {
+        grid-column: 1 / -1;
+        grid-row: 2 / 3;
+        padding: 0;
+        text-align: left;
+    }
+    .school-inner {
+        flex-direction: column;
+        .school-right {
+            max-width: none;
+            width: 100%;
+        }
+    }
+    .desktop-inner {
+        flex-direction: column;
+        .desktop-right {
+            max-width: none;
+            width: 100%;
+        }
+    }
 }
 
 
@@ -96,49 +145,6 @@
     .hero-title {
         font-size: 1.5rem;
     }
-    .hero-subtitle {
-        font-size: 1rem;
-    }
-    .hero-actions {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    .hero-section {
-        min-height: 400px;
-        height: 100vh;
-        background-position: center top;
-    }
-
-    .about-inner { padding: 0; }
-    .about-portrait { margin: 0 auto 1rem auto; }
-
-    .typewriter { max-width: 22ch; }
-
-
-    .about-hero-qt {
-        display: block !important;
-        left: 50%;
-        top: auto;
-        bottom: clamp(6vh, 10vh, 14vh);
-        transform: translateX(-50%) translateY(0);
-        width: min(92vw, 520px);
-        max-width: 92vw;
-        pointer-events: none;
-        opacity: 0;
-        z-index: 6;
-        transition: opacity 320ms cubic-bezier(.2,.9,.3,1), transform 320ms cubic-bezier(.2,.9,.3,1);
-    }
-
-
-    .about-hero-qt.show {
-        pointer-events: auto;
-        opacity: 1;
-        transform: translateX(-50%) translateY(-4px);
-    }
-
-    .hero-title {
-        font-size: 1.5rem;
-    }
 }
 
 
@@ -155,7 +161,6 @@
         margin-bottom: 1rem;
     }
 
-
     .portrait-panel {
         left: 50%;
         right: auto;
@@ -166,7 +171,6 @@
 
     .typewriter { max-width: 16ch; border-right-width: 1.5px; }
 
-
     .profile-card .profile-inner {
         flex-direction: column;
         gap: 0.9rem;
@@ -174,13 +178,13 @@
         text-align: center;
     }
     .profile-card .profile-left {
-        width: min(92%, 320px);
+        width: 100%;
+        max-width: 80%;
         flex-basis: auto;
     }
     .profile-card .profile-right {
         width: 100%;
     }
-
 
     .profile-card {
         width: 100%;
@@ -191,14 +195,6 @@
         box-sizing: border-box;
     }
 
-
-    .profile-card .profile-left {
-        width: 100%;
-        max-width: 100%;
-        flex-basis: auto;
-    }
-
-
     .profile-card .profile-photo {
         width: 100%;
         height: auto;
@@ -206,9 +202,11 @@
     }
 
     .childhood-inner {
+        display: flex !important;
         flex-direction: column;
-        align-items: center;
         gap: 0.8rem;
+        align-items: center;
+        text-align: center;
     }
     .child-left,
     .child-right {
@@ -219,11 +217,15 @@
     .child-photo {
         height: auto;
         width: 100%;
+        max-height: none;
+        object-fit: cover;
     }
     .child-middle {
         width: 100%;
         padding: 0 0.6rem;
         text-align: center;
+        grid-column: auto;
+        grid-row: auto;
     }
 
     .about-bottom-hero {
@@ -234,6 +236,36 @@
     .about-bottom-hero-bg::after { height: 42%; }
     .about-bottom-hero-title { font-size: 1.05rem; }
     .about-bottom-hero-sub { font-size: 0.95rem; }
+
+    .footer-inner {
+        flex-direction: column;
+        gap: 0.6rem;
+        align-items: center;
+        text-align: center;
+    }
+    .footer-nav {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        display: flex;
+        width: 100%;
+    }
+    .footer-list {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    .footer-nav a { padding: 0.4rem 0.6rem; }
+    .footer-legal { order: 3; }
+    .footer-brand { order: 1; }
+
+    .profile-right cite{
+        justify-content: center;
+    }
 }
 
 /* Small phones */
@@ -284,6 +316,12 @@
         font-size: 0.98rem;
         padding: 0 0.6rem;
     }
+
+    .projects-inner { padding: 0 0.75rem; }
+    .project-card { gap: 0.8rem; padding: 0.85rem; }
+    .project-card__body h3 { font-size: 1.02rem; margin-bottom: 0.4rem; }
+    .project-card__body p { font-size: 0.95rem; line-height: 1.45; }
+    .project-stores { gap: 0.6rem; }
 }
 
 
@@ -293,16 +331,19 @@
         max-width: 880px;
     }
 
-
     .school-right {
-        flex: 0 0 220px;
-        max-width: 220px;
+        flex: 0 0 260px;
+        max-width: 260px;
     }
 
     .school-photo {
         height: 160px;
         max-height: 180px;
         object-fit: cover;
+    }
+
+    .my-profile {
+        flex-direction: column;
     }
 
     .profile-card {
@@ -314,13 +355,11 @@
         padding-right: 1rem;
     }
 
-
     .about-grid {
         grid-template-columns: 320px 1fr;
         gap: 1.25rem;
         align-items: start;
     }
-
 
     .about-portrait {
         max-width: 320px;
@@ -353,106 +392,24 @@
 
     /* Ensure centered main line position remains accurate */
     .graph-main-line, .graph-svg {
-
         left: 50%;
         transform: translateX(-50%);
     }
 
     .about-bottom-hero { min-height: 36vh; padding: 1.6rem 0; }
     .about-bottom-hero-title { font-size: 1.4rem; }
-}
 
-
-@media (max-width: 720px) {
-    .school-card {
-        width: 100%;
-        max-width: 100%;
-        margin: 1rem auto;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        box-sizing: border-box;
+    .child-left, .child-right {
+        /* Removed flex-basis and max-width to allow grid to control size */
     }
-    .school-inner {
-        flex-direction: column;
-        gap: 0.9rem;
-        align-items: center;
-        text-align: center;
-    }
-    .school-left {
-        width: 100%;
-    }
-    .school-right {
-        width: 100%;
-        max-width: 100%;
-        flex-basis: auto;
-        display: block;
-    }
-    .school-photo {
-        width: 100%;
-        height: auto;
-        max-height: none;
-        object-fit: cover;
-        display: block;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .typewriter { border-right: 0; }
-    .hero-title, .hero-subtitle, .hero-actions, .logo, .nav, .hamburger, .header {
-        transition: none !important;
-        animation: none !important;
-    }
-    .glassy.glassy-active::after { animation: none; opacity: 0.12; left: 0; }
-    .skill-detail, .skill, .portrait-panel { transition: none !important; transform: none !important; }
-}
-
-/* Utilities responsive helpers */
-
-
-@media (max-width: 720px) {
-    .media, .profile-card .profile-inner, .school-inner, .childhood-inner, .desktop-inner {
-        flex-direction: column;
-        gap: 0.9rem;
-        align-items: center;
-        text-align: center;
-    }
-
-    .u-card, .about-card, .profile-card, .school-card, .childhood-card, .desktop-card {
-        width: 100%;
-        max-width: 100%;
-        margin: 1rem auto;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        box-sizing: border-box;
-    }
-    /* image helpers adjust on mobile */
-    .media__figure, .profile-card .profile-left, .school-right, .child-left, .child-right, .desktop-left {
-        width: min(92%, 360px);
-        max-width: 360px;
-        flex-basis: auto;
-    }
-    .u-img, .u-img--contain, .profile-photo, .school-photo, .child-photo, .desktop-photo {
-        width: 100%;
-        height: auto;
-        max-height: none;
-        object-fit: cover;
-    }
-}
-
-
-@media (min-width: 721px) and (max-width: 1200px) {
-
-    .child-left, .child-right { flex: 0 0 240px; max-width: 240px; }
     .child-photo {
         height: 240px;
         max-height: 420px;
         object-fit: cover;
     }
 
-
     .u-maxwidth { max-width: 920px; width: calc(100% - 3rem); }
     .profile-card .profile-left { flex: 0 0 300px; max-width: 300px; }
-    .school-right { flex: 0 0 260px; max-width: 260px; }
 }
 
 
@@ -462,83 +419,10 @@
         max-width: 320px;
     }
     .child-photo {
-        height: 320px;
+        height: 240px;
         max-height: 640px;
         object-fit: cover;
     }
-}
-
-
-@media (max-width: 720px) {
-    .footer-inner {
-        flex-direction: column;
-        gap: 0.6rem;
-        align-items: center;
-        text-align: center;
-    }
-    .footer-nav {
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        justify-content: center;
-        display: flex;
-        width: 100%;
-    }
-    .footer-list {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        width: 100%;
-        padding: 0;
-        margin: 0;
-    }
-    .footer-nav a { padding: 0.4rem 0.6rem; }
-    .footer-legal { order: 3; }
-    .footer-brand { order: 1; }
-}
-
-
-@media (max-width: 720px) {
-    .childhood-inner {
-        display: flex !important;
-        flex-direction: column;
-        gap: 0.8rem;
-        align-items: center;
-        text-align: center;
-    }
-
-    .child-middle {
-        width: 100%;
-        grid-column: auto;
-        grid-row: auto;
-        padding: 0 0.6rem;
-        text-align: center;
-    }
-
-    .child-left,
-    .child-right {
-        width: min(92%, 360px);
-        max-width: 360px;
-        flex: none;
-    }
-
-    .child-photo {
-        width: 100%;
-        height: auto;
-        max-height: none;
-        object-fit: cover;
-    }
-    .profile-right cite{
-        justify-content: center;
-    }
-}
-
-
-.projects-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    box-sizing: border-box;
 }
 
 
@@ -570,14 +454,6 @@
     }
 }
 
-
-@media (max-width: 480px) {
-    .projects-inner { padding: 0 0.75rem; }
-    .project-card { gap: 0.8rem; padding: 0.85rem; }
-    .project-card__body h3 { font-size: 1.02rem; margin-bottom: 0.4rem; }
-    .project-card__body p { font-size: 0.95rem; line-height: 1.45; }
-    .project-stores { gap: 0.6rem; }
-}
 
 
 @media (min-width: 981px) {
