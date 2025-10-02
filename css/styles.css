@@ -2263,11 +2263,12 @@ body {
 
 /* Content */
 .timeline-date {
-    display: block;
     font-weight: 800;
     color: var(--accent);
     letter-spacing: 0.5px;
     margin-bottom: 0.25rem;
+    display: flex;
+    justify-content: center;
 }
 .timeline-desc {
     margin: 0;
