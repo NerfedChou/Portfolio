@@ -10,7 +10,6 @@
     <link rel="preload" href="../css/responsive.css" as="style">
     <link rel="preload" href="../assets/selfie.jpeg" as="image">
     <link rel="preload" href="../assets/photoshoot.jpg" as="image">
-    
 
     <link rel="dns-prefetch" href="//unpkg.com">
     <link rel="preload" href="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" as="script" crossorigin>
@@ -46,6 +45,7 @@
      <link rel="stylesheet" href="../css/styles.css">
      <link rel="stylesheet" href="../css/responsive.css">
 </head>
+<style></style>
 <body>
     <a class="skip-link" href="#main-content" aria-label="Skip to main content">Skip to content</a>
 
@@ -71,31 +71,65 @@
     </section>
 
     <main id="main-content" tabindex="-1">
-
-        <section class="about-card profile-card" aria-labelledby="profile-card-title">
-            <div class="profile-inner">
-                <div class="profile-left" aria-hidden="false">
-                    <img src="../assets/selfie.jpeg" alt="Portrait of Jan Rhian Angulo" class="profile-photo" loading="eager" decoding="async" fetchpriority="high">
+        <section class = "my-profile">
+            <section class="about-card profile-card" aria-labelledby="profile-card-title">
+                <div class="profile-inner">
+                    <div class="profile-left" aria-hidden="false">
+                        <img src="../assets/selfie.jpeg" alt="Portrait of Jan Rhian Angulo" class="profile-photo" loading="eager" decoding="async" fetchpriority="high">
+                    </div>
+                    <div class="profile-right">
+                        <h3 id="profile-card-title" class="profile-name">Mr. Jan Rhian Angulo</h3>
+                        <p class="profile-role">Fullstack Developer</p>
+                        <p class="profile-bio">
+                            I build reliable, maintainable web applications — from API design and backend systems to
+                            performant front-end interfaces and thoughtful UX. I focus on clean architecture, testing,
+                            and shipping value. As a lifelong learner, I stay updated with the latest technologies and best practices
+                            to deliver high-quality solutions. When I'm not coding, I enjoy hiking, photography, and exploring new tech trends.
+                            I'm passionate about creating impactful digital experiences that solve real-world problems.
+                        </p>
+                        <p class="profile-bio">
+                            Off work, I spend my time on Drums and Guitars. One thing about me is that I love to travel and explore new places.
+                            I also enjoy reading books on technology, self-improvement, and fiction.
+                            I'm always eager to connect with like-minded professionals and explore new opportunities.
+                            Taking my talent to the next level is one of the challenge I really want to master.
+                            Even so far, I am still on the process of learning and improving my skills.
+                        </p>
+                    </div>
                 </div>
-                <div class="profile-right">
-                    <h3 id="profile-card-title" class="profile-name">Mr. Jan Rhian Angulo</h3>
-                    <p class="profile-role">Fullstack Developer</p>
-                    <p class="profile-bio">
-                        I build reliable, maintainable web applications — from API design and backend systems to
-                        performant front-end interfaces and thoughtful UX. I focus on clean architecture, testing,
-                        and shipping value. As a lifelong learner, I stay updated with the latest technologies and best practices
-                        to deliver high-quality solutions. When I'm not coding, I enjoy hiking, photography, and exploring new tech trends.
-                        I'm passionate about creating impactful digital experiences that solve real-world problems.
-                    </p>
-                    <p class="profile-bio">
-                        Off work, I spend my time on Drums and Guitars. One thing about me is that I love to travel and explore new places.
-                        I also enjoy reading books on technology, self-improvement, and fiction.
-                        I'm always eager to connect with like-minded professionals and explore new opportunities.
-                        Taking my talent to the next level is one of the challenge I really want to master.
-                        Even so far, I am still on the process of learning and improving my skills.
-                    </p>
+            </section>
+            <section class="about-card profile-card" aria-labelledby="about-card-title">
+                <div class="profile-inner history">
+                    <!-- Added history timeline -->
+                    <h3 id="about-card-title" class="profile-name">My History</h3>
+                    <p class="profile-role">Milestones that shaped my journey</p>
+                    <ol class="timeline" aria-label="Personal milestones timeline">
+                        <li class="timeline-item" tabindex="0">
+                            <time class="timeline-date" datetime="2018">2018</time>
+                            <p class="timeline-desc">Wrote my first HTML/CSS and fell in love with the web.</p>
+                        </li>
+                        <li class="timeline-item" tabindex="0">
+                            <time class="timeline-date" datetime="2019">2019</time>
+                            <p class="timeline-desc">Built my first complete personal website.</p>
+                        </li>
+                        <li class="timeline-item" tabindex="0">
+                            <time class="timeline-date" datetime="2020">2020</time>
+                            <p class="timeline-desc">Dived into JavaScript and front‑end fundamentals.</p>
+                        </li>
+                        <li class="timeline-item" tabindex="0">
+                            <time class="timeline-date" datetime="2021">2021</time>
+                            <p class="timeline-desc">Started backend work with Node.js and APIs.</p>
+                        </li>
+                        <li class="timeline-item" tabindex="0">
+                            <time class="timeline-date" datetime="2023">2023</time>
+                            <p class="timeline-desc">Freelanced and shipped small projects end‑to‑end.</p>
+                        </li>
+                        <li class="timeline-item" tabindex="0">
+                            <time class="timeline-date" datetime="2024">2024</time>
+                            <p class="timeline-desc">B.S. Computer Science — Metro Dumaguete College (current).</p>
+                        </li>
+                    </ol>
                 </div>
-            </div>
+            </section>
         </section>
 
 
@@ -182,33 +216,36 @@
             </div>
         </section>
 
-
-        <section class="about-card mentor-card u-card profile-card glassy" aria-labelledby="mentor-card-title">
-            <div class="profile-inner">
-                <div class="profile-left" aria-hidden="false">
-                    <img src="../assets/mentor.jpg" alt="My mentor photo" class="profile-photo mentor-photo" loading="lazy" decoding="async">
+    <section class="my-profile">
+            <section class="about-card mentor-card u-card profile-card glassy" aria-labelledby="mentor-card-title">
+                <div class="profile-inner">
+                    <div class="profile-left" aria-hidden="false">
+                        <img src="../assets/mentor.jpg" alt="My mentor photo" class="profile-photo mentor-photo" loading="lazy" decoding="async">
+                    </div>
+                    <div class="profile-right" role="region" aria-labelledby="mentor-card-title">
+                        <h3 id="mentor-card-title" class="profile-name mentor-name">My Mentor</h3>
+                        <p class="profile-role">A teacher a mentor and a friend.</p>
+                        <figure class="glassy">
+                            <blockquote class="mentor-quote glassy">
+                                <p>"I gave you the rod and teach you how to fish, but don't expect me to catch the fish"</p>
+                            </blockquote>
+                            <figcaption>--Lawrence Caguioa</figcaption>
+                        </figure>
+                        <p class="profile-bio mentor-desc">
+                          Sir Lawrence (aka "Sir Law") has been my mentor and guide throughout my programming journey.
+                          At first I was really scared to interact with him because he is really strict well I can tell.
+                            But despite of its strictness, he is also very kind and patient. He always encourages me to push my limits and
+                            never give up. He has taught me the importance of discipline, hard work, and perseverance.
+                            I am grateful for his guidance and support, and I hope to one day be able to mentor others as he has mentored me.
+                            He even hunt me when I cut class and ditch school to learn on online resources.
+                        </p>
+                    </div>
                 </div>
-                <div class="profile-right" role="region" aria-labelledby="mentor-card-title">
-                    <h3 id="mentor-card-title" class="profile-name mentor-name">My Mentor</h3>
-                    <p class="profile-role">A teacher a mentor and a friend.</p>
-                    <figure class="glassy">
-                        <blockquote class="mentor-quote glassy">
-                            <p>"I gave you the rod and teach you how to fish, but don't expect me to catch the fish"</p>
-                        </blockquote>
-                        <figcaption>--Lawrence Caguioa</figcaption>
-                    </figure>
-                    <p class="profile-bio mentor-desc">
-                      Sir Lawrence (aka "Sir Law") has been my mentor and guide throughout my programming journey.
-                      At first I was really scared to interact with him because he is really strict well I can tell.
-                        But despite of its strictness, he is also very kind and patient. He always encourages me to push my limits and
-                        never give up. He has taught me the importance of discipline, hard work, and perseverance.
-                        I am grateful for his guidance and support, and I hope to one day be able to mentor others as he has mentored me.
-                        He even hunt me when I cut class and ditch school to learn on online resources.
-                    </p>
-                </div>
-            </div>
-        </section>
+            </section>
+            <section class="about-card u-card profile-card glassy" aria-labelledby="about-card-title">
 
+            </section>
+    </section>
     </main>
 
     <!-- Footer -->
