@@ -271,7 +271,6 @@
 /* Small phones */
 @media (max-width: 480px) {
     .header {
-        padding: 0.7rem 3vw 0 3vw;
         align-items: center;
     }
     .hero-title {
