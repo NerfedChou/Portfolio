@@ -397,15 +397,51 @@ body {
 .about-inner {
     max-width: 1200px;
     margin: 2.5rem auto;
-    padding: 1.5rem;
     box-sizing: border-box;
 }
 
 .about-grid {
     display: grid;
-    grid-template-columns: 360px 1fr;
     gap: var(--content-gap);
     align-items: center;
+    grid-template-areas:
+        "left right"
+        "left skills";
+}
+
+.about-left {
+    grid-area: left;
+}
+
+.about-right {
+    grid-area: right;
+}
+
+.skills {
+    grid-area: skills;
+}
+
+@media (max-width: 970px) {
+    .about-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr;
+        grid-template-areas:
+            "right right"
+            "left skills";
+        gap: var(--content-gap);
+    }
+    .about-right {
+        grid-column: 1 / 3;
+        grid-row: 1;
+    }
+    .about-left {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    .skills {
+        grid-column: 2;
+        grid-row: 2;
+    }
 }
 
 /* Portrait image (left) */
