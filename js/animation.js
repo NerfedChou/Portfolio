@@ -671,12 +671,102 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* -------------------------
+       History timeline controls (buttons + indicator)
+       ------------------------- */
+    function initializeHistoryTimelineUI() {
+        const timeline = document.getElementById('historyTimeline');
+        if (!timeline) return;
+
+        const wrapper = timeline.closest('.timeline-wrapper') || timeline.parentElement;
+        const prevBtn = wrapper.querySelector('.timeline-btn--prev');
+        const nextBtn = wrapper.querySelector('.timeline-btn--next');
+        const indicator = wrapper.querySelector('.timeline-indicator');
+        const thumb = indicator ? indicator.querySelector('.timeline-indicator__thumb') : null;
+
+        const smoothBehavior = PREFERS_REDUCED_MOTION ? 'auto' : 'smooth';
+
+        function getStepAmount(direction = 1) {
+            const item = timeline.querySelector('.timeline-item');
+            const cs = getComputedStyle(timeline);
+            const gapStr = cs.gap || cs.columnGap || '0px';
+            const gap = parseFloat(gapStr) || 0;
+            const itemWidth = item ? item.getBoundingClientRect().width : 0;
+            const base = itemWidth ? (itemWidth + gap) : Math.max(240, timeline.clientWidth * 0.8);
+            return base * direction;
+        }
+
+        function update() {
+            const max = Math.max(0, timeline.scrollWidth - timeline.clientWidth);
+            const atStart = timeline.scrollLeft <= 1;
+            const atEnd = timeline.scrollLeft >= max - 1;
+
+            if (prevBtn) prevBtn.disabled = atStart;
+            if (nextBtn) nextBtn.disabled = atEnd;
+
+            if (indicator && thumb) {
+                if (max <= 0) {
+                    indicator.classList.add('is-hidden');
+                    indicator.setAttribute('aria-valuenow', '100');
+                } else {
+                    indicator.classList.remove('is-hidden');
+                    const ratio = timeline.scrollLeft / max;
+                    const visibleRatio = timeline.clientWidth / timeline.scrollWidth;
+                    const thumbW = Math.max(visibleRatio * 100, 8);
+                    const left = Math.max(0, Math.min(100 - thumbW, ratio * (100 - thumbW)));
+                    thumb.style.width = `${thumbW}%`;
+                    thumb.style.left = `${left}%`;
+                    indicator.setAttribute('aria-valuenow', String(Math.round(ratio * 100)));
+                }
+            }
+        }
+
+        function scrollByStep(direction) {
+            const amount = getStepAmount(direction);
+            try {
+                timeline.scrollBy({ left: amount, behavior: smoothBehavior });
+            } catch {
+                timeline.scrollLeft += amount;
+            }
+        }
+
+        let rafId = null;
+        function onScroll() {
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(update);
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => scrollByStep(-1));
+        if (nextBtn) nextBtn.addEventListener('click', () => scrollByStep(1));
+
+        timeline.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', () => update(), { passive: true });
+
+        if (indicator) {
+            indicator.addEventListener('click', (ev) => {
+                const rect = indicator.getBoundingClientRect();
+                const x = ev.clientX - rect.left;
+                const ratio = Math.max(0, Math.min(1, x / rect.width));
+                const max = Math.max(0, timeline.scrollWidth - timeline.clientWidth);
+                const target = ratio * max;
+                try {
+                    timeline.scrollTo({ left: target, behavior: smoothBehavior });
+                } catch {
+                    timeline.scrollLeft = target;
+                }
+            });
+        }
+
+        update();
+    }
+
+    /* -------------------------
        Initialization sequence (viewport-gated)
        ------------------------- */
     initializeSiteEntrance();
     initializeAboutOverlayEntrance();
     initializeTypewriter();
     initializeNavigation();
+    initializeHistoryTimelineUI(); // init timeline controls
 
     runIdle(() => {
         // Start/stop glassy sheen only when a .glassy element is visible

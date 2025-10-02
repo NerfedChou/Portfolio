@@ -102,32 +102,48 @@
                     <!-- Added history timeline -->
                     <h3 id="about-card-title" class="profile-name">My History</h3>
                     <p class="profile-role">Milestones that shaped my journey</p>
-                    <ol class="timeline" aria-label="Personal milestones timeline">
-                        <li class="timeline-item" tabindex="0">
-                            <time class="timeline-date" datetime="2018">2018</time>
-                            <p class="timeline-desc">Wrote my first HTML/CSS and fell in love with the web.</p>
-                        </li>
-                        <li class="timeline-item" tabindex="0">
-                            <time class="timeline-date" datetime="2019">2019</time>
-                            <p class="timeline-desc">Built my first complete personal website.</p>
-                        </li>
-                        <li class="timeline-item" tabindex="0">
-                            <time class="timeline-date" datetime="2020">2020</time>
-                            <p class="timeline-desc">Dived into JavaScript and front‑end fundamentals.</p>
-                        </li>
-                        <li class="timeline-item" tabindex="0">
-                            <time class="timeline-date" datetime="2021">2021</time>
-                            <p class="timeline-desc">Started backend work with Node.js and APIs.</p>
-                        </li>
-                        <li class="timeline-item" tabindex="0">
-                            <time class="timeline-date" datetime="2023">2023</time>
-                            <p class="timeline-desc">Freelanced and shipped small projects end‑to‑end.</p>
-                        </li>
-                        <li class="timeline-item" tabindex="0">
-                            <time class="timeline-date" datetime="2024">2024</time>
-                            <p class="timeline-desc">B.S. Computer Science — Metro Dumaguete College (current).</p>
-                        </li>
-                    </ol>
+
+                    <div class="timeline-wrapper">
+                        <button class="timeline-btn timeline-btn--prev glassy" aria-label="Scroll previous" aria-controls="historyTimeline">
+                            <ion-icon name="chevron-back"></ion-icon>
+                        </button>
+
+                        <ol id="historyTimeline" class="timeline" aria-label="Personal milestones timeline">
+                            <li class="timeline-item" tabindex="0">
+                                <time class="timeline-date" datetime="2018">2018</time>
+                                <p class="timeline-desc">Wrote my first HTML/CSS and fell in love with the web.</p>
+                            </li>
+                            <li class="timeline-item" tabindex="0">
+                                <time class="timeline-date" datetime="2019">2019</time>
+                                <p class="timeline-desc">Built my first complete personal website.</p>
+                            </li>
+                            <li class="timeline-item" tabindex="0">
+                                <time class="timeline-date" datetime="2020">2020</time>
+                                <p class="timeline-desc">Dived into JavaScript and front‑end fundamentals.</p>
+                            </li>
+                            <li class="timeline-item" tabindex="0">
+                                <time class="timeline-date" datetime="2021">2021</time>
+                                <p class="timeline-desc">Started backend work with Node.js and APIs.</p>
+                            </li>
+                            <li class="timeline-item" tabindex="0">
+                                <time class="timeline-date" datetime="2023">2023</time>
+                                <p class="timeline-desc">Freelanced and shipped small projects end‑to‑end.</p>
+                            </li>
+                            <li class="timeline-item" tabindex="0">
+                                <time class="timeline-date" datetime="2024">2024</time>
+                                <p class="timeline-desc">B.S. Computer Science — Metro Dumaguete College (current).</p>
+                            </li>
+                        </ol>
+
+                        <button class="timeline-btn timeline-btn--next glassy" aria-label="Scroll next" aria-controls="historyTimeline">
+                            <ion-icon name="chevron-forward"></ion-icon>
+                        </button>
+
+                        <div class="timeline-indicator" role="progressbar" aria-label="Timeline scroll position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <div class="timeline-indicator__track"></div>
+                            <div class="timeline-indicator__thumb"></div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </section>
