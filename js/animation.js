@@ -781,7 +781,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { threshold: 0.1 });
         }
 
-        // Gate skills and portrait panel by #about visibility
         const aboutSection = document.getElementById('about');
         let skillPanelCtl = null;
         if (aboutSection) {
@@ -819,12 +818,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const section = document.querySelector('.mentor-card');
         if (!section) return;
 
-        // Target only the mentor section elements with glassy sheen
         const selector = '.mentor-card.glassy, .mentor-card .glassy, .mentor-quote.glassy';
         const targets = Array.from(document.querySelectorAll(selector));
         if (!targets.length) return;
 
-        // Accessibility: reveal without animation
         if (PREFERS_REDUCED_MOTION) {
             targets.forEach(el => el.classList.add('glassy-active'));
             return;
