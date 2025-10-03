@@ -1931,12 +1931,12 @@ body {
 }
 
 #friend {
-    box-shadow: 0 6px 18px rgba(208, 0, 255, 0.14), inset 0 1px 0 rgba(223, 0, 255, 0.11);
+    box-shadow: 0 6px 18px rgba(45, 1, 55, 0.14) inset, inset 0 1px 0 rgba(19, 0, 23, 0.47);
 }
 
 #mtv {
     background: linear-gradient(90deg, rgba(208, 0, 255, 0.06), rgba(221, 0, 255, 0.06));
-    color: rgba(112, 22, 136, 0.98);
+    color: #cb02f6;
     line-height: 1.35;
     box-shadow: 0 6px 18px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.02);
     border-left: 3.5px solid rgba(208, 0, 255, 0.14);
