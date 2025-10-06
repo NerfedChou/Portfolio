@@ -8,6 +8,7 @@
     :root {
         --white: #181818;
         --eerie-black: #fff;
+        --accent: #9e4901;
     }
     .btn {
         --white: #fff;
