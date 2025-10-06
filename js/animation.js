@@ -183,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navigationMenu.classList.add('open');
             hamburgerBtn.setAttribute('aria-expanded', 'true');
             navigationMenu.setAttribute('aria-hidden', 'false');
+            Array.from(navigationMenu.querySelectorAll('a')).forEach(link => link.removeAttribute('tabindex'));
             if (focusFirst) {
                 const first = getFirstNavLink();
                 if (first) first.focus();
@@ -193,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navigationMenu.classList.remove('open');
             hamburgerBtn.setAttribute('aria-expanded', 'false');
             navigationMenu.setAttribute('aria-hidden', 'true');
+            Array.from(navigationMenu.querySelectorAll('a')).forEach(link => link.setAttribute('tabindex', '-1'));
             if (returnFocusToBtn) hamburgerBtn.focus();
         }
 
