@@ -136,6 +136,7 @@
         transform: translateY(0) scale(1);
         pointer-events: auto;
         max-height: 420px;
+        backdrop-filter: blur(20px);
     }
 
     .hamburger {

@@ -1,6 +1,6 @@
 :root {
     /* CSS HEX */
-    --eerie-black: #181818ff;
+    --eerie-black: #191818;
     --eerie-black-2: #252525ff;
     --jet: #373638ff;
     --davys-gray: #4F4F51ff;
@@ -53,6 +53,7 @@ html {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color-scheme: light dark;
 }
 *,
 *::before,
