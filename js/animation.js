@@ -875,8 +875,6 @@ function highlightFirstOccurrence(text = '', keyword = '') {
 /* -------------------------
        Contact form validation
        ------------------------- */
-
-
 function initializeContactFormValidation() {
     const form = document.querySelector('.contact-form');
     const nameInput = document.getElementById('contact-name');
@@ -885,11 +883,6 @@ function initializeContactFormValidation() {
     const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
     if (!form || !nameInput || !emailInput || !messageInput || !submitBtn) return;
-
-    // Initially disable the button
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = '0.6';
-    submitBtn.style.cursor = 'not-allowed';
 
     function isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -904,23 +897,16 @@ function initializeContactFormValidation() {
         const allValid = nameValid && emailValid && messageValid;
 
         if (allValid) {
-            submitBtn.disabled = false;
             submitBtn.style.backgroundColor = 'var(--accent)';
             submitBtn.style.borderColor = 'var(--accent)';
             submitBtn.style.color = 'var(--white)';
-            submitBtn.style.opacity = '1';
-            submitBtn.style.cursor = 'pointer';
         } else {
-            submitBtn.disabled = true;
             submitBtn.style.backgroundColor = '';
             submitBtn.style.borderColor = '';
             submitBtn.style.color = '';
-            submitBtn.style.opacity = '0.6';
-            submitBtn.style.cursor = 'not-allowed';
         }
     }
 
-    // Add event listeners for all form inputs
     nameInput.addEventListener('input', validateForm);
     emailInput.addEventListener('input', validateForm);
     messageInput.addEventListener('input', validateForm);
@@ -930,4 +916,50 @@ function initializeContactFormValidation() {
 
     // Initial validation
     validateForm();
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const loadingContainer = form.querySelector('.loading-container');
+        const successMessage = form.querySelector('.success-message');
+
+        submitBtn.style.display = 'none';
+        loadingContainer.style.display = 'flex';
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            loadingContainer.style.display = 'none';
+            successMessage.style.display = 'flex';
+            setTimeout(() => {
+                successMessage.classList.add('show');
+            }, 100);
+            setTimeout(() => {
+                form.reset();
+                successMessage.classList.remove('show');
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                    validateForm();
+                }, 300);
+            }, 3000);
+        } catch (error) {
+            loadingContainer.style.display = 'none';
+            submitBtn.style.display = 'block';
+            console.error('Form submission error:', error);
+            alert('Something went wrong. Please try again.');
+        }
+    });
 }
+
+const lightModeDetector = window.matchMedia('(prefers-color-scheme: light)');
+const aboutPortrait = document.querySelector('.about-portrait');
+
+function updatePortrait() {
+    if (lightModeDetector.matches) {
+        aboutPortrait.src = 'assets/melight.png';
+    } else {
+        aboutPortrait.src = 'assets/me.jpeg';
+    }
+}
+
+updatePortrait();
+lightModeDetector.addEventListener('change', updatePortrait);
