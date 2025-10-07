@@ -16,7 +16,7 @@
     .hero-section {
         background-image:
                 linear-gradient(to bottom, rgba(24,24,24,0) 58%, rgba(255, 255, 255, 0) 75%, white 100%),
-                url('../assets/melight.jpeg');
+                url('../assets/melight.webp');
     }
     .about-desc {
         color: black;
@@ -85,7 +85,7 @@
     .hero-section {
         background-image:
                 linear-gradient(to bottom, rgba(24,24,24,0) 58%, rgba(24,24,24,0.25) 75%, var(--eerie-black) 100%),
-                url('../assets/me.jpeg');
+                url('../assets/me.webp');
     }
     .hero-overlay {
         background: linear-gradient(120deg, rgba(24,24,24,0.85) 60%, rgba(24,24,24,0.6) 100%);

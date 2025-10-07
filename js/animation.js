@@ -955,9 +955,9 @@ const aboutPortrait = document.querySelector('.about-portrait');
 
 function updatePortrait() {
     if (!lightModeDetector.matches) {
-        aboutPortrait.src = 'assets/me.jpeg';
+        aboutPortrait.src = 'assets/me.webp';
     } else {
-        aboutPortrait.src = 'assets/melight.jpeg';
+        aboutPortrait.src = 'assets/melight.webp';
     }
 }
 

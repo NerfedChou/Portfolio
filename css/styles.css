@@ -181,7 +181,6 @@ body {
     letter-spacing: 2px;
     margin: 0 0 0.7rem 0;
     color: var(--accent);
-
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     opacity: 0;
     transform: translateY(24px);
