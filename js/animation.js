@@ -954,6 +954,7 @@ const lightModeDetector = window.matchMedia('(prefers-color-scheme: light)');
 const aboutPortrait = document.querySelector('.about-portrait');
 
 function updatePortrait() {
+    if (!aboutPortrait) return; // guard for pages without the portrait
     if (!lightModeDetector.matches) {
         aboutPortrait.src = 'assets/me.webp';
     } else {
@@ -963,3 +964,22 @@ function updatePortrait() {
 
 updatePortrait();
 lightModeDetector.addEventListener('change', updatePortrait);
+
+// Service worker registration (works on any page, GitHub Pages-friendly)
+(function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+    // Delay slightly to prioritize page interactive
+    const doRegister = async () => {
+        try {
+            const existing = await navigator.serviceWorker.getRegistration();
+            if (existing) return; // already registered
+            try {
+                await navigator.serviceWorker.register('sw.js');
+            } catch (e1) {
+                try { await navigator.serviceWorker.register('/sw.js'); } catch (e2) { /* noop */ }
+            }
+        } catch (_) { /* ignore */ }
+    };
+    if (document.readyState === 'complete') setTimeout(doRegister, 0);
+    else window.addEventListener('load', () => setTimeout(doRegister, 0));
+})();

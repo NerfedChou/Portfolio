@@ -2478,7 +2478,14 @@ body {
 .loading-dots .dot:nth-child(1) {
     animation-delay: 0s;
 }
-
+/* --- Performance: render containment and offscreen skipping --- */
+.about-section,
+.services,
+.projects-container,
+.contact-section {
+    content-visibility: auto;             /* skip rendering until scrolled into view */
+    contain-intrinsic-size: 1000px 800px; /* reserve space to avoid layout shift */
+}
 .loading-dots .dot:nth-child(2) {
     animation-delay: 0.2s;
 }
@@ -2532,4 +2539,12 @@ body {
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(40px);}
     to { opacity: 1; transform: translateY(0);}
+}
+/* For large wrappers that animate or overlay content, add containment hints */
+.hero-section,
+.about-section,
+.services-container,
+.projects-inner,
+.contact-inner {
+    contain: layout paint style;
 }
