@@ -68,6 +68,13 @@
                 var(--eerie-black) 100%
         );
     }
+    .typewriter {
+        color: white !important;
+        text-shadow: #191818 2px 2px 1px;
+    }
+    .about-bottom-hero-title {
+        color: orangered !important;
+    }
 }
 
 @media (prefers-color-scheme: dark) {

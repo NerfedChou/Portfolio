@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, () => {
             running = false;
             clearStepTimers();
-        }, { threshold: 0.25 });
+        }, { threshold: 0.01 });
     }
 
     /* -------------------------
