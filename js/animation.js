@@ -957,7 +957,7 @@ function updatePortrait() {
     if (!lightModeDetector.matches) {
         aboutPortrait.src = 'assets/me.jpeg';
     } else {
-        aboutPortrait.src = 'assets/melight.webp';
+        aboutPortrait.src = 'assets/melight.jpeg';
     }
 }
 
