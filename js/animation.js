@@ -954,10 +954,10 @@ const lightModeDetector = window.matchMedia('(prefers-color-scheme: light)');
 const aboutPortrait = document.querySelector('.about-portrait');
 
 function updatePortrait() {
-    if (lightModeDetector.matches) {
-        aboutPortrait.src = 'assets/melight.png';
-    } else {
+    if (!lightModeDetector.matches) {
         aboutPortrait.src = 'assets/me.jpeg';
+    } else {
+        aboutPortrait.src = 'assets/melight.png';
     }
 }
 
