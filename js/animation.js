@@ -797,6 +797,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         initializeServicesEntrance();
 
+        // Initialize contact form validation
+        initializeContactFormValidation();
+
         if (document.querySelector('.mentor-card')) {
             initializeMentorGlassySheen();
         } else {
@@ -867,4 +870,64 @@ function highlightFirstOccurrence(text = '', keyword = '') {
     const match = escapeHtml(String(text).slice(index, index + String(keyword).length));
     const after = escapeHtml(String(text).slice(index + String(keyword).length));
     return `${before}<span class="panel-keyword">${match}</span>${after}`;
+}
+
+/* -------------------------
+       Contact form validation
+       ------------------------- */
+
+
+function initializeContactFormValidation() {
+    const form = document.querySelector('.contact-form');
+    const nameInput = document.getElementById('contact-name');
+    const emailInput = document.getElementById('contact-email');
+    const messageInput = document.getElementById('contact-message');
+    const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+
+    if (!form || !nameInput || !emailInput || !messageInput || !submitBtn) return;
+
+    // Initially disable the button
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.6';
+    submitBtn.style.cursor = 'not-allowed';
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function validateForm() {
+        const nameValid = nameInput.value.trim().length >= 2;
+        const emailValid = isValidEmail(emailInput.value.trim());
+        const messageValid = messageInput.value.trim().length >= 10;
+
+        const allValid = nameValid && emailValid && messageValid;
+
+        if (allValid) {
+            submitBtn.disabled = false;
+            submitBtn.style.backgroundColor = 'var(--accent)';
+            submitBtn.style.borderColor = 'var(--accent)';
+            submitBtn.style.color = 'var(--white)';
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.backgroundColor = '';
+            submitBtn.style.borderColor = '';
+            submitBtn.style.color = '';
+            submitBtn.style.opacity = '0.6';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+    }
+
+    // Add event listeners for all form inputs
+    nameInput.addEventListener('input', validateForm);
+    emailInput.addEventListener('input', validateForm);
+    messageInput.addEventListener('input', validateForm);
+    nameInput.addEventListener('blur', validateForm);
+    emailInput.addEventListener('blur', validateForm);
+    messageInput.addEventListener('blur', validateForm);
+
+    // Initial validation
+    validateForm();
 }
