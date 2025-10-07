@@ -968,15 +968,27 @@ lightModeDetector.addEventListener('change', updatePortrait);
 // Service worker registration (works on any page, GitHub Pages-friendly)
 (function registerServiceWorker() {
     if (!('serviceWorker' in navigator)) return;
-    // Delay slightly to prioritize page interactive
     const doRegister = async () => {
         try {
             const existing = await navigator.serviceWorker.getRegistration();
-            if (existing) return; // already registered
+            if (existing) return;
+            const segments = location.pathname.split('/').filter(Boolean);
+            const base = segments.length ? `/${segments[0]}/` : '/';
             try {
-                await navigator.serviceWorker.register('sw.js');
+                // Prefer project base (works for GitHub Project Pages)
+                await navigator.serviceWorker.register(`${base}sw.js`, { scope: base });
             } catch (e1) {
-                try { await navigator.serviceWorker.register('/sw.js'); } catch (e2) { /* noop */ }
+                try {
+                    // Fallback: relative (works when sw.js sits next to the page)
+                    await navigator.serviceWorker.register('sw.js');
+                } catch (e2) {
+                    try {
+                        // Fallback: root (works for GitHub User/Org Pages)
+                        await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+                    } catch (e3) {
+                        console.error('Service worker registration failed', e3);
+                    }
+                }
             }
         } catch (_) { /* ignore */ }
     };

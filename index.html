@@ -432,10 +432,28 @@
      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" defer></script>
      <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" defer></script>
      <script>
-       // Register service worker for better repeat-visit performance and offline support
        if ('serviceWorker' in navigator) {
          window.addEventListener('load', () => {
-           navigator.serviceWorker.register('/sw.js').catch(console.error);
+           const segments = location.pathname.split('/').filter(Boolean);
+           const base = segments.length ? `/${segments[0]}/` : '/';
+           (async () => {
+             try {
+               // Prefer project base (works for GitHub Project Pages)
+               await navigator.serviceWorker.register(`${base}sw.js`, { scope: base });
+             } catch (e1) {
+               try {
+                 // Fallback: relative (works on index pages)
+                 await navigator.serviceWorker.register('sw.js');
+               } catch (e2) {
+                 try {
+                   // Fallback: root (works for GitHub User/Org Pages)
+                   await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+                 } catch (e3) {
+                   console.error('Service worker registration failed', e3);
+                 }
+               }
+             }
+           })();
          });
        }
      </script>
