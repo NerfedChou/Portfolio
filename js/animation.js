@@ -797,6 +797,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         initializeServicesEntrance();
 
+        // Initialize contact form validation
+        initializeContactFormValidation();
+
         if (document.querySelector('.mentor-card')) {
             initializeMentorGlassySheen();
         } else {
@@ -868,3 +871,95 @@ function highlightFirstOccurrence(text = '', keyword = '') {
     const after = escapeHtml(String(text).slice(index + String(keyword).length));
     return `${before}<span class="panel-keyword">${match}</span>${after}`;
 }
+
+/* -------------------------
+       Contact form validation
+       ------------------------- */
+function initializeContactFormValidation() {
+    const form = document.querySelector('.contact-form');
+    const nameInput = document.getElementById('contact-name');
+    const emailInput = document.getElementById('contact-email');
+    const messageInput = document.getElementById('contact-message');
+    const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+
+    if (!form || !nameInput || !emailInput || !messageInput || !submitBtn) return;
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function validateForm() {
+        const nameValid = nameInput.value.trim().length >= 2;
+        const emailValid = isValidEmail(emailInput.value.trim());
+        const messageValid = messageInput.value.trim().length >= 10;
+
+        const allValid = nameValid && emailValid && messageValid;
+
+        if (allValid) {
+            submitBtn.style.backgroundColor = 'var(--accent)';
+            submitBtn.style.borderColor = 'var(--accent)';
+            submitBtn.style.color = 'var(--white)';
+        } else {
+            submitBtn.style.backgroundColor = '';
+            submitBtn.style.borderColor = '';
+            submitBtn.style.color = '';
+        }
+    }
+
+    nameInput.addEventListener('input', validateForm);
+    emailInput.addEventListener('input', validateForm);
+    messageInput.addEventListener('input', validateForm);
+    nameInput.addEventListener('blur', validateForm);
+    emailInput.addEventListener('blur', validateForm);
+    messageInput.addEventListener('blur', validateForm);
+
+    // Initial validation
+    validateForm();
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const loadingContainer = form.querySelector('.loading-container');
+        const successMessage = form.querySelector('.success-message');
+
+        submitBtn.style.display = 'none';
+        loadingContainer.style.display = 'flex';
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            loadingContainer.style.display = 'none';
+            successMessage.style.display = 'flex';
+            setTimeout(() => {
+                successMessage.classList.add('show');
+            }, 100);
+            setTimeout(() => {
+                form.reset();
+                successMessage.classList.remove('show');
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                    validateForm();
+                }, 300);
+            }, 3000);
+        } catch (error) {
+            loadingContainer.style.display = 'none';
+            submitBtn.style.display = 'block';
+            console.error('Form submission error:', error);
+            alert('Something went wrong. Please try again.');
+        }
+    });
+}
+
+const lightModeDetector = window.matchMedia('(prefers-color-scheme: light)');
+const aboutPortrait = document.querySelector('.about-portrait');
+
+function updatePortrait() {
+    if (lightModeDetector.matches) {
+        aboutPortrait.src = 'assets/melight.png';
+    } else {
+        aboutPortrait.src = 'assets/me.jpeg';
+    }
+}
+
+updatePortrait();
+lightModeDetector.addEventListener('change', updatePortrait);
