@@ -954,7 +954,6 @@ const lightModeDetector = window.matchMedia('(prefers-color-scheme: light)');
 const aboutPortrait = document.querySelector('.about-portrait');
 
 function updatePortrait() {
-    if (!aboutPortrait) return; // guard for pages without the portrait
     if (!lightModeDetector.matches) {
         aboutPortrait.src = 'assets/me.webp';
     } else {

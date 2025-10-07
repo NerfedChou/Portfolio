@@ -1,10 +1,4 @@
-/*
-  Simple offline-first caching for GitHub Pages
-  - Precache core assets on install
-  - Stale-while-revalidate for same-origin requests (css/js/images)
-  - Version bump cacheName to invalidate old assets
-*/
-const cacheName = 'portfolio-cache-v1';
+const cacheName = 'portfolio-cache-v2';
 const precacheAssets = [
   '/',
   '/index.html',
@@ -14,8 +8,6 @@ const precacheAssets = [
   '/css/lightdark.css',
   '/js/animation.js',
   '/js/customItemAnimations.js',
-  '/assets/me.webp',
-  '/assets/melight.webp',
 ];
 
 self.addEventListener('install', (event) => {
@@ -38,6 +30,13 @@ self.addEventListener('fetch', (event) => {
 
   // Only handle same-origin GET requests
   if (req.method !== 'GET' || url.origin !== location.origin) return;
+
+  // Don't cache portrait images to allow dynamic switching
+  if (url.pathname.includes('/assets/me.webp') || url.pathname.includes('/assets/melight.webp')) {
+    // Always fetch portrait images from network to allow dynamic switching
+    event.respondWith(fetch(req));
+    return;
+  }
 
   const accept = req.headers.get('accept') || '';
   const isAsset =
@@ -67,4 +66,3 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
-
