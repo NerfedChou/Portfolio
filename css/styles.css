@@ -2483,7 +2483,7 @@ body {
 .services,
 .projects-container,
 .contact-section {
-    content-visibility: auto;             /* skip rendering until scrolled into view */
+    content-visibility: auto;
     contain-intrinsic-size: 1000px 800px; /* reserve space to avoid layout shift */
 }
 .loading-dots .dot:nth-child(2) {

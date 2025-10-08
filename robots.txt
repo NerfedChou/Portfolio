@@ -1,0 +1,6 @@
+# Ensure this file is served as text/plain and not rewritten to an HTML page.
+User-agent: *
+Allow: /
+
+Sitemap: https://developie.me/sitemap.xml
+
