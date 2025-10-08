@@ -416,14 +416,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!skillsContainer || !skillNodes.length || !portraitPanel || !panelDescription || !aboutLeft) return null;
 
-        // Detect real hover capability (desktop/mouse). Touch devices won't use hover open/close.
-        const SUPPORTS_HOVER = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-        // Track if the user is navigating by keyboard (Tab) to enable focus handlers only then.
-        let keyboardMode = false;
-        document.addEventListener('keydown', (e) => { if (e.key === 'Tab') keyboardMode = true; }, { passive: true });
-        document.addEventListener('pointerdown', () => { keyboardMode = false; }, { passive: true });
-
         let panelEnabled = true; // gate
         let activeSkillNode = null;
         let hideTimer = null;
@@ -432,32 +424,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const SUPPRESS_MS = 420;
         let intentToShowNode = null;
 
-        // Make labels act like buttons and keep aria-expanded in sync
-        const getLabel = (s) => s.querySelector('.skill-label');
-        function setExpandedFor(targetSkill, expanded) {
-            skillNodes.forEach(s => {
-                const l = getLabel(s);
-                if (!l) return;
-                const isTarget = targetSkill && s === targetSkill && expanded;
-                l.setAttribute('aria-expanded', isTarget ? 'true' : 'false');
-            });
+        // --- TOGGLE LOGIC: Add a toggle event for skill panel ---
+        function toggleSkillPanel(skillNode) {
+            if (activeSkillNode === skillNode) {
+                hideSkillDetail();
+            } else {
+                skillNodes.forEach(s => s.classList.remove('pull'));
+                skillNodes.forEach(s => s.classList.remove('active'));
+                skillNode.classList.add('pull');
+                showSkillDetail(skillNode, true).then(() => {
+                    if (activeSkillNode === skillNode) { // check if not hidden since
+                        skillNode.classList.add('active');
+                    }
+                });
+            }
         }
-        skillNodes.forEach(s => {
-            const l = getLabel(s);
-            if (!l) return;
-            l.setAttribute('role', 'button');
-            l.tabIndex = 0;
-            l.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
-                    e.preventDefault();
-                    // Trigger the delegated click handler
-                    l.click();
-                }
-            });
-            // Pointer/tap affordance
-            l.style.cursor = 'pointer';
-            l.style.pointerEvents = 'auto';
-        });
 
         function createCancellableTyper(targetEl, charDelay = 36) {
             let cancelled = false;
@@ -507,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => { suppressDocumentClose = false; }, ms);
         }
 
-        async function showSkillDetail(skillNode) {
+        async function showSkillDetail(skillNode, isPinning = false) {
             if (!panelEnabled) return;
 
             clearHideTimer();
@@ -526,18 +507,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (panelTitle) panelTitle.textContent = labelText;
             if (panelDescription) panelDescription.textContent = '';
 
-            activeSkillNode = skillNode;
-            setExpandedFor(skillNode, true); // sync aria-expanded on label
+            if (isPinning) {
+                activeSkillNode = skillNode;
+            }
             aboutLeft.classList.add('active');
             portraitPanel.classList.remove('hiding'); // Cancel any pending hide animation
-
-            // Force panel visible so tap persists (overrides hover-only CSS)
-            portraitPanel.setAttribute('aria-hidden', 'false');
-            portraitPanel.style.visibility = 'visible';
-            portraitPanel.style.opacity = '1';
-            portraitPanel.style.pointerEvents = 'auto';
-            portraitPanel.style.transform = 'translateY(0)';
-            aboutLeft.setAttribute('data-panel-open', 'true');
 
             const panelAlreadyVisible = portraitPanel.classList.contains('visible');
 
@@ -548,7 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
                 } else {
                     await typer.typeText(detailText);
-                    if (activeSkillNode === skillNode) panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
+                    if (intentToShowNode === skillNode) panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
                 }
                 return;
             }
@@ -567,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
             } else {
                 await typer.typeText(detailText);
-                if (activeSkillNode === skillNode) panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
+                if (intentToShowNode === skillNode) panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
             }
         }
 
@@ -583,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, HIDE_DELAY_MS);
         }
 
-        function hideSkillDetail() {
+        function hideSkillDetail(isUnpinning = false) {
             clearHideTimer();
             intentToShowNode = null;
             if (activeTyper && activeTyper.cancel) activeTyper.cancel();
@@ -591,23 +565,18 @@ document.addEventListener('DOMContentLoaded', () => {
             portraitPanel.classList.add('hiding');
             portraitPanel.classList.remove('visible');
 
-            // Hide accessibly and stop interactions immediately
-            portraitPanel.setAttribute('aria-hidden', 'true');
-            portraitPanel.style.pointerEvents = 'none';
-
             setTimeout(() => {
                 portraitPanel.classList.remove('hiding');
-                aboutLeft.classList.remove('active');
-                aboutLeft.setAttribute('data-panel-open', 'false');
-                // Clear forced styles so CSS can take over again
-                portraitPanel.style.visibility = '';
-                portraitPanel.style.opacity = '';
-                portraitPanel.style.transform = '';
+                if (!activeSkillNode || isUnpinning) {
+                    aboutLeft.classList.remove('active');
+                }
             }, 220);
 
-            skillNodes.forEach(s => s.classList.remove('pull'));
-            setExpandedFor(null, false); // collapse all labels
-            activeSkillNode = null;
+            if (!activeSkillNode || isUnpinning) {
+                skillNodes.forEach(s => s.classList.remove('pull'));
+                skillNodes.forEach(s => s.classList.remove('active'));
+                activeSkillNode = null;
+            }
         }
 
 
@@ -619,84 +588,45 @@ document.addEventListener('DOMContentLoaded', () => {
             setSuppressDocumentClose();
         }, { passive: true });
 
-        // Tap/click toggles: stays open until same-skill tap or outside tap
+        skillsContainer.addEventListener('pointerover', (ev) => {
+            if (!panelEnabled || activeSkillNode) return;
+            const hovered = ev.target.closest('.skill');
+            if (!hovered) return;
+            hovered.classList.add('pull');
+            showSkillDetail(hovered, false);
+        });
+
+        skillsContainer.addEventListener('pointerout', (ev) => {
+            if (!panelEnabled || activeSkillNode) return;
+            const hoveredOut = ev.target.closest('.skill');
+            if (!hoveredOut) return;
+            scheduleHideForSkill(hoveredOut);
+            hoveredOut.classList.remove('pull');
+        });
+
+
         skillsContainer.addEventListener('click', (ev) => {
             if (!panelEnabled) return;
             const clicked = ev.target.closest('.skill');
             if (!clicked) return;
             ev.stopPropagation();
-            clearHideTimer();
-            setSuppressDocumentClose();
-            if (activeSkillNode === clicked) {
-                hideSkillDetail();
-            } else {
-                skillNodes.forEach(s => s.classList.remove('pull'));
-                clicked.classList.add('pull');
-                showSkillDetail(clicked);
-            }
+            toggleSkillPanel(clicked);
         });
 
-        // Add touchstart for mobile devices to ensure taps trigger the panel
-        skillsContainer.addEventListener('touchstart', (ev) => {
-            if (!panelEnabled) return;
-            const clicked = ev.target.closest('.skill');
-            if (!clicked) return;
-            ev.stopPropagation();
-            clearHideTimer();
-            setSuppressDocumentClose();
-            if (activeSkillNode === clicked) {
-                hideSkillDetail();
-            } else {
-                skillNodes.forEach(s => s.classList.remove('pull'));
-                clicked.classList.add('pull');
-                showSkillDetail(clicked);
-            }
-        }, { passive: true });
 
-        // Only use hover open/close on devices that support hover (desktop/mouse)
-        if (SUPPORTS_HOVER) {
-            skillsContainer.addEventListener('pointerover', (ev) => {
-                if (!panelEnabled) return;
-                const entered = ev.target.closest('.skill');
-                if (!entered) return;
-                const from = ev.relatedTarget;
-                if (from && entered.contains(from)) return;
-
-                skillNodes.forEach(s => s.classList.remove('pull'));
-                entered.classList.add('pull');
-
-                showSkillDetail(entered);
-            }, { passive: true });
-
-            skillsContainer.addEventListener('pointerout', (ev) => {
-                if (!panelEnabled) return;
-                const left = ev.target.closest('.skill');
-                if (!left) return;
-                const to = ev.relatedTarget;
-                if (to && left.contains(to)) return;
-
-                scheduleHideForSkill(left);
-                left.classList.remove('pull');
-            }, { passive: true });
-        }
-
-        // Enable focus behavior only during keyboard navigation (Tab)
         skillsContainer.addEventListener('focusin', (ev) => {
-            if (!panelEnabled || !keyboardMode) return;
+            if (!panelEnabled) return;
             const focused = ev.target.closest('.skill');
             if (!focused) return;
             skillNodes.forEach(s => s.classList.remove('pull'));
             focused.classList.add('pull');
-            showSkillDetail(focused);
+            showSkillDetail(focused, false);
         });
         skillsContainer.addEventListener('focusout', (ev) => {
-            if (!panelEnabled || !keyboardMode) return;
+            if (!panelEnabled) return;
             const blurred = ev.target.closest('.skill');
             if (!blurred) return;
-            // Only hide if focus moved completely outside the skills and panel
-            const next = ev.relatedTarget;
-            const stillInside = next && (skillsContainer.contains(next) || aboutLeft.contains(next));
-            if (!stillInside) scheduleHideForSkill(blurred);
+            scheduleHideForSkill(blurred);
             blurred.classList.remove('pull');
         });
 
@@ -704,12 +634,24 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('click', (ev) => {
             if (!panelEnabled) return;
             if (suppressDocumentClose) return;
-            if (!aboutLeft.contains(ev.target) && !skillNodes.some(s => s.contains(ev.target))) hideSkillDetail();
+            if (!aboutLeft.contains(ev.target) && !skillNodes.some(s => s.contains(ev.target))) {
+                if (activeSkillNode) {
+                    hideSkillDetail(true);
+                } else {
+                    hideSkillDetail(false);
+                }
+            }
         });
 
         document.addEventListener('keydown', (ev) => {
             if (!panelEnabled) return;
-            if (isEscape(ev)) hideSkillDetail();
+            if (isEscape(ev)) {
+                if (activeSkillNode) {
+                    hideSkillDetail(true);
+                } else {
+                    hideSkillDetail(false);
+                }
+            }
         });
 
         return {
