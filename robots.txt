@@ -4,3 +4,6 @@ Allow: /
 
 Sitemap: https://developie.me/sitemap.xml
 
+User-Agent: *
+Content-signal: search=yes,ai-train=no  <-- Lighthouse flags this as unknown
+Allow: /
