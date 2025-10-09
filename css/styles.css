@@ -611,26 +611,6 @@ body {
     overflow: visible;
 }
 
-
-.skill-fill::before {
-    content: "";
-    position: absolute;
-    left: -50%;
-    top: -80%;
-    background: radial-gradient(closest-side at 30% 65%,
-    rgba(255,255,255,0.06),
-    rgba(255,255,255,0.02) 18%,
-    rgba(255,255,255,0) 40%);
-    filter: blur(20px);
-    opacity: 0;
-    transform: translateX(0) rotate(-6deg) scale(1);
-    pointer-events: none;
-    mix-blend-mode: overlay;
-    z-index: 2;
-    transition: opacity 260ms ease;
-}
-
-
 .skill-fill::after {
     content: "";
     position: absolute;
@@ -645,12 +625,6 @@ body {
     z-index: 3;
 }
 
-
-@keyframes liquidWave {
-    0% { transform: translateX(-8%) rotate(-6deg) scale(1); }
-    50% { transform: translateX(6%) rotate(-5deg) scale(1.02); }
-    100% { transform: translateX(-8%) rotate(-6deg) scale(1); }
-}
 @keyframes sheenSweep {
     0% { left: -40%; opacity: 0; }
     10% { opacity: 0.9; }
@@ -658,11 +632,6 @@ body {
     100% { left: 120%; opacity: 0; }
 }
 
-
-.skill.in-view .skill-fill::before {
-    opacity: 1;
-    animation: liquidWave 4800ms linear infinite;
-}
 .skill.in-view .skill-fill::after {
     animation: sheenSweep 2000ms cubic-bezier(.2,.9,.3,1) 220ms both infinite;
     opacity: 0.95;
@@ -2406,24 +2375,6 @@ body {
         transform: translateY(-15px);
         opacity: 1;
     }
-}
-
-/* Success message styles */
-.success-message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 1rem;
-    padding: 1rem;
-    background: rgba(76, 175, 80, 0.1);
-    border: 1px solid rgba(76, 175, 80, 0.3);
-    border-radius: 8px;
-    color: #4CAF50;
-    font-weight: 600;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
 }
 
 .success-message.show {
