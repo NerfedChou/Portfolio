@@ -424,6 +424,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const SUPPRESS_MS = 420;
         let intentToShowNode = null;
 
+        // --- Touch scroll detection to prevent accidental taps ---
+        let touchMoved = false;
+        let touchStartY = 0;
+        const TOUCH_MOVE_THRESHOLD = 10; // pixels
+
         // --- TOGGLE LOGIC: Add a toggle event for skill panel ---
         function toggleSkillPanel(skillNode) {
             if (activeSkillNode === skillNode) {
@@ -580,6 +585,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
+        // --- Touch scroll detection events ---
+        skillsContainer.addEventListener('touchstart', (ev) => {
+            if (!panelEnabled) return;
+            touchMoved = false;
+            touchStartY = ev.touches[0].clientY;
+        }, { passive: true });
+
+        skillsContainer.addEventListener('touchmove', (ev) => {
+            if (!panelEnabled || touchMoved) return;
+            const deltaY = Math.abs(ev.touches[0].clientY - touchStartY);
+            if (deltaY > TOUCH_MOVE_THRESHOLD) {
+                touchMoved = true;
+            }
+        }, { passive: true });
+
+
         // Events (guarded by panelEnabled flag)
         skillsContainer.addEventListener('pointerdown', (ev) => {
             if (!panelEnabled) return;
@@ -607,6 +628,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         skillsContainer.addEventListener('click', (ev) => {
             if (!panelEnabled) return;
+
+            // If touch moved, it's a scroll, not a click.
+            if (touchMoved) {
+                touchMoved = false; // Reset for the next interaction
+                return;
+            }
+
             const clicked = ev.target.closest('.skill');
             if (!clicked) return;
             ev.stopPropagation();
