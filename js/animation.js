@@ -424,10 +424,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const SUPPRESS_MS = 420;
         let intentToShowNode = null;
 
+        // --- Touch/Pointer guards specifically for .skill interactions ---
+        const HAS_COARSE_POINTER = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+
         // --- Touch scroll detection to prevent accidental taps ---
         let touchMoved = false;
         let touchStartY = 0;
+        let touchLastY = 0;
         const TOUCH_MOVE_THRESHOLD = 10; // pixels
+        // Suppress any late-click that may still fire after a swipe
+        let suppressNextClickUntil = 0;
 
         // --- TOGGLE LOGIC: Add a toggle event for skill panel ---
         function toggleSkillPanel(skillNode) {
@@ -585,19 +591,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
-        // --- Touch scroll detection events ---
+        // --- Touch scroll detection events on the skills container ---
         skillsContainer.addEventListener('touchstart', (ev) => {
             if (!panelEnabled) return;
             touchMoved = false;
             touchStartY = ev.touches[0].clientY;
+            touchLastY = touchStartY;
         }, { passive: true });
 
         skillsContainer.addEventListener('touchmove', (ev) => {
-            if (!panelEnabled || touchMoved) return;
-            const deltaY = Math.abs(ev.touches[0].clientY - touchStartY);
-            if (deltaY > TOUCH_MOVE_THRESHOLD) {
-                touchMoved = true;
+            if (!panelEnabled) return;
+            const currentY = ev.touches[0].clientY;
+            touchLastY = currentY;
+
+            if (!touchMoved) {
+                const deltaY = Math.abs(currentY - touchStartY);
+                if (deltaY > TOUCH_MOVE_THRESHOLD) {
+                    touchMoved = true;
+                    // short window to ignore any click synthesized after this drag
+                    suppressNextClickUntil = Date.now() + 350;
+                }
             }
+        }, { passive: true });
+
+        skillsContainer.addEventListener('touchend', () => {
+            if (!panelEnabled) return;
+            // keep suppression timer if we dragged; just reset the flag for the next interaction
+            touchMoved = false;
+        }, { passive: true });
+
+        skillsContainer.addEventListener('touchcancel', () => {
+            if (!panelEnabled) return;
+            touchMoved = false;
         }, { passive: true });
 
 
@@ -609,8 +634,10 @@ document.addEventListener('DOMContentLoaded', () => {
             setSuppressDocumentClose();
         }, { passive: true });
 
+        // Only allow hover-driven preview with a mouse, never on touch
         skillsContainer.addEventListener('pointerover', (ev) => {
             if (!panelEnabled || activeSkillNode) return;
+            if (HAS_COARSE_POINTER || (ev.pointerType && ev.pointerType !== 'mouse')) return;
             const hovered = ev.target.closest('.skill');
             if (!hovered) return;
             hovered.classList.add('pull');
@@ -619,6 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         skillsContainer.addEventListener('pointerout', (ev) => {
             if (!panelEnabled || activeSkillNode) return;
+            if (HAS_COARSE_POINTER || (ev.pointerType && ev.pointerType !== 'mouse')) return;
             const hoveredOut = ev.target.closest('.skill');
             if (!hoveredOut) return;
             scheduleHideForSkill(hoveredOut);
@@ -629,9 +657,11 @@ document.addEventListener('DOMContentLoaded', () => {
         skillsContainer.addEventListener('click', (ev) => {
             if (!panelEnabled) return;
 
-            // If touch moved, it's a scroll, not a click.
-            if (touchMoved) {
-                touchMoved = false; // Reset for the next interaction
+            // Ignore any click that happens during/after a swipe
+            if (touchMoved || Date.now() < suppressNextClickUntil) {
+                touchMoved = false;
+                ev.stopPropagation();
+                ev.preventDefault?.();
                 return;
             }
 
@@ -850,7 +880,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.querySelector('.mentor-card')) {
             initializeMentorGlassySheen();
         } else {
-            let glassyCtl = null;
+            glassyCtl = null;
             const firstGlassy = document.querySelector('.glassy');
             if (firstGlassy) {
                 observeVisibility(firstGlassy, () => {
