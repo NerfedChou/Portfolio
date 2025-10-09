@@ -431,14 +431,18 @@ document.addEventListener('DOMContentLoaded', () => {
         let touchMoved = false;
         let touchStartY = 0;
         let touchLastY = 0;
-        const TOUCH_MOVE_THRESHOLD = 10; // pixels
+        let pageScrollStartY = 0;
+        const TOUCH_MOVE_THRESHOLD = 16; // pixels
         // Suppress any late-click that may still fire after a swipe
         let suppressNextClickUntil = 0;
+        // Throttle to avoid rapid toggles that can feel laggy on mobile
+        let lastToggleTs = 0;
 
         // --- TOGGLE LOGIC: Add a toggle event for skill panel ---
         function toggleSkillPanel(skillNode) {
             if (activeSkillNode === skillNode) {
-                hideSkillDetail();
+                // Unpin and fully reset classes when toggling off
+                hideSkillDetail(true);
             } else {
                 skillNodes.forEach(s => s.classList.remove('pull'));
                 skillNodes.forEach(s => s.classList.remove('active'));
@@ -529,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (panelAlreadyVisible) {
                 if (activeTyper && activeTyper.cancel) activeTyper.cancel();
                 const typer = resetTyper();
-                if (PREFERS_REDUCED_MOTION) {
+                if (PREFERS_REDUCED_MOTION || HAS_COARSE_POINTER) {
                     panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
                 } else {
                     await typer.typeText(detailText);
@@ -548,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (activeTyper && activeTyper.cancel) activeTyper.cancel();
             const typer = resetTyper();
-            if (PREFERS_REDUCED_MOTION) {
+            if (PREFERS_REDUCED_MOTION || HAS_COARSE_POINTER) {
                 panelDescription.innerHTML = highlightFirstOccurrence(detailText, labelText);
             } else {
                 await typer.typeText(detailText);
@@ -558,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function scheduleHideForSkill(skillNode) {
             if (!panelEnabled) return;
-            intentToShowNode = null; // Clear intent
+            // Do not clear global intent here; it can interfere with a new hover intent
             clearHideTimer();
             hideTimer = setTimeout(() => {
                 if (activeSkillNode === skillNode && !intentToShowNode) {
@@ -597,6 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
             touchMoved = false;
             touchStartY = ev.touches[0].clientY;
             touchLastY = touchStartY;
+            pageScrollStartY = window.pageYOffset || window.scrollY || 0;
         }, { passive: true });
 
         skillsContainer.addEventListener('touchmove', (ev) => {
@@ -616,6 +621,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         skillsContainer.addEventListener('touchend', () => {
             if (!panelEnabled) return;
+            // If the page scrolled during this touch, suppress any resulting click
+            const pageDelta = Math.abs((window.pageYOffset || window.scrollY || 0) - pageScrollStartY);
+            if (pageDelta > 2) {
+                suppressNextClickUntil = Date.now() + 400;
+            }
             // keep suppression timer if we dragged; just reset the flag for the next interaction
             touchMoved = false;
         }, { passive: true });
@@ -649,15 +659,23 @@ document.addEventListener('DOMContentLoaded', () => {
             if (HAS_COARSE_POINTER || (ev.pointerType && ev.pointerType !== 'mouse')) return;
             const hoveredOut = ev.target.closest('.skill');
             if (!hoveredOut) return;
-            scheduleHideForSkill(hoveredOut);
+            // Don't schedule a hide here; user may be moving to another skill.
             hoveredOut.classList.remove('pull');
+        });
+
+        // When the mouse actually leaves the skills area entirely, hide the preview panel
+        skillsContainer.addEventListener('pointerleave', (ev) => {
+            if (!panelEnabled || activeSkillNode) return;
+            if (HAS_COARSE_POINTER || (ev.pointerType && ev.pointerType !== 'mouse')) return;
+            hideSkillDetail(false);
+            skillNodes.forEach(s => s.classList.remove('pull'));
         });
 
 
         skillsContainer.addEventListener('click', (ev) => {
             if (!panelEnabled) return;
 
-            // Ignore any click that happens during/after a swipe
+            // Ignore any click that happens during/after a swipe or page scroll
             if (touchMoved || Date.now() < suppressNextClickUntil) {
                 touchMoved = false;
                 ev.stopPropagation();
@@ -667,6 +685,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const clicked = ev.target.closest('.skill');
             if (!clicked) return;
+
+            // Throttle rapid toggles (helps on mobile where ghost clicks can occur)
+            const now = Date.now();
+            if (now - lastToggleTs < 200) {
+                ev.stopPropagation();
+                ev.preventDefault?.();
+                return;
+            }
+            lastToggleTs = now;
+
             ev.stopPropagation();
             toggleSkillPanel(clicked);
         });
@@ -744,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     obs.disconnect();
                 }
             });
-        }, { threshold: 0.18 });
+        }, { threshold: 0 });
 
         observer.observe(serviceList);
     }
