@@ -566,7 +566,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #ffd9b3;
+    color: var(--accent);
     font-size: 1rem;
     margin-bottom: 0.5rem;
 }
@@ -586,7 +586,7 @@
 }
 .cv-role {
     font-size: 1.1rem;
-    color: #ffd9b3;
+    color: var(--accent);
     margin: 0.2rem 0 0.7rem 0;
     text-align: center;
 }
