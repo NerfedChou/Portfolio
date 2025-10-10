@@ -953,14 +953,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav a');
     const sections = Array.from(document.querySelectorAll('section[id]'));
     const navMapClass = 'navMap';
-    const offset = 70; // Adjust if your navbar height is different
+    const offsetTop = 540;
+    const offsetBottom = 20;
 
     function onScrollSpy() {
         let currentSectionId = '';
         const scrollY = window.scrollY;
         sections.forEach(section => {
-            const sectionTop = section.offsetTop - offset;
-            const sectionBottom = sectionTop + section.offsetHeight;
+            const rect = section.getBoundingClientRect();
+            const sectionTop = rect.top + scrollY - offsetTop;
+            const sectionBottom = rect.bottom + scrollY - offsetBottom;
             if (scrollY >= sectionTop && scrollY < sectionBottom) {
                 currentSectionId = section.id;
             }
