@@ -836,6 +836,7 @@ body {
     position: relative;
     overflow: hidden;
     gap: 0.10rem;
+    transition: all 0.9s ease;
 }
 
 
