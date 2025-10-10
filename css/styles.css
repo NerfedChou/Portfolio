@@ -120,7 +120,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0rem;
     padding: 0.45rem 0.9rem;
     border-radius: 10px;
     background: rgba(255,255,255,0.02);
@@ -359,7 +359,6 @@ body {
 .nav-link:focus, .nav-link:focus-visible {
     color: var(--accent);
     background: rgba(255,115,0,0.06);
-    padding: 0.25rem 0.5rem;
     border-radius: 6px;
 }
 
