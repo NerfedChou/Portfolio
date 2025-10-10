@@ -349,17 +349,16 @@ body {
 :focus {
     outline: none;
 }
-:focus-visible, .nav-link:focus, .btn:focus, .hamburger:focus, .nav-link.navMap {
+:focus-visible, .nav-link:focus, .btn:focus, .hamburger:focus {
     outline: 3px solid rgba(255, 115, 0, 0.18);
     outline-offset: 3px;
     border-radius: 6px;
 }
 
-
 .nav-link:focus, .nav-link:focus-visible, .nav-link.navMap{
     color: var(--accent);
     background: rgba(255,115,0,0.06);
-    border-radius: 6px;
+    border-radius: 24px;
 }
 
 

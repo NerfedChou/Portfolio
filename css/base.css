@@ -68,3 +68,6 @@ a {
 li {
     list-style: none;
 }
+section {
+    scroll-margin-top: 7rem;
+}
