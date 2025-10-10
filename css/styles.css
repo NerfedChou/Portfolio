@@ -836,6 +836,7 @@ body {
 .btn.glassy {
     position: relative;
     overflow: hidden;
+    gap: 0.10rem;
 }
 
 
