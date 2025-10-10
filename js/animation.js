@@ -867,6 +867,77 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* -------------------------
+       Auto-hide header on scroll (header-only)
+       ------------------------- */
+    function initializeAutoHideHeader() {
+        const header = document.querySelector('.header');
+        if (!header) return;
+
+        const navMenu = document.getElementById('navMenu');
+        const HIDE_AFTER_IDLE_MS = 1400;
+        let hideTimer = null;
+        let ticking = false;
+
+        function showHeader() {
+            header.classList.remove('is-hidden');
+            header.classList.add('is-visible');
+        }
+        function hideHeader() {
+            // Keep visible near the very top and when menu is open
+            if (window.scrollY <= 10) return;
+            if (navMenu && navMenu.classList.contains('open')) return;
+            header.classList.add('is-hidden');
+            header.classList.remove('is-visible');
+        }
+        function scheduleHide() {
+            if (hideTimer) clearTimeout(hideTimer);
+            hideTimer = setTimeout(hideHeader, HIDE_AFTER_IDLE_MS);
+        }
+
+        function onScroll() {
+            if (hideTimer) clearTimeout(hideTimer);
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    showHeader();
+                    scheduleHide();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        // Reveal when pointer nears the top edge
+        let hoverTimer = null;
+        function onMouseMove(e) {
+            if (e.clientY < 80) showHeader();
+            if (hoverTimer) clearTimeout(hoverTimer);
+            hoverTimer = setTimeout(() => {
+                if (e.clientY > 120) hideHeader();
+            }, 800);
+        }
+
+        // Initial state
+        showHeader();
+        if (window.scrollY > 10) scheduleHide();
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('mousemove', onMouseMove, { passive: true });
+
+        // Keep header visible while nav is open
+        if (navMenu) {
+            const navObserver = new MutationObserver(() => {
+                if (navMenu.classList.contains('open')) {
+                    if (hideTimer) clearTimeout(hideTimer);
+                    showHeader();
+                } else {
+                    scheduleHide();
+                }
+            });
+            navObserver.observe(navMenu, { attributes: true, attributeFilter: ['class'] });
+        }
+    }
+
+    /* -------------------------
        Initialization sequence (viewport-gated)
        ------------------------- */
     initializeSiteEntrance();
@@ -874,6 +945,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTypewriter();
     initializeNavigation();
     initializeHistoryTimelineUI(); // init timeline controls
+    initializeAutoHideHeader(); // header-only behavior
 
     runIdle(() => {
         // Start/stop glassy sheen only when a .glassy element is visible
