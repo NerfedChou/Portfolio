@@ -1032,7 +1032,7 @@ function initializeContactFormValidation() {
         const messageValid = messageInput.value.trim().length >= 10;
 
         const allValid = nameValid && emailValid && messageValid;
-
+        submitBtn.disabled = !allValid;
         if (allValid) {
             submitBtn.style.backgroundColor = 'var(--accent)';
             submitBtn.style.borderColor = 'var(--accent)';

@@ -871,6 +871,15 @@ body {
     animation: navCtaSheen var(--duration-very-long) var(--ease-standard) both infinite;
 }
 
+.btn:disabled,
+.btn[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: 0.6;
+    color: gray;
+    border: 1px solid gray;
+}
+
+
 
 @media (prefers-reduced-motion: reduce) {
     .glassy.glassy-active::after {
