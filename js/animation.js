@@ -946,6 +946,36 @@ document.addEventListener('DOMContentLoaded', () => {
             targets.forEach(el => el.classList.remove('glassy-active'));
         }, { threshold: 0.2 });
     }
+
+    /* -------------------------
+       Scrollspy: Highlight nav link with navMap class
+       ------------------------- */
+    const navLinks = document.querySelectorAll('.nav a');
+    const sections = Array.from(document.querySelectorAll('section[id]'));
+    const navMapClass = 'navMap';
+    const offset = 70; // Adjust if your navbar height is different
+
+    function onScrollSpy() {
+        let currentSectionId = '';
+        const scrollY = window.scrollY;
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - offset;
+            const sectionBottom = sectionTop + section.offsetHeight;
+            if (scrollY >= sectionTop && scrollY < sectionBottom) {
+                currentSectionId = section.id;
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove(navMapClass);
+            if (currentSectionId && link.getAttribute('href') === '#' + currentSectionId) {
+                link.classList.add(navMapClass);
+            }
+        });
+    }
+
+    window.addEventListener('scroll', onScrollSpy);
+    // Initial highlight on page load
+    onScrollSpy();
 });
 
 /* -------------------------
