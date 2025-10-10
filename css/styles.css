@@ -445,7 +445,11 @@ body {
     margin: 0 auto;
     box-shadow: 0 12px 40px rgba(0,0,0,0.55);
     border: 1px solid rgba(255,255,255,0.04);
-    background: linear-gradient(180deg, rgba(24,24,24,0.7), rgba(37,37,37,0.6));
+}
+
+.about-left img {
+    object-fit: cover;
+    object-position: center top;
 }
 
 .about-left {
