@@ -67,6 +67,10 @@ a {
     text-decoration: none;
 }
 
+a:visited {
+    color: gray;
+}
+
 li {
     list-style: none;
 }

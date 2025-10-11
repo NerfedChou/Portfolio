@@ -132,6 +132,9 @@ body {
     z-index: 1;
     pointer-events: auto;
 }
+.nav-link:visited {
+    color: var(--white);
+}
 .nav-link:hover {
     color: var(--accent);
     background: rgba(255,255,255,0.035);
@@ -237,6 +240,9 @@ body {
     transition: opacity var(--duration-medium) 220ms var(--ease-standard), transform var(--duration-medium) 220ms var(--ease-standard);
 }
 
+.hero-actions a:visited {
+    color: var(--white);
+}
 
 .site-container.animate .hero-title {
     opacity: 1;
@@ -892,10 +898,12 @@ body {
 }
 
 /* subtle hover / focus lift */
-
+.about-bottom-hero-sub:visited,
 .about-bottom-hero-sub {
     color: white;
 }
+
+
 .about-bottom-hero-sub:hover,
 .about-bottom-hero-sub:focus {
     transform: translateY(-3px);
@@ -2088,13 +2096,6 @@ body {
     margin-bottom: 1.5rem;
 }
 
-.contact-info h3 {
-    color: var(--accent);
-    margin-bottom: 1rem;
-    font-size: 1.15rem;
-    font-weight: 700;
-}
-
 .contact-list {
     list-style: none;
     padding: 0;
@@ -2121,6 +2122,10 @@ body {
     transition: color 0.18s;
 }
 
+.contact-list a:visited {
+    color: gray;
+}
+
 .contact-list a:hover,
 .contact-list a:focus {
     color: #ffb366;
@@ -2135,12 +2140,14 @@ body {
     padding: 2rem 1.5rem 1.5rem 1.5rem;
     color: #ffd9b3;
 }
-
+.contact-info h3,
 .contact-form-container h3 {
     color: var(--accent);
     margin-bottom: 1rem;
     font-size: 1.15rem;
     font-weight: 700;
+    justify-content: center;
+    display: flex;
 }
 
 .contact-form {
