@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     io.observe(servicesTarget);
 });
 
-function expand(el) {
+function expand(el, btn) {
     el.style.display = 'flex';
     el.style.overflow = 'hidden';
     el.style.opacity = '0';
@@ -99,13 +99,13 @@ function expand(el) {
         if (el.style.height !== '0px') {
             el.style.height = 'auto';
             el.style.overflow = '';
-            buttons.textContent = ``;
+            if (btn) btn.textContent = 'Close';
         }
         el.removeEventListener('transitionend', handler);
     }, { once: true });
 }
 
-function collapse(el) {
+function collapse(el, btn) {
     const { height } = window.getComputedStyle(el);
     el.style.height = height;
     el.style.overflow = 'hidden';
@@ -119,6 +119,7 @@ function collapse(el) {
     el.addEventListener('transitionend', function handler(event) {
         if (event.propertyName === 'height') {
             el.style.visibility = 'hidden';
+            if (btn) btn.textContent = 'See Timeline';
             el.removeEventListener('transitionend', handler);
         }
     });
@@ -129,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.expand-btn');
     const targets = document.querySelectorAll('.project-lower');
 
-
     buttons.forEach((btn, idx) => {
         btn.addEventListener('click', () => {
             const target = targets[idx];
@@ -138,25 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const isCollapsed = window.getComputedStyle(target).height === '0px';
 
             if (isCollapsed) {
-                expand(target);
+                expand(target, btn);
             } else {
-                collapse(target);
-            }
-        });
-    });
-    buttons.forEach((btn, idx) => {
-        btn.addEventListener('click', () => {
-            const target = targets[idx];
-            if (!target) return;
-
-            const isCollapsed = window.getComputedStyle(target).height === '0px';
-
-            if (isCollapsed) {
-                btn.textContent = 'Expanded'; // Only this button changes
-            } else {
-                btn.textContent = 'See Timeline';
+                collapse(target, btn);
             }
         });
     });
 });
-
