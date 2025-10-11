@@ -1707,11 +1707,30 @@ body {
     border-radius: 1rem;
     max-height: 31rem;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent);
     gap: 0.70rem;
     transition: all 1s ease;
+    cursor: pointer;
 }
+
+/* WebKit browsers */
+.updates::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+.updates::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 6px;
+}
+.updates::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.08);
+    border-radius: 6px;
+}
+
+.updates {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) rgba(0,0,0,0.08);
+}
+
 
 .preventer {
     display: flex;
@@ -1787,6 +1806,14 @@ body {
     width: 10.434rem;
     height: 2.8rem;
     transition: all 0.5s ease;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.btn-text {
+    transition: opacity 0.5s ease;
 }
 
 /* Mirror the hover treatment used by service cards to lift and emphasize the project */

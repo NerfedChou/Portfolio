@@ -95,11 +95,21 @@ function expand(el, btn) {
     el.style.opacity = '1';
     el.style.visibility = 'visible';
 
+    if (btn) {
+        const ps = btn.querySelectorAll('p');
+        ps.forEach(p => {
+            p.classList.add('fade-out');
+            setTimeout(() => {
+                p.textContent = 'Close';
+                p.classList.remove('fade-out');
+            }, 200);
+        });
+    }
+
     el.addEventListener('transitionend', function handler() {
         if (el.style.height !== '0px') {
             el.style.height = 'auto';
             el.style.overflow = '';
-            if (btn) btn.textContent = 'Close';
         }
         el.removeEventListener('transitionend', handler);
     }, { once: true });
@@ -109,7 +119,16 @@ function collapse(el, btn) {
     const { height } = window.getComputedStyle(el);
     el.style.height = height;
     el.style.overflow = 'hidden';
-
+    if (btn) {
+        const ps = btn.querySelectorAll('p');
+        ps.forEach(p => {
+            p.classList.add('fade-out');
+            setTimeout(() => {
+                p.classList.remove('fade-out');
+                p.textContent = 'See Timeline';
+            }, 200);
+        });
+    }
     void el.offsetWidth;
 
     el.style.transition = 'height 0.5s cubic-bezier(.2,.9,.3,1), opacity 0.5s ease-in-out';
@@ -119,7 +138,6 @@ function collapse(el, btn) {
     el.addEventListener('transitionend', function handler(event) {
         if (event.propertyName === 'height') {
             el.style.visibility = 'hidden';
-            if (btn) btn.textContent = 'See Timeline';
             el.removeEventListener('transitionend', handler);
         }
     });

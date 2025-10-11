@@ -72,3 +72,9 @@ li {
 section {
     scroll-margin-top: 7rem;
 }
+
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.8s ease;
+}
+
