@@ -1687,7 +1687,7 @@ body {
     flex-direction: row;
 }
 .project-lower {
-    display: none;
+    display: flex;
     visibility: hidden;
     justify-content: start;
     width: 100%;
