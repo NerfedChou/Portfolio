@@ -1703,7 +1703,7 @@ body {
     display: flex;
     padding: 1rem;
     flex-direction: column;
-    width: 20rem;
+    width: auto;
     border-radius: 1rem;
     max-height: 31rem;
     overflow-y: auto;
@@ -1713,6 +1713,11 @@ body {
     transition: all 1s ease;
 }
 
+.preventer {
+    display: flex;
+    pointer-events: auto;
+    width: 100%;
+}
 .updates time {
     font-size: 0.55rem;
 }
