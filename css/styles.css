@@ -1710,6 +1710,8 @@ body {
     gap: 0.70rem;
     transition: all 1s ease;
     cursor: pointer;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* WebKit browsers */
@@ -1747,6 +1749,9 @@ body {
     transition: all 1s ease;
     max-width: 15rem;
 }
+
+
+
 .updates-item:focus-within,
 .updates-item-wrapper:focus,
 .updates-item-wrapper:hover,
