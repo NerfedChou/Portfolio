@@ -6,7 +6,7 @@ const precacheAssets = [
   '/css/responsive.css',
   '/css/base.css',
   '/css/lightdark.css',
-  '/js/animation.js',
+  '/js/function.js',
   '/js/customItemAnimations.js',
 ];
 

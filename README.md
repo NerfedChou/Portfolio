@@ -24,7 +24,7 @@ Built with semantic HTML, responsive CSS, and small vanilla JavaScript utilities
 - css/base.css — color variables and basic tokens (edit `--accent` for orange).
 - css/styles.css — core styles and components.
 - css/responsive.css — all breakpoint rules (centralized).
-- js/animation.js — animations and interactive behaviors:
+- js/function.js — animations and interactive behaviors:
   - `startGlassyCycle(selector, intervalMs)` — starts sheen cycle on elements.
   - Typing routine for the hero and portrait panel (cancellable).
   - IntersectionObserver to reveal skill progress bars when visible.
@@ -37,7 +37,7 @@ Built with semantic HTML, responsive CSS, and small vanilla JavaScript utilities
 - Change hero image:
   - Replace `/assets/me.jpeg` or update the `background-image` in `.hero-section` (styles.css).
 - Edit roles/typewriter:
-  - Modify roles array in `js/animation.js` (typewriter setup).
+  - Modify roles array in `js/function.js` (typewriter setup).
 - Edit skills:
   - In `index.html`, update each `<li class="skill">`:
     - `data-detail` — description shown in portrait panel.
@@ -61,11 +61,11 @@ Built with semantic HTML, responsive CSS, and small vanilla JavaScript utilities
   - Confirm `--skill-percent` is set on `.skill-fill`.
   - IntersectionObserver reveals fills when the items enter the viewport.
 - If panel closes unexpectedly on mobile when switching skills:
-  - The script uses a short suppression window to avoid accidental document-level clicks; increase `SUPPRESS_MS` in `js/animation.js` if needed.
+  - The script uses a short suppression window to avoid accidental document-level clicks; increase `SUPPRESS_MS` in `js/function.js` if needed.
 
 ## Contributing / extending
 - To reuse the glassy sheen: add `class="glassy"` to any element and call `startGlassyCycle('.glassy', 2000)` or with a custom selector/interval.
-- The typing utility is cancellable — use the pattern in `js/animation.js` when adding other typed elements.
+- The typing utility is cancellable — use the pattern in `js/function.js` when adding other typed elements.
 
 ## License & Credits
 Project created by Mr. Jan Rhian Angulo. Update attribution or license as needed.

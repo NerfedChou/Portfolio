@@ -1716,7 +1716,6 @@ body {
 .preventer {
     display: flex;
     pointer-events: auto;
-    width: 100%;
 }
 .updates time {
     font-size: 0.55rem;
