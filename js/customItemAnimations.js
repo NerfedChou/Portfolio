@@ -99,7 +99,7 @@ function expand(el) {
         if (el.style.height !== '0px') {
             el.style.height = 'auto';
             el.style.overflow = '';
-
+            buttons.textContent = ``;
         }
         el.removeEventListener('transitionend', handler);
     }, { once: true });
@@ -144,4 +144,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    buttons.forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+            const target = targets[idx];
+            if (!target) return;
+
+            const isCollapsed = window.getComputedStyle(target).height === '0px';
+
+            if (isCollapsed) {
+                btn.textContent = 'Expanded'; // Only this button changes
+            } else {
+                btn.textContent = 'See Timeline';
+            }
+        });
+    });
 });
+

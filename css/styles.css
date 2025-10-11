@@ -1716,7 +1716,6 @@ body {
 .preventer {
     display: flex;
     pointer-events: auto;
-    width: 100%;
 }
 .updates time {
     font-size: 0.55rem;
@@ -1785,6 +1784,9 @@ body {
 .related .custom-modifier-btn {
     background: var(--accent);
     border: none;
+    width: 10.434rem;
+    height: 3.5rem;
+    transition: all 0.5s ease;
 }
 
 /* Mirror the hover treatment used by service cards to lift and emphasize the project */
