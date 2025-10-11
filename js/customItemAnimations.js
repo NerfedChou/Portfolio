@@ -81,3 +81,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
     io.observe(servicesTarget);
 });
+
+function expand(el) {
+    el.style.display = 'flex';
+    el.style.overflow = 'hidden';
+    el.style.opacity = '0';
+    el.style.height = '0';
+
+    void el.offsetWidth;
+
+    el.style.transition = 'height 0.5s cubic-bezier(.2,.9,.3,1), opacity 0.5s ease-in-out, visibility 0.5s linear';
+    el.style.height = el.scrollHeight + 'px';
+    el.style.opacity = '1';
+    el.style.visibility = 'visible';
+
+    el.addEventListener('transitionend', function handler() {
+        if (el.style.height !== '0px') {
+            el.style.height = 'auto';
+            el.style.overflow = '';
+
+        }
+        el.removeEventListener('transitionend', handler);
+    }, { once: true });
+}
+
+function collapse(el) {
+    const { height } = window.getComputedStyle(el);
+    el.style.height = height;
+    el.style.overflow = 'hidden';
+
+    void el.offsetWidth;
+
+    el.style.transition = 'height 0.5s cubic-bezier(.2,.9,.3,1), opacity 0.5s ease-in-out';
+    el.style.height = '0';
+    el.style.opacity = '0';
+
+    el.addEventListener('transitionend', function handler(event) {
+        if (event.propertyName === 'height') {
+            el.style.visibility = 'hidden';
+            el.removeEventListener('transitionend', handler);
+        }
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.expand-btn');
+    const targets = document.querySelectorAll('.project-lower');
+
+
+    buttons.forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+            const target = targets[idx];
+            if (!target) return;
+
+            const isCollapsed = window.getComputedStyle(target).height === '0px';
+
+            if (isCollapsed) {
+                expand(target);
+            } else {
+                collapse(target);
+            }
+        });
+    });
+});
