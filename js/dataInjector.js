@@ -21,14 +21,24 @@ const projectData = {
       {
         date: '2025-09-07',
         version: 'v1.0',
-        title: 'First Initial Release',
-        description: 'The initial release of Five Nights at Malacañang, a thrilling survival game inspired by Philippine corruption. Players must survive the night as a security guard, managing power and monitoring cameras to fend off corrupt officials.'
+        title: 'Beta Test is Open',
       }
     ],
     history: {
       title: '',
       date: '',
-      content: 'The initial release of Five Nights at Malacañang, a thrilling survival game inspired by Philippine corruption. Players must survive the night as a security guard, managing power and monitoring cameras to fend off corrupt officials.'
+      content: `
+        <p>The initial release of Five Nights at Malacañang, a thrilling survival game inspired by Philippine corruption. Players must survive the night as a security guard, managing power and monitoring cameras to fend off corrupt officials.</p>
+        <h3>In-game Screen-Shots: </h3>
+          <ul style="padding-left: 1.5rem;" class="screen-shots-list">
+            <li class="screen-shots">
+              <img src="../assets/discaya.jpeg">               
+            </li>
+             <li class="screen-shots">
+              <img src="../assets/marcos.jpeg">               
+            </li>
+          </ul>
+        `
     }
   },
   'bedroom-235': {
@@ -37,7 +47,6 @@ const projectData = {
         date: '2025-09-07',
         version: 'v1.0',
         title: 'The Spark of Dream',
-        description: 'The initial release of BEDROOM 2:35 Framework, an open-source framework designed to simplify front-end development with Smart Containers and responsive design principles.'
       }
     ],
     history: {
