@@ -2712,7 +2712,7 @@ body {
 
 .img-expandable:hover {
     transform: scale(1.02);
-    box-shadow: 0 4px 24px rgba(255, 115, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(255, 115, 0, 0.2);
 }
 
 /* Modal overlay */
@@ -2763,7 +2763,7 @@ body {
 }
 
 .img-expander-close:hover {
-    background: rgba(255, 115, 0, 0.8);
+    background: var(--accent);
     transform: rotate(90deg);
 }
 

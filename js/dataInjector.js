@@ -27,7 +27,7 @@ const projectData = {
           <p><strong>Why This Project?</strong> Inspired by the need for a customizable, self-hosted alternative to GitHub, this clone prioritizes developer freedom and learning. It's ideal for developers looking to understand platform architecture, experiment with web technologies, or deploy a private GitHub-like service. The Rust backend guarantees safety and performance, making it suitable for production use.</p>
           <h3>Getting Started:</h3>
           <ol style="padding-left: 1.5rem;">
-            <li>Clone the repository: <code>git clone [your-repo-url]</code>.</li>
+            <li>Clone the repository: <code>git clone https://nerfedchou/guthib/github.git</code>.</li>
             <li>Install dependencies: [e.g., <code>cargo build</code> for Rust backend].</li>
             <li>Run the application: [e.g., <code>npm start</code> or equivalent].</li>
             <li>Access at <code>http://localhost:3000</code>.</li>
@@ -40,7 +40,7 @@ const projectData = {
             <li style="list-style: disc;">Mobile responsiveness</li>
             <li style="list-style: disc;">Integration with external services</li>
           </ul>
-          <p>For more information, visit [your-website] or check the full documentation.</p>
+          <p>For more information, visit https://nerfedchou/guthib.com or check the full documentation.</p>
         `
       },
       {
@@ -140,7 +140,7 @@ const projectData = {
           <p><strong>Why This Project?</strong> By offering this solution for free and focusing the developer purely on design mastery, BEDROOM 2:35 is poised to dominate the market by becoming the essential, anti-fragile, and developer-centric foundation for the next generation of the web.</p>
           <h3>Getting Started:</h3>
           <ol style="padding-left: 1.5rem;">
-            <li>Clone the repository: <code>git clone [your-repo-url]</code>.</li>
+            <li>Clone the repository: <code>git clone www.nefredchou/b235/bedroom.git</code>.</li>
             <li>Install dependencies: [e.g., <code>cargo build</code> for Rust backend].</li>
             <li>Run the application: [e.g., <code>npm start</code> or equivalent].</li>
             <li>Access at <code>http://localhost:3000</code>.</li>
