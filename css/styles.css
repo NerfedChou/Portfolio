@@ -2755,6 +2755,8 @@ body {
     border-radius: 50%;
     border: none;
     cursor: pointer;
+    background: none;
+    color: white;
     z-index: 2;
     transition: all var(--duration-short) var(--ease-standard);
     display: flex;
