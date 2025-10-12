@@ -370,6 +370,10 @@
     .project-card__body h3 { font-size: 1.02rem; margin-bottom: 0.4rem; }
     .project-card__body p { font-size: 0.95rem; line-height: 1.45; }
     .project-stores { gap: 0.6rem; }
+
+    .history-description-head {
+        flex-direction: column;
+    }
 }
 
 
