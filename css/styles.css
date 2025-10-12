@@ -1750,7 +1750,6 @@ body {
 .updates-item {
     position: relative;
     padding: 0 1rem;
-    border-left: 1px solid rgba(255,255,255,0.06);
     transition: all 1s ease;
     max-width: 15rem;
 }
@@ -1785,7 +1784,6 @@ body {
 .updates-item-wrapper {
     border-radius: 0.5rem;
     padding: 0 0.55rem;
-    border: 0.1rem solid rgba(255,255,255,0.06);
     transition: all 0.5s ease;
 }
 
@@ -1881,6 +1879,12 @@ body {
     border-radius: 1rem;
     width: 20rem;
     height: 20rem;
+}
+
+.codes {
+    padding: 1rem;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.08) inset;
+    overflow-y: auto;
 }
 /* Respect reduced-motion: remove transform animations */
 @media (prefers-reduced-motion: reduce) {

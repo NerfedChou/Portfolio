@@ -73,7 +73,6 @@
     }
     .updates-item {
         border-left: none;
-        border-top: 1px solid rgba(255,255,255,0.06);
         padding: 1rem 0 0 0;
     }
     .updates-item:before {
@@ -120,6 +119,11 @@
     }
 }
 
+@media (min-width: 980px) {
+    .updates-item {
+        border-top: none;
+    }
+}
 
 @media (max-width: 768px) {
 

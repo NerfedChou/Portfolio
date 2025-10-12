@@ -75,6 +75,13 @@
     .about-bottom-hero-title {
         color: orangered !important;
     }
+    .updates-item-wrapper {
+        border: 0.1rem solid rgba(46, 46, 46, 0.50);
+    }
+    .updates-item {
+        border-top: 0.1rem solid rgba(46, 46, 46, 0.50);
+        border-left: 1px solid rgba(46, 46, 46, 0.50);
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -137,5 +144,12 @@
                 rgba(24,24,24,0.55) 70%,
                 var(--eerie-black) 100%
         );
+    }
+    .updates-item-wrapper {
+        border: 0.1rem solid rgba(255,255,255,0.06);
+    }
+    .updates-item {
+        border-left: 1px solid rgba(255,255,255,0.06);
+        border-top: 1px solid rgba(255,255,255,0.06);
     }
 }

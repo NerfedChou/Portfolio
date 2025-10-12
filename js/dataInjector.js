@@ -42,6 +42,20 @@ const projectData = {
           </ul>
           <p>For more information, visit [your-website] or check the full documentation.</p>
         `
+      },
+      {
+        date: '2025-10-12',
+        version: 'v1.1',
+        title: 'Bug Fixes and Improvements',
+        description: `
+          <p>This minor update includes various bug fixes, performance improvements, and minor feature enhancements to enhance the overall user experience.</p>
+          <ul style="padding-left: 1.5rem;">
+            <li style="list-style: disc;">Fixed issues with repository forking</li>
+            <li style="list-style: disc;">Improved search functionality</li>
+            <li style="list-style: disc;">Enhanced UI responsiveness</li>
+          </ul>
+          <p>Thank you to our contributors for their valuable feedback and contributions!</p>
+        `
       }
     ],
     history: {
@@ -68,6 +82,31 @@ const projectData = {
               </li>
             </ul>
           `
+      },
+      {
+        date: '2025-10-12',
+        version: 'v1.1',
+        title: 'New Features and Achievements Added',
+        description: `
+          <p>This update introduces several new features to enhance gameplay and adds secret achievements for dedicated players. We've expanded the game's mechanics to provide more challenges and rewards.</p>
+          <h3>Added Features:</h3>
+          <ul style="padding-left: 1.5rem;">
+            <li style="list-style: disc;">Enhanced camera system with improved night vision mode for better surveillance.</li>
+            <li style="list-style: disc;">New power management mini-games to conserve energy more efficiently.</li>
+            <li style="list-style: disc;">Additional office upgrades, including customizable security doors and alarm systems.</li>
+            <li style="list-style: disc;">Expanded story mode with more dialogue and branching narratives based on player choices.</li>
+            <li style="list-style: disc;">Multiplayer co-op mode for up to 4 players to team up against the corrupt officials.</li>
+          </ul>
+          <h3>Secret Achievements:</h3>
+          <ul style="padding-left: 1.5rem;">
+            <li style="list-style: disc;">"Corruption Buster": Survive 10 nights without triggering any alarms.</li>
+            <li style="list-style: disc;">"Whistleblower": Discover and expose all hidden corruption clues in a single playthrough.</li>
+            <li style="list-style: disc;">"Power Saver": Complete a night using less than 50% of available power.</li>
+            <li style="list-style: disc;">"Team Player": Win a co-op game without any team member being caught.</li>
+            <li style="list-style: disc;">"Legendary Guard": Achieve a perfect score on all nights in story mode.</li>
+          </ul>
+          <p>These additions aim to increase replayability and provide new ways for players to engage with the game's themes of corruption and survival. Thank you for your continued support!</p>
+        `
       }
     ],
     history: {
@@ -114,7 +153,56 @@ const projectData = {
             <li style="list-style: disc;">Enhanced Smart Engine features</li>
             <li style="list-style: disc;">Community-driven extensions</li>
           </ul>
-          <p>For more information, visit [your-website] or check the full documentation.</p>
+        `
+      },
+      {
+        date: '2025-10-12',
+        version: 'v1.1',
+        title: 'Added Features with Boilerplates',
+        description: `
+          <p>This update introduces new Smart Containers and boilerplates to accelerate development. We've added detailed code snippets for common use cases, making it easier to get started with BEDROOM 2:35.</p>
+          <h3>New Smart Containers:</h3>
+          <ul style="padding-left: 1.5rem;">
+            <li style="list-style: disc;"><strong>Modal Container:</strong> A responsive modal dialog for overlays and popups.</li>
+            <li style="list-style: disc;"><strong>Accordion Container:</strong> Collapsible sections for FAQs and content organization.</li>
+            <li style="list-style: disc;"><strong>Carousel Container:</strong> Image or content sliders with touch support.</li>
+          </ul>
+          <h3>Boilerplate Code Snippets:</h3>
+          <h4>Modal Container Example:</h4>
+          <pre class="codes"><code>&lt;div class="b235-modal" data-modal="example"&gt;
+  &lt;div class="b235-modal-overlay"&gt;&lt;/div&gt;
+  &lt;div class="b235-modal-content"&gt;
+    &lt;h2&gt;Modal Title&lt;/h2&gt;
+    &lt;p&gt;Modal content here.&lt;/p&gt;
+    &lt;button class="b235-modal-close"&gt;Close&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          <h4>Accordion Container Example:</h4>
+          <pre class="codes"><code>&lt;div class="b235-accordion"&gt;
+  &lt;div class="b235-accordion-item"&gt;
+    &lt;button class="b235-accordion-toggle"&gt;Section 1&lt;/button&gt;
+    &lt;div class="b235-accordion-content"&gt;
+      &lt;p&gt;Content for section 1.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="b235-accordion-item"&gt;
+    &lt;button class="b235-accordion-toggle"&gt;Section 2&lt;/button&gt;
+    &lt;div class="b235-accordion-content"&gt;
+      &lt;p&gt;Content for section 2.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          <h4>Carousel Container Example:</h4>
+          <pre class="codes"><code>&lt;div class="b235-carousel"&gt;
+  &lt;div class="b235-carousel-track"&gt;
+    &lt;div class="b235-carousel-slide"&gt;&lt;img src="image1.jpg" alt="Slide 1"&gt;&lt;/div&gt;
+    &lt;div class="b235-carousel-slide"&gt;&lt;img src="image2.jpg" alt="Slide 2"&gt;&lt;/div&gt;
+    &lt;div class="b235-carousel-slide"&gt;&lt;img src="image3.jpg" alt="Slide 3"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button class="b235-carousel-prev"&gt;&amp;lt;&lt;/button&gt;
+  &lt;button class="b235-carousel-next"&gt;&amp;gt;&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+          <p>These boilerplates are designed to be easily customizable with your own CSS variables. The Smart Engine ensures responsive behavior across all devices.</p>
         `
       }
     ],
@@ -131,10 +219,13 @@ function setHistoryFromUpdates(data) {
   for (const projectId in data) {
     const project = data[projectId];
     if (project.updates && project.updates.length > 0) {
-      const firstUpdate = project.updates[0];
-      project.history.title = firstUpdate.title;
-      project.history.date = new Date(firstUpdate.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      project.history.content = firstUpdate.description;
+      // Sort updates by date in descending order (newest first)
+      project.updates.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      const latestUpdate = project.updates[0];
+      project.history.title = latestUpdate.title;
+      project.history.date = new Date(latestUpdate.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      project.history.content = latestUpdate.description;
     }
   }
 }
