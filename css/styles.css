@@ -1881,11 +1881,11 @@ body {
     height: 20rem;
 }
 
-.hljs {
+.codes {
     border-radius: 1rem;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.62) inset;
     background: rgba(0,0,0,0.08);
-    width: 100%;
+    width: 50%;
 }
 /* Respect reduced-motion: remove transform animations */
 @media (prefers-reduced-motion: reduce) {

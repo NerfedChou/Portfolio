@@ -160,49 +160,26 @@ const projectData = {
         version: 'v1.1',
         title: 'Added Features with Boilerplates',
         description: `
-          <p>This update introduces new Smart Containers and boilerplates to accelerate development. We've added detailed code snippets for common use cases, making it easier to get started with BEDROOM 2:35.</p>
-          <h3>New Smart Containers:</h3>
-          <ul style="padding-left: 1.5rem;">
-            <li style="list-style: disc;"><strong>Modal Container:</strong> A responsive modal dialog for overlays and popups.</li>
-            <li style="list-style: disc;"><strong>Accordion Container:</strong> Collapsible sections for FAQs and content organization.</li>
-            <li style="list-style: disc;"><strong>Carousel Container:</strong> Image or content sliders with touch support.</li>
+          <p>In this update, BEDROOM 2:35 expands its core offering with a new set of Smart Containers and ready-made boilerplates designed to make building modern, responsive interfaces even faster and more intuitive.</p>
+          
+          <h3>What’s New?</h3>
+          <ul>
+            <li><strong>Modal Container:</strong> Effortlessly create overlays and popups with our new Modal Container, which adapts seamlessly to any screen size. It’s perfect for alerts, dialogs, and feature highlights. The container ensures that your modal content remains centered and accessible, while the background is subtly dimmed for clarity and focus.</li>
+            <li><strong>Accordion Container:</strong> Organize your content with the new Accordion Container, ideal for FAQs, menus, or any expandable/collapsible sections. Each section smoothly expands or contracts in response to user interaction, providing a clean, uncluttered presentation that is both mobile-friendly and fully keyboard accessible.</li>
+            <li><strong>Carousel Container:</strong> Showcase images, testimonials, or featured content with the Carousel Container. Users can swipe or click through slides, which automatically adjust to fit their device—ensuring a polished, touch-ready experience on phones, tablets, and desktops alike.</li>
           </ul>
-          <h3>Boilerplate Code Snippets:</h3>
-          <h4>Modal Container Example:</h4>
-          <pre class="codes"><code>&lt;div class="b235-modal" data-modal="example"&gt;
-  &lt;div class="b235-modal-overlay"&gt;&lt;/div&gt;
-  &lt;div class="b235-modal-content"&gt;
-    &lt;h2&gt;Modal Title&lt;/h2&gt;
-    &lt;p&gt;Modal content here.&lt;/p&gt;
-    &lt;button class="b235-modal-close"&gt;Close&lt;/button&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-          <h4>Accordion Container Example:</h4>
-          <pre class="codes"><code>&lt;div class="b235-accordion"&gt;
-  &lt;div class="b235-accordion-item"&gt;
-    &lt;button class="b235-accordion-toggle"&gt;Section 1&lt;/button&gt;
-    &lt;div class="b235-accordion-content"&gt;
-      &lt;p&gt;Content for section 1.&lt;/p&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class="b235-accordion-item"&gt;
-    &lt;button class="b235-accordion-toggle"&gt;Section 2&lt;/button&gt;
-    &lt;div class="b235-accordion-content"&gt;
-      &lt;p&gt;Content for section 2.&lt;/p&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-          <h4>Carousel Container Example:</h4>
-          <pre class="codes"><code>&lt;div class="b235-carousel"&gt;
-  &lt;div class="b235-carousel-track"&gt;
-    &lt;div class="b235-carousel-slide"&gt;&lt;img src="image1.jpg" alt="Slide 1"&gt;&lt;/div&gt;
-    &lt;div class="b235-carousel-slide"&gt;&lt;img src="image2.jpg" alt="Slide 2"&gt;&lt;/div&gt;
-    &lt;div class="b235-carousel-slide"&gt;&lt;img src="image3.jpg" alt="Slide 3"&gt;&lt;/div&gt;
-  &lt;/div&gt;
-  &lt;button class="b235-carousel-prev"&gt;&amp;lt;&lt;/button&gt;
-  &lt;button class="b235-carousel-next"&gt;&amp;gt;&lt;/button&gt;
-&lt;/div&gt;</code></pre>
-          <p>These boilerplates are designed to be easily customizable with your own CSS variables. The Smart Engine ensures responsive behavior across all devices.</p>
+          
+          <h3>Boilerplate Templates for Rapid Development</h3>
+          <p>To help you get started, this release also introduces boilerplate templates for each new Smart Container. These templates offer best-practice layouts and recommended property usage, so you can quickly adapt the structure to your specific project needs. Whether you’re building a landing page, a dashboard, or a mobile-first web app, these templates provide a strong foundation to accelerate your workflow.</p>
+          
+          <h3>Why This Matters</h3>
+          <p>With these additions, BEDROOM 2:35 further reduces the time and effort required to implement complex interface patterns. By standardizing containers and providing clear starting points, developers can focus more on creativity and feature development, and less on repetitive setup work.</p>
+          
+          <h3>How to Use</h3>
+          <p>Simply include the BEDROOM 2:35 framework in your project, and reference the official documentation for detailed guidance on integrating and customizing these new Smart Containers. All containers are designed with flexibility in mind, allowing you to tailor appearance and behavior using straightforward, semantic HTML and your own CSS variables.</p>
+          
+          <h3>Next Steps</h3>
+          <p>We invite you to explore these new features, provide feedback, and contribute your own ideas or improvements to the project. As always, our goal is to empower developers to build beautiful, robust interfaces with confidence and minimal friction.</p>
         `
       }
     ],
