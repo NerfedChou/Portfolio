@@ -1048,8 +1048,67 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('scroll', onScrollSpy);
-    // Initial highlight on page load
     onScrollSpy();
+
+    /* -------------------------
+       Image Expander
+       ------------------------- */
+    function initImageExpander() {
+        // Create modal if it doesn't exist
+        let modal = document.getElementById('imgExpanderModal');
+
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'imgExpanderModal';
+            modal.className = 'img-expander-modal';
+            modal.innerHTML = `
+                <button class="img-expander-close" aria-label="Close expanded image"><ion-icon name="close-circle-outline"></ion-icon></button>
+                <img src="" alt="Expanded image" id="imgExpanderImg">
+            `;
+            document.body.appendChild(modal);
+        }
+
+        const modalImg = document.getElementById('imgExpanderImg');
+        const closeBtn = modal.querySelector('.img-expander-close');
+
+        // Open modal when clicking expandable images
+        document.body.addEventListener('click', function(e) {
+            if (e.target.classList.contains('img-expandable')) {
+                modalImg.src = e.target.src;
+                modalImg.alt = e.target.alt || 'Expanded image';
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        });
+
+        // Close modal function
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Close on button click
+        closeBtn.addEventListener('click', closeModal);
+
+        // Close when clicking on the background
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target === modalImg) {
+                closeModal();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    }
+
+    /* -------------------------
+       Initialize all features
+       ------------------------- */
+    initImageExpander();
 });
 
 /* -------------------------

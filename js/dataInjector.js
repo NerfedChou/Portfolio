@@ -75,10 +75,10 @@ const projectData = {
           <h3>In-game Screen-Shots: </h3>
             <ul style="padding-left: 1.5rem;" class="screen-shots-list">
               <li class="screen-shots">
-                <img src="../assets/discaya.jpeg" alt="In-game screenshot of Discaya">               
+                <img src="../assets/discaya.jpeg" class = "img-expandable" alt="In-game screenshot of Discaya">               
               </li>
                <li class="screen-shots">
-                <img src="../assets/marcos.jpeg" alt="In-game screenshot of Marcos">               
+                <img src="../assets/marcos.jpeg" class = "img-expandable" alt="In-game screenshot of Marcos">               
               </li>
             </ul>
           `
