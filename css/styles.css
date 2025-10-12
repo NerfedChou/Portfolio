@@ -228,9 +228,6 @@ body {
     transition: opacity 220ms ease;
 }
 
-
-
-
 .hero-actions {
     display: flex;
     gap: 1rem;
@@ -1791,6 +1788,19 @@ body {
     border: 0.1rem solid rgba(255,255,255,0.06);
     transition: all 0.5s ease;
 }
+
+.update-badge {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.versions {
+    font-size: 0.5rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
 .update-title {
     max-width: 100%;
     text-overflow-ellipsis: ellipsis;
@@ -1805,6 +1815,11 @@ body {
     min-height: 500px;
 }
 
+.history-description-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: clamp(.70rem, 1vw, 1.5rem);
+}
 .related {
     display: flex;
     justify-content: space-between;
