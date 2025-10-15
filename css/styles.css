@@ -1808,7 +1808,7 @@ body {
 .history-description {
     width: 100%;
     border-radius: 0.5rem;
-    border: 0.1rem solid rgba(255,255,255,0.06);
+    border: 0.1rem solid var(--accent);
     padding: 1rem;
     min-height: 500px;
 }
@@ -1832,6 +1832,10 @@ body {
     width: 10.434rem;
     height: 2.8rem;
     transition: all 0.5s ease;
+}
+
+.custom-modifier-btn p {
+    color: white;
 }
 
 .fade-out {
@@ -2804,5 +2808,9 @@ body {
         height: 40px;
         font-size: 2rem;
     }
+}
+
+.text-truncate-toggle {
+    color: var(--accent);
 }
 

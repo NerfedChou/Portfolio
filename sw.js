@@ -28,12 +28,10 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Only handle same-origin GET requests
   if (req.method !== 'GET' || url.origin !== location.origin) return;
 
   // Don't cache portrait images to allow dynamic switching
   if (url.pathname.includes('/assets/me.webp') || url.pathname.includes('/assets/melight.webp')) {
-    // Always fetch portrait images from network to allow dynamic switching
     event.respondWith(fetch(req));
     return;
   }
